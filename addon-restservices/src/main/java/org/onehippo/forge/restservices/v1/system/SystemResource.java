@@ -66,15 +66,13 @@ public class SystemResource {
         final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
         Map<String, String> info = new LinkedHashMap<String, String>();
         try {
-            Runtime runtime = Runtime.getRuntime();
-            NumberFormat nf = NumberFormat.getInstance();
-            nf.setMaximumFractionDigits(2);
             info.put("Hippo Release Version", getHippoReleaseVersion());
             info.put("Hippo CMS version", getCMSVersion());
             info.put("Project Version", getProjectVersion());
             info.put("Repository vendor", getRepositoryVendor(session));
             info.put("Repository version", getRepositoryVersion(session));
-        } finally {
+        }
+        finally {
             RepositoryConnectionUtils.cleanupSession(session);
         }
 
@@ -92,8 +90,6 @@ public class SystemResource {
         Map<String, String> info = new LinkedHashMap<String, String>();
         try {
             Runtime runtime = Runtime.getRuntime();
-            NumberFormat nf = NumberFormat.getInstance();
-            nf.setMaximumFractionDigits(2);
             info.put("OS architecture", System.getProperty("os.arch"));
             info.put("OS name", System.getProperty("os.name"));
             info.put("OS version", System.getProperty("os.version"));
