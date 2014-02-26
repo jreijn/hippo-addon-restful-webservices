@@ -44,7 +44,7 @@ public class PropertyResource {
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
     })
-    public Response getPropertyByPath(@ApiParam(value = "Path of the node to retrieve e.g '/content/hippostd:foldertype'.", required = true) @PathParam("path") @DefaultValue("/") String path) throws RepositoryException {
+    public Response getPropertyByPath(@ApiParam(value = "Path of the node to retrieve e.g '/content/hippostd:foldertype'.", required = true) @PathParam("path") String path) throws RepositoryException {
 
         final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
         JcrProperty jcrProperty = null;
