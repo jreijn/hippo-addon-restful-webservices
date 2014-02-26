@@ -3,6 +3,7 @@ package org.onehippo.forge.restservices.jaxrs.exception;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jeroen Reijn
  */
+@Provider
 public class CustomWebApplicationExceptionMapper implements ExceptionMapper<WebApplicationException> {
 
     private static Logger log = LoggerFactory.getLogger(CustomWebApplicationExceptionMapper.class);

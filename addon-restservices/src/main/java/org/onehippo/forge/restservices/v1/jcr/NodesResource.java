@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * @author jreijn
  */
 @GZIP
-@Api(value = "v1/nodes", description = "Generic API for working with JCR nodes")
+@Api(value = "v1/nodes", description = "API for working with JCR nodes")
 @Path("v1/nodes")
 public class NodesResource {
 

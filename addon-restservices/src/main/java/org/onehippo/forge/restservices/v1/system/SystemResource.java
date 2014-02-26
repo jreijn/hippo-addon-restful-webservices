@@ -14,13 +14,11 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import javax.jcr.Repository;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -49,8 +47,7 @@ public class SystemResource {
 
     @ApiOperation(
             value = "Display the system properties",
-            notes = "",
-            response = Properties.class)
+            notes = "")
     @Path(value = "/properties")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -61,8 +58,7 @@ public class SystemResource {
 
     @ApiOperation(
             value = "Display the system information",
-            notes = "",
-            response = Response.class)
+            notes = "")
     @Path(value = "/info")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -70,7 +66,6 @@ public class SystemResource {
         final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
         Map<String, String> info = new LinkedHashMap<String, String>();
         try {
-
             Runtime runtime = Runtime.getRuntime();
             NumberFormat nf = NumberFormat.getInstance();
             nf.setMaximumFractionDigits(2);
@@ -81,7 +76,7 @@ public class SystemResource {
             info.put("Memory in use", nf.format(((double) (runtime.totalMemory() - runtime.freeMemory())) / MB) + " MB");
             info.put("Memory total free", nf.format(((double)
                     (runtime.maxMemory() - runtime.totalMemory() + runtime.freeMemory())) / MB) + " MB");
-            info.put("Hippo Release Version", getReleaseVersion());
+            info.put("Hippo Release Version", getHippoReleaseVersion());
             info.put("Hippo CMS version", getCMSVersion());
             info.put("Project Version", getProjectVersion());
             info.put("Repository vendor", getRepositoryVendor(session));
@@ -100,7 +95,7 @@ public class SystemResource {
         return Response.ok(info).build();
     }
 
-    public String getReleaseVersion() {
+    private String getHippoReleaseVersion() {
         try {
             final Manifest manifest = getWebAppManifest();
             if (manifest != null) {
@@ -112,7 +107,7 @@ public class SystemResource {
         return "unknown";
     }
 
-    public String getProjectVersion() {
+    private String getProjectVersion() {
         try {
             final Manifest manifest = getWebAppManifest();
             if (manifest != null) {
@@ -137,7 +132,7 @@ public class SystemResource {
         return null;
     }
 
-    public String getRepositoryVersion(Session session) {
+    private String getRepositoryVersion(Session session) {
         Repository repository = session.getRepository();
         if (repository != null) {
             return repository.getDescriptor(Repository.REP_VERSION_DESC);
@@ -146,7 +141,7 @@ public class SystemResource {
         }
     }
 
-    public String getRepositoryVendor(Session session) {
+    private String getRepositoryVendor(Session session) {
         Repository repository = session.getRepository();
         if (repository != null) {
             return repository.getDescriptor(Repository.REP_NAME_DESC);
@@ -155,7 +150,7 @@ public class SystemResource {
         }
     }
 
-    public String getCMSVersion() {
+    private String getCMSVersion() {
         try {
             Manifest manifest = getManifest(Home.class);
             if (manifest == null) {
