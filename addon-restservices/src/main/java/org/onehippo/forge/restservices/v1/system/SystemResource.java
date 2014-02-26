@@ -57,9 +57,9 @@ public class SystemResource {
     }
 
     @ApiOperation(
-            value = "Display the system information",
+            value = "Display the version information",
             notes = "")
-    @Path(value = "/info")
+    @Path(value = "/versions")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVersionInfo() {
@@ -69,21 +69,31 @@ public class SystemResource {
             Runtime runtime = Runtime.getRuntime();
             NumberFormat nf = NumberFormat.getInstance();
             nf.setMaximumFractionDigits(2);
-            info.clear();
-            info.put("Memory maximum", nf.format(((double) runtime.maxMemory()) / MB) + " MB");
-            info.put("Memory taken", nf.format(((double) runtime.totalMemory()) / MB) + " MB");
-            info.put("Memory free", nf.format(((double) runtime.freeMemory()) / MB) + " MB");
-            info.put("Memory in use", nf.format(((double) (runtime.totalMemory() - runtime.freeMemory())) / MB) + " MB");
-            info.put("Memory total free", nf.format(((double)
-                    (runtime.maxMemory() - runtime.totalMemory() + runtime.freeMemory())) / MB) + " MB");
             info.put("Hippo Release Version", getHippoReleaseVersion());
             info.put("Hippo CMS version", getCMSVersion());
             info.put("Project Version", getProjectVersion());
             info.put("Repository vendor", getRepositoryVendor(session));
             info.put("Repository version", getRepositoryVersion(session));
-            info.put("Java vendor", System.getProperty("java.vendor"));
-            info.put("Java version", System.getProperty("java.version"));
-            info.put("Java VM", System.getProperty("java.vm.name"));
+        } finally {
+            RepositoryConnectionUtils.cleanupSession(session);
+        }
+
+        return Response.ok(info).build();
+    }
+
+    @ApiOperation(
+            value = "Display the hardware information",
+            notes = "")
+    @Path(value = "/hardware")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getHardwareInfo() {
+        final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
+        Map<String, String> info = new LinkedHashMap<String, String>();
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            NumberFormat nf = NumberFormat.getInstance();
+            nf.setMaximumFractionDigits(2);
             info.put("OS architecture", System.getProperty("os.arch"));
             info.put("OS name", System.getProperty("os.name"));
             info.put("OS version", System.getProperty("os.version"));
@@ -91,6 +101,30 @@ public class SystemResource {
         } finally {
             RepositoryConnectionUtils.cleanupSession(session);
         }
+
+        return Response.ok(info).build();
+    }
+
+    @ApiOperation(
+            value = "Display the memory information from the JVM",
+            notes = "")
+    @Path(value = "/jvm")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMemoryInfo() {
+        Map<String, String> info = new LinkedHashMap<String, String>();
+        Runtime runtime = Runtime.getRuntime();
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMaximumFractionDigits(2);
+        info.put("Java vendor", System.getProperty("java.vendor"));
+        info.put("Java version", System.getProperty("java.version"));
+        info.put("Java VM", System.getProperty("java.vm.name"));
+        info.put("Memory maximum", nf.format(((double) runtime.maxMemory()) / MB) + " MB");
+        info.put("Memory taken", nf.format(((double) runtime.totalMemory()) / MB) + " MB");
+        info.put("Memory free", nf.format(((double) runtime.freeMemory()) / MB) + " MB");
+        info.put("Memory in use", nf.format(((double) (runtime.totalMemory() - runtime.freeMemory())) / MB) + " MB");
+        info.put("Memory total free", nf.format(((double)
+                (runtime.maxMemory() - runtime.totalMemory() + runtime.freeMemory())) / MB) + " MB");
 
         return Response.ok(info).build();
     }
