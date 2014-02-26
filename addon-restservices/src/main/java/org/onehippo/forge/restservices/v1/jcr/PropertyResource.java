@@ -58,7 +58,7 @@ public class PropertyResource {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
             final Property property = session.getProperty(absolutePath);
-            jcrProperty = JcrBindingHelper.getPropertyRepresentation(property);
+            jcrProperty = JcrDataBindingHelper.getPropertyRepresentation(property);
         } catch (RepositoryException e) {
             log.error("Error: {}", e);
             throw new WebApplicationException(e);

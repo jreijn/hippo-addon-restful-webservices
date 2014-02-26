@@ -73,7 +73,7 @@ public class NodesResource {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
             final Node node = session.getNode(absolutePath);
-            jcrNode = JcrBindingHelper.getNodeRepresentation(node, depth);
+            jcrNode = JcrDataBindingHelper.getNodeRepresentation(node, depth);
         } catch (RepositoryException e) {
             log.error("Error: {}", e);
             throw new WebApplicationException(e);
@@ -126,8 +126,8 @@ public class NodesResource {
         try {
             final Node parentNode = session.getNode(absolutePath);
             final Node node = parentNode.addNode(jcrNode.getName(), jcrNode.getPrimaryType());
-            JcrBindingHelper.addMixinsFromRepresentation(node, jcrNode.getMixinTypes());
-            JcrBindingHelper.addPropertiesFromRepresentation(node, jcrNode.getProperties());
+            JcrDataBindingHelper.addMixinsFromRepresentation(node, jcrNode.getMixinTypes());
+            JcrDataBindingHelper.addPropertiesFromRepresentation(node, jcrNode.getProperties());
             UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getNodeByPath");
             newNodeUri = ub.build(node.getName());
             session.save();

@@ -16,7 +16,6 @@ import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.NodeType;
 
 import org.apache.commons.codec.binary.Base64;
@@ -28,9 +27,9 @@ import org.slf4j.LoggerFactory;
  * Helper class for mapping to and from JCR.
  * @author jreijn
  */
-public class JcrBindingHelper {
+public class JcrDataBindingHelper {
 
-    private static Logger log = LoggerFactory.getLogger(JcrBindingHelper.class);
+    private static Logger log = LoggerFactory.getLogger(JcrDataBindingHelper.class);
 
     private static final Map<Integer, String> HIPPO_PROPERTY_BLACKLIST = createMap();
 
@@ -41,7 +40,7 @@ public class JcrBindingHelper {
         return Collections.unmodifiableMap(result);
     }
 
-    private JcrBindingHelper(){
+    private JcrDataBindingHelper(){
 
     }
 
