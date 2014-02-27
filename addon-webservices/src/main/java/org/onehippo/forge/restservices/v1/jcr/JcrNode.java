@@ -13,7 +13,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "A representation of a JCR node")
 @XmlRootElement(name = "node")
-@XmlType(propOrder = {"name","identifier","path","primaryType","properties","nodes"})
+@XmlType(propOrder = {"name","identifier","path","primaryType","mixinTypes","properties","nodes"})
 public class JcrNode {
 
     @ApiModelProperty(required = true)

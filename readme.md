@@ -1,8 +1,8 @@
 # Hippo REST services project
 
-This project is an initial attempt to have a pragmatic approach to provide a REST service on top of JCR (initially).
+This project is an initial attempt to have a pragmatic approach to provide a web service on top of JCR (initially).
 
-Visit http://localhost:8080/cms/swagger/ after startup to see the available rest end-points.
+Visit http://localhost:8080/cms/swagger/ after startup to see the available service end-points.
 
 Running locally
 ===============
