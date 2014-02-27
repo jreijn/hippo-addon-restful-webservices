@@ -203,7 +203,7 @@
         <module>bootstrap</module>
         <module>cms</module>
         <module>site</module>
-        <module>addon-restservices</module>
+        <module>addon-webservices</module>
       </modules>
     </profile>
 
