@@ -8,7 +8,7 @@
       <sv:value>hst:channel</sv:value>
     </sv:property>
     <sv:property sv:name="hst:channelinfoclass" sv:type="String">
-      <sv:value>org.onehippo.forge.restservices.channels.WebsiteInfo</sv:value>
+      <sv:value>org.onehippo.forge.webservices.channels.WebsiteInfo</sv:value>
     </sv:property>
     <sv:property sv:name="hst:name" sv:type="String">
       <sv:value>Hippo REST Services Demo project</sv:value>

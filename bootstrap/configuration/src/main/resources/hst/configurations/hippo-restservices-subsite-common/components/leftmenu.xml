@@ -4,7 +4,7 @@
     <sv:value>hst:component</sv:value>
   </sv:property>
   <sv:property sv:name="hst:componentclassname" sv:type="String">
-    <sv:value>org.onehippo.forge.restservices.components.LeftMenu</sv:value>
+    <sv:value>org.onehippo.forge.webservices.components.LeftMenu</sv:value>
   </sv:property>
   <sv:property sv:name="hst:template" sv:type="String">
     <sv:value>subsite.standard.main.leftmenu</sv:value>

@@ -14,7 +14,7 @@
       <sv:value>hst:channel</sv:value>
     </sv:property>
     <sv:property sv:name="hst:channelinfoclass" sv:type="String">
-      <sv:value>org.onehippo.forge.restservices.channels.SubsiteInfo</sv:value>
+      <sv:value>org.onehippo.forge.webservices.channels.SubsiteInfo</sv:value>
     </sv:property>
     <sv:property sv:name="hst:type" sv:type="String">
       <sv:value>website</sv:value>
