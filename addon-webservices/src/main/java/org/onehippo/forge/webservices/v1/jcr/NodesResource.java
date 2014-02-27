@@ -5,6 +5,7 @@ import java.net.URI;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -44,6 +45,9 @@ public class NodesResource {
 
     private static Logger log = LoggerFactory.getLogger(NodesResource.class);
 
+    @Context
+    private HttpServletRequest request;
+
     /**
      * Gets a node by its path.
      */
@@ -61,7 +65,7 @@ public class NodesResource {
     public Response getNodeByPath(@ApiParam(value = "Path of the node to retrieve", required = true) @PathParam("path") @DefaultValue("/") String path,
                                   @ApiParam(value = "Depth of the retrieval", required = false) @QueryParam("depth") @DefaultValue("0") int depth) throws RepositoryException {
 
-        final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
+        final Session session = RepositoryConnectionUtils.createSession(request);
         JcrNode jcrNode = null;
         String absolutePath = StringUtils.defaultIfEmpty(path, "/");
         if (!absolutePath.startsWith("/")) {
@@ -104,7 +108,7 @@ public class NodesResource {
                                      @Context UriInfo ui,
                                      JcrNode jcrNode) throws RepositoryException {
 
-        final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
+        final Session session = RepositoryConnectionUtils.createSession(request);
 
         String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
         if (!absolutePath.startsWith("/")) {
@@ -128,6 +132,7 @@ public class NodesResource {
             final Node node = parentNode.addNode(jcrNode.getName(), jcrNode.getPrimaryType());
             JcrDataBindingHelper.addMixinsFromRepresentation(node, jcrNode.getMixinTypes());
             JcrDataBindingHelper.addPropertiesFromRepresentation(node, jcrNode.getProperties());
+            JcrDataBindingHelper.addChildNodesFromRepresentation(node, jcrNode.getNodes());
             UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getNodeByPath");
             newNodeUri = ub.build(node.getName());
             session.save();
@@ -151,7 +156,7 @@ public class NodesResource {
     public Response deleteNodeByPath(@ApiParam(required = true, value = "Path of the node to delete e.g. '/content/documents/'")
                                      @PathParam("path") String path) throws RepositoryException {
 
-        final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
+        final Session session = RepositoryConnectionUtils.createSession(request);
         String absolutePath = path;
 
         if(StringUtils.isBlank(path)) {

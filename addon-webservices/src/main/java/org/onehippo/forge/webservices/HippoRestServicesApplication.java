@@ -18,7 +18,7 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 /**
- * Application that bootstraps
+ * Application that bootstraps the services
  */
 public class HippoRestServicesApplication extends Application {
 
@@ -36,6 +36,7 @@ public class HippoRestServicesApplication extends Application {
         classes.add(JacksonJaxbJsonProvider.class);
         classes.add(ResourceListingProvider.class);
         classes.add(CustomWebApplicationExceptionMapper.class);
+        classes.add(HippoAuthenticationHandler.class);
         return classes;
     }
 

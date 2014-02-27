@@ -178,16 +178,6 @@
       <param-name>javax.ws.rs.Application</param-name>
       <param-value>org.onehippo.forge.webservices.HippoRestServicesApplication</param-value>
     </init-param>
-<!--
-    <init-param>
-      <param-name>jaxrs.providers</param-name>
-      <param-value>
-        com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider,
-        org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider,
-        com.wordnik.swagger.jaxrs.listing.ResourceListingProvider
-      </param-value>
-    </init-param>
--->
     <init-param>
       <param-name>jaxrs.extensions</param-name>
       <param-value>json=application/json, xml=application/xml</param-value>

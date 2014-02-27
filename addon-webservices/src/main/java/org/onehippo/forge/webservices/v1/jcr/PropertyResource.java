@@ -3,12 +3,14 @@ package org.onehippo.forge.webservices.v1.jcr;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -30,6 +32,9 @@ public class PropertyResource {
 
     private static Logger log = LoggerFactory.getLogger(NodesResource.class);
 
+    @Context
+    private HttpServletRequest request;
+
     /**
      * Gets a property by its path.
      */
@@ -45,7 +50,7 @@ public class PropertyResource {
     })
     public Response getPropertyByPath(@ApiParam(value = "Path of the node to retrieve e.g '/content/hippostd:foldertype'.", required = true) @PathParam("path") String path) throws RepositoryException {
 
-        final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
+        final Session session = RepositoryConnectionUtils.createSession(request);
         JcrProperty jcrProperty = null;
         String absolutePath = StringUtils.defaultIfEmpty(path, "/");
         if (!absolutePath.startsWith("/")) {
@@ -84,7 +89,7 @@ public class PropertyResource {
     public Response deleteNodeByPath(@ApiParam(required = true, value = "Path of the property to delete e.g. '/content/hippostd:foldertype'.")
                                      @PathParam("path") String path) throws RepositoryException {
 
-        final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
+        final Session session = RepositoryConnectionUtils.createSession(request);
         String absolutePath = path;
 
         if (StringUtils.isBlank(path)) {

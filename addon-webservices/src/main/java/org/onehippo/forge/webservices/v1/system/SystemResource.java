@@ -13,9 +13,11 @@ import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import javax.jcr.LoginException;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -45,6 +47,9 @@ public class SystemResource {
     @Context
     private ServletContext servletContext;
 
+    @Context
+    private HttpServletRequest request;
+
     @ApiOperation(
             value = "Display the system properties",
             notes = "")
@@ -63,16 +68,18 @@ public class SystemResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVersionInfo() {
-        final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
+        Session session = null;
         Map<String, String> info = new LinkedHashMap<String, String>();
         try {
+            session = RepositoryConnectionUtils.createSession(request);
             info.put("Hippo Release Version", getHippoReleaseVersion());
             info.put("Hippo CMS version", getCMSVersion());
             info.put("Project Version", getProjectVersion());
             info.put("Repository vendor", getRepositoryVendor(session));
             info.put("Repository version", getRepositoryVersion(session));
-        }
-        finally {
+        } catch (LoginException e) {
+            log.warn("An exception occurred while trying to login: {}", e);
+        } finally {
             RepositoryConnectionUtils.cleanupSession(session);
         }
 
@@ -86,14 +93,17 @@ public class SystemResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHardwareInfo() {
-        final Session session = RepositoryConnectionUtils.createSession("admin", "admin");
+        Session session = null;
         Map<String, String> info = new LinkedHashMap<String, String>();
         try {
+            session = RepositoryConnectionUtils.createSession(request);
             Runtime runtime = Runtime.getRuntime();
             info.put("OS architecture", System.getProperty("os.arch"));
             info.put("OS name", System.getProperty("os.name"));
             info.put("OS version", System.getProperty("os.version"));
             info.put("Processors", "# " + runtime.availableProcessors());
+        } catch (LoginException e) {
+            log.warn("An exception occurred while trying to login: {}", e);
         } finally {
             RepositoryConnectionUtils.cleanupSession(session);
         }
@@ -121,7 +131,6 @@ public class SystemResource {
         info.put("Memory in use", nf.format(((double) (runtime.totalMemory() - runtime.freeMemory())) / MB) + " MB");
         info.put("Memory total free", nf.format(((double)
                 (runtime.maxMemory() - runtime.totalMemory() + runtime.freeMemory())) / MB) + " MB");
-
         return Response.ok(info).build();
     }
 

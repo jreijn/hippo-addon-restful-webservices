@@ -122,7 +122,18 @@ public class JcrDataBindingHelper {
         }
     }
 
-    private static void addPropertyToNode(final Node node, final JcrProperty property) throws RepositoryException {
+    public static void addChildNodesFromRepresentation(final Node node, List<JcrNode> nodes) throws RepositoryException {
+        for(JcrNode jcrNode : nodes) {
+            Node childNode = node.addNode(jcrNode.getName(),jcrNode.getPrimaryType());
+            addPropertiesFromRepresentation(childNode, jcrNode.getProperties());
+            addMixinsFromRepresentation(childNode, jcrNode.getMixinTypes());
+            if(!jcrNode.getNodes().isEmpty()) {
+                addChildNodesFromRepresentation(childNode, jcrNode.getNodes());
+            }
+        }
+    }
+
+    public static void addPropertyToNode(final Node node, final JcrProperty property) throws RepositoryException {
         ValueFactory valueFactory = node.getSession().getValueFactory();
         if(property.isMultiple()) {
 
@@ -145,7 +156,6 @@ public class JcrDataBindingHelper {
                     existingProperty.remove();
                 }
             }
-
             node.setProperty(property.getName(), values);
 
         } else {
@@ -171,7 +181,7 @@ public class JcrDataBindingHelper {
 
         switch (propertyType) {
             case PropertyType.BINARY:
-                // We expect binary values to be base64 encoded
+                // Binary values to be base64 encoded
                 byte[] decodedPropertyValue = Base64.decodeBase64(propertyValue);
                 try {
                     value = valueFactory.createValue(new BinaryImpl(new ByteArrayInputStream(decodedPropertyValue)));
