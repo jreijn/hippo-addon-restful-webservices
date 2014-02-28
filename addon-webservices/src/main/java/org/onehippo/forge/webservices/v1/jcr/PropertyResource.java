@@ -1,11 +1,17 @@
 package org.onehippo.forge.webservices.v1.jcr;
 
+import java.net.URI;
+
+import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -13,6 +19,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -70,6 +78,58 @@ public class PropertyResource {
             RepositoryConnectionUtils.cleanupSession(session);
         }
         return Response.ok(jcrProperty).build();
+    }
+
+    /**
+     * Creates a new property.
+     */
+    @POST
+    @Path("{path:.*}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(value = "Add a property to a node", notes = "Adds a property to a node")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = ResponseConstants.STATUS_MESSAGE_CREATED),
+            @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
+            @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
+            @ApiResponse(code = 403, message = ResponseConstants.STATUS_MESSAGE_ACCESS_DENIED),
+            @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
+    })
+    public Response createPropertyByPath(@ApiParam(required = true, value = "Path of the node to which to add the property to e.g. '/content/documents/'")
+                                         @PathParam("path") @DefaultValue("/") String parentPath,
+                                         @Context UriInfo ui,
+                                         JcrProperty jcrProperty) throws RepositoryException {
+
+        final Session session = RepositoryConnectionUtils.createSession(request);
+
+        String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
+        if (!absolutePath.startsWith("/")) {
+            absolutePath = "/" + absolutePath;
+        }
+
+        if (!session.nodeExists(absolutePath)) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        if (StringUtils.isEmpty(jcrProperty.getName())) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if (StringUtils.isEmpty(jcrProperty.getType())) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        URI newPropertyUri = null;
+        try {
+            final Node parentNode = session.getNode(absolutePath);
+            JcrDataBindingHelper.addPropertyToNode(parentNode,jcrProperty);
+            session.save();
+            UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getPropertyByPath");
+            newPropertyUri = ub.build(parentNode.getProperty(jcrProperty.getName()));
+        } catch (Exception e) {
+            throw new WebApplicationException(e);
+        } finally {
+            RepositoryConnectionUtils.cleanupSession(session);
+        }
+        return Response.created(newPropertyUri).build();
     }
 
     /**
