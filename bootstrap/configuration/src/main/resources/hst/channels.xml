@@ -3,7 +3,7 @@
   <sv:property sv:name="jcr:primaryType" sv:type="Name">
     <sv:value>hst:channels</sv:value>
   </sv:property>
-  <sv:node sv:name="hipporestservices">
+  <sv:node sv:name="hippowebservices">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hst:channel</sv:value>
     </sv:property>
@@ -11,7 +11,7 @@
       <sv:value>org.onehippo.forge.webservices.channels.WebsiteInfo</sv:value>
     </sv:property>
     <sv:property sv:name="hst:name" sv:type="String">
-      <sv:value>Hippo REST Services Demo project</sv:value>
+      <sv:value>Hippo WEB Services Demo project</sv:value>
     </sv:property>
       <sv:property sv:name="hst:type" sv:type="String">
         <sv:value>website</sv:value>

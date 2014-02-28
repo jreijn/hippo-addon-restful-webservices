@@ -5,8 +5,8 @@
   version="2.5"
   id="site">
 
-  <display-name>Hippo REST Services Demo project site</display-name>
-  <description>Hippo REST Services Demo project site</description>
+  <display-name>Hippo WEB Services Demo project site</display-name>
+  <description>Hippo WEB Services Demo project site</description>
 
   <jsp-config>
     <jsp-property-group>

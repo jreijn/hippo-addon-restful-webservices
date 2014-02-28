@@ -68,7 +68,7 @@
       </sv:node>
       <sv:node sv:name="toyota-suggests-putting-a-glass-of-water-on-your-dash">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
-          <sv:value>hipporestservices:newsdocument</sv:value>
+          <sv:value>hippowebservices:newsdocument</sv:value>
         </sv:property>
         <sv:property sv:name="jcr:mixinTypes" sv:type="Name">
           <sv:value>hippo:harddocument</sv:value>
@@ -108,16 +108,16 @@
         <sv:property sv:name="hippotranslation:locale" sv:type="String">
           <sv:value>en</sv:value>
         </sv:property>
-        <sv:property sv:name="hipporestservices:date" sv:type="Date">
+        <sv:property sv:name="hippowebservices:date" sv:type="Date">
           <sv:value>2011-02-15T00:00:00.000+01:00</sv:value>
         </sv:property>
-        <sv:property sv:name="hipporestservices:summary" sv:type="String">
+        <sv:property sv:name="hippowebservices:summary" sv:type="String">
           <sv:value>For a 10% fuel consumption reduction...</sv:value>
         </sv:property>
-        <sv:property sv:name="hipporestservices:title" sv:type="String">
+        <sv:property sv:name="hippowebservices:title" sv:type="String">
           <sv:value>Toyota suggests putting a glass of water on your dash (well, not really)</sv:value>
         </sv:property>
-        <sv:node sv:name="hipporestservices:body">
+        <sv:node sv:name="hippowebservices:body">
           <sv:property sv:name="jcr:primaryType" sv:type="Name">
             <sv:value>hippostd:html</sv:value>
           </sv:property>
@@ -142,7 +142,7 @@ smooth operator.&lt;/p&gt;
 &lt;/html&gt;</sv:value>
           </sv:property>
         </sv:node>
-        <sv:node sv:name="hipporestservices:image">
+        <sv:node sv:name="hippowebservices:image">
           <sv:property sv:name="jcr:primaryType" sv:type="Name">
             <sv:value>hippogallerypicker:imagelink</sv:value>
           </sv:property>
@@ -165,7 +165,7 @@ smooth operator.&lt;/p&gt;
       </sv:property>
       <sv:node sv:name="solar-power-the-sky-is-the-limit">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
-          <sv:value>hipporestservices:newsdocument</sv:value>
+          <sv:value>hippowebservices:newsdocument</sv:value>
         </sv:property>
         <sv:property sv:name="jcr:mixinTypes" sv:type="Name">
           <sv:value>hippo:harddocument</sv:value>
@@ -205,16 +205,16 @@ smooth operator.&lt;/p&gt;
         <sv:property sv:name="hippotranslation:locale" sv:type="String">
           <sv:value>en</sv:value>
         </sv:property>
-        <sv:property sv:name="hipporestservices:date" sv:type="Date">
+        <sv:property sv:name="hippowebservices:date" sv:type="Date">
           <sv:value>2011-02-11T00:00:00.000+01:00</sv:value>
         </sv:property>
-        <sv:property sv:name="hipporestservices:summary" sv:type="String">
+        <sv:property sv:name="hippowebservices:summary" sv:type="String">
           <sv:value>This week’s record-breaking night flight by the Solar Impulse aircraft has been widely acclaimed, but few of us are ever likely to fly in such a plane.</sv:value>
         </sv:property>
-        <sv:property sv:name="hipporestservices:title" sv:type="String">
+        <sv:property sv:name="hippowebservices:title" sv:type="String">
           <sv:value>Solar power: the sky is the limit</sv:value>
         </sv:property>
-        <sv:node sv:name="hipporestservices:body">
+        <sv:node sv:name="hippowebservices:body">
           <sv:property sv:name="jcr:primaryType" sv:type="Name">
             <sv:value>hippostd:html</sv:value>
           </sv:property>
@@ -257,7 +257,7 @@ long ago, Feldzer explained; having a person on board “changes everything”.&
 &lt;/html&gt;</sv:value>
           </sv:property>
         </sv:node>
-        <sv:node sv:name="hipporestservices:image">
+        <sv:node sv:name="hippowebservices:image">
           <sv:property sv:name="jcr:primaryType" sv:type="Name">
             <sv:value>hippogallerypicker:imagelink</sv:value>
           </sv:property>
@@ -291,7 +291,7 @@ long ago, Feldzer explained; having a person on board “changes everything”.&
       </sv:property>
       <sv:node sv:name="pbs-show-asserts-greenhouse-gases-atmospheric-pollutants-dimming-future">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
-          <sv:value>hipporestservices:newsdocument</sv:value>
+          <sv:value>hippowebservices:newsdocument</sv:value>
         </sv:property>
         <sv:property sv:name="jcr:mixinTypes" sv:type="Name">
           <sv:value>hippo:harddocument</sv:value>
@@ -331,16 +331,16 @@ long ago, Feldzer explained; having a person on board “changes everything”.&
         <sv:property sv:name="hippotranslation:locale" sv:type="String">
           <sv:value>en</sv:value>
         </sv:property>
-        <sv:property sv:name="hipporestservices:date" sv:type="Date">
+        <sv:property sv:name="hippowebservices:date" sv:type="Date">
           <sv:value>2011-02-24T00:00:00.000+01:00</sv:value>
         </sv:property>
-        <sv:property sv:name="hipporestservices:summary" sv:type="String">
+        <sv:property sv:name="hippowebservices:summary" sv:type="String">
           <sv:value>This week, the Public Broadcasting Service aired a NOVA program titled “Dimming the Earth”, which presented research by leading scientists on the complex systems of our global climate and human activity's effect on it. One of the largest interactions (or "inputs") humans have with the atmosphere is the ever-increasing use of fossil fuels. Consumption has risen 2% per year for this decade.</sv:value>
         </sv:property>
-        <sv:property sv:name="hipporestservices:title" sv:type="String">
+        <sv:property sv:name="hippowebservices:title" sv:type="String">
           <sv:value>PBS show asserts greenhouse gases, atmospheric pollutants dimming future</sv:value>
         </sv:property>
-        <sv:node sv:name="hipporestservices:body">
+        <sv:node sv:name="hippowebservices:body">
           <sv:property sv:name="jcr:primaryType" sv:type="Name">
             <sv:value>hippostd:html</sv:value>
           </sv:property>
@@ -368,7 +368,7 @@ particulate solids from industrial waste before it reaches the air.&lt;/p&gt;
 &lt;/html&gt;</sv:value>
           </sv:property>
         </sv:node>
-        <sv:node sv:name="hipporestservices:image">
+        <sv:node sv:name="hippowebservices:image">
           <sv:property sv:name="jcr:primaryType" sv:type="Name">
             <sv:value>hippogallerypicker:imagelink</sv:value>
           </sv:property>

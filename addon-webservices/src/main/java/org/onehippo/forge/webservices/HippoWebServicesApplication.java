@@ -20,7 +20,7 @@ import org.reflections.util.ConfigurationBuilder;
 /**
  * Application that bootstraps the services
  */
-public class HippoRestServicesApplication extends Application {
+public class HippoWebServicesApplication extends Application {
 
     private String resourcePackage = "org.onehippo.forge.webservices";
 

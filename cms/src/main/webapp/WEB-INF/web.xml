@@ -6,8 +6,8 @@
     id="cms">
 
   <!-- General configuration -->
-  <display-name>Hippo REST Services Demo project CMS</display-name>
-  <description>Hippo REST Services Demo project CMS</description>
+  <display-name>Hippo WebServices Demo project CMS</display-name>
+  <description>Hippo WebServices Demo project CMS</description>
 
   <context-param>
     <description>The address of the repository</description>
@@ -172,11 +172,11 @@
   </servlet>
 
   <servlet>
-    <servlet-name>RepositoryRestServicesServlet</servlet-name>
+    <servlet-name>RepositoryWebservicesServlet</servlet-name>
     <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
     <init-param>
       <param-name>javax.ws.rs.Application</param-name>
-      <param-value>org.onehippo.forge.webservices.HippoRestServicesApplication</param-value>
+      <param-value>org.onehippo.forge.webservices.HippoWebServicesApplication</param-value>
     </init-param>
     <init-param>
       <param-name>jaxrs.extensions</param-name>
@@ -204,7 +204,7 @@
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>RepositoryRestServicesServlet</servlet-name>
+    <servlet-name>RepositoryWebservicesServlet</servlet-name>
     <url-pattern>/rest/api/*</url-pattern>
   </servlet-mapping>
 

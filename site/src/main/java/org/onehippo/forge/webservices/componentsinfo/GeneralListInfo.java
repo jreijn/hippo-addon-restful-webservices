@@ -22,7 +22,7 @@ public interface GeneralListInfo  {
     @Parameter(name = "pageSize", displayName = "Page Size", defaultValue="10")
     int getPageSize();
 
-    @Parameter(name = "docType", displayName = "Document Type", defaultValue="hipporestservices:basedocument")
+    @Parameter(name = "docType", displayName = "Document Type", defaultValue="hippowebservices:basedocument")
     String getDocType();
 
     @Parameter(name = "sortBy", displayName = "Sort By Property")

@@ -1,4 +1,4 @@
-# Hippo REST services project
+# Hippo WEB services project
 
 This project is an initial attempt to have a pragmatic approach to provide a web service on top of the Hippo Repository.
 
@@ -16,7 +16,7 @@ From the project root folder, execute:
 Access the CMS at http://localhost:8080/cms, and the site at http://localhost:8080/site
 Logs are located in target/tomcat6x/logs
 
-Also you can see the REST api docs by browsing to http://localhost:8080/cms/swagger/
+Also you can see the WEB api docs by browsing to http://localhost:8080/cms/swagger/
 
 
 Building distribution

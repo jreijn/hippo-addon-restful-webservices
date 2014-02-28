@@ -3,12 +3,12 @@
   <sv:property sv:name="jcr:primaryType" sv:type="Name">
     <sv:value>hst:configurations</sv:value>
   </sv:property>
-  <sv:node sv:name="hipporestservices">
+  <sv:node sv:name="hippowebservices">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hst:configuration</sv:value>
     </sv:property>
   </sv:node>
-  <sv:node sv:name="hipporestservices-subsite-common">
+  <sv:node sv:name="hippowebservices-subsite-common">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hst:configuration</sv:value>
     </sv:property>

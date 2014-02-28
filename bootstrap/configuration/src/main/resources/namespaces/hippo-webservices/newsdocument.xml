@@ -26,11 +26,11 @@
         <sv:value>true</sv:value>
       </sv:property>
       <sv:property sv:name="hipposysedit:supertype" sv:type="String">
-        <sv:value>hipporestservices:basedocument</sv:value>
+        <sv:value>hippowebservices:basedocument</sv:value>
         <sv:value>hippostd:relaxed</sv:value>
       </sv:property>
       <sv:property sv:name="hipposysedit:uri" sv:type="String">
-        <sv:value>http://www.onehippo.org/hipporestservices/nt/1.0</sv:value>
+        <sv:value>http://www.onehippo.org/hippowebservices/nt/1.0</sv:value>
       </sv:property>
       <sv:node sv:name="title">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -46,7 +46,7 @@
           <sv:value>false</sv:value>
         </sv:property>
         <sv:property sv:name="hipposysedit:path" sv:type="String">
-          <sv:value>hipporestservices:title</sv:value>
+          <sv:value>hippowebservices:title</sv:value>
         </sv:property>
         <sv:property sv:name="hipposysedit:primary" sv:type="Boolean">
           <sv:value>false</sv:value>
@@ -69,7 +69,7 @@
           <sv:value>false</sv:value>
         </sv:property>
         <sv:property sv:name="hipposysedit:path" sv:type="String">
-          <sv:value>hipporestservices:summary</sv:value>
+          <sv:value>hippowebservices:summary</sv:value>
         </sv:property>
         <sv:property sv:name="hipposysedit:primary" sv:type="Boolean">
           <sv:value>false</sv:value>
@@ -92,7 +92,7 @@
           <sv:value>false</sv:value>
         </sv:property>
         <sv:property sv:name="hipposysedit:path" sv:type="String">
-          <sv:value>hipporestservices:body</sv:value>
+          <sv:value>hippowebservices:body</sv:value>
         </sv:property>
         <sv:property sv:name="hipposysedit:primary" sv:type="Boolean">
           <sv:value>false</sv:value>
@@ -115,7 +115,7 @@
           <sv:value>false</sv:value>
         </sv:property>
         <sv:property sv:name="hipposysedit:path" sv:type="String">
-          <sv:value>hipporestservices:date</sv:value>
+          <sv:value>hippowebservices:date</sv:value>
         </sv:property>
         <sv:property sv:name="hipposysedit:primary" sv:type="Boolean">
           <sv:value>false</sv:value>
@@ -138,7 +138,7 @@
           <sv:value>false</sv:value>
         </sv:property>
         <sv:property sv:name="hipposysedit:path" sv:type="String">
-          <sv:value>hipporestservices:image</sv:value>
+          <sv:value>hippowebservices:image</sv:value>
         </sv:property>
         <sv:property sv:name="hipposysedit:primary" sv:type="Boolean">
           <sv:value>false</sv:value>
@@ -155,7 +155,7 @@
     </sv:property>
     <sv:node sv:name="hipposysedit:prototype">
       <sv:property sv:name="jcr:primaryType" sv:type="Name">
-        <sv:value>hipporestservices:newsdocument</sv:value>
+        <sv:value>hippowebservices:newsdocument</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:mixinTypes" sv:type="Name">
         <sv:value>hippo:harddocument</sv:value>
@@ -184,18 +184,18 @@
         <sv:value>admin</sv:value>
       </sv:property>
       <sv:property sv:name="hippotranslation:id" sv:type="String">
-        <sv:value>hipporestservices-newsdocument-prototype-id</sv:value>
+        <sv:value>hippowebservices-newsdocument-prototype-id</sv:value>
       </sv:property>
       <sv:property sv:name="hippotranslation:locale" sv:type="String">
         <sv:value>en</sv:value>
       </sv:property>
-      <sv:property sv:name="hipporestservices:summary" sv:type="String">
+      <sv:property sv:name="hippowebservices:summary" sv:type="String">
         <sv:value/>
       </sv:property>
-      <sv:property sv:name="hipporestservices:title" sv:type="String">
+      <sv:property sv:name="hippowebservices:title" sv:type="String">
         <sv:value/>
       </sv:property>
-      <sv:node sv:name="hipporestservices:body">
+      <sv:node sv:name="hippowebservices:body">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
           <sv:value>hippostd:html</sv:value>
         </sv:property>
@@ -203,7 +203,7 @@
           <sv:value>&lt;html&gt;&lt;body/&gt;&lt;/html&gt;</sv:value>
         </sv:property>
       </sv:node>
-      <sv:node sv:name="hipporestservices:image">
+      <sv:node sv:name="hippowebservices:image">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
           <sv:value>hippogallerypicker:imagelink</sv:value>
         </sv:property>
@@ -238,7 +238,7 @@
         <sv:value>validator.id</sv:value>
       </sv:property>
       <sv:property sv:name="type" sv:type="String">
-        <sv:value>hipporestservices:newsdocument</sv:value>
+        <sv:value>hippowebservices:newsdocument</sv:value>
       </sv:property>
       <sv:node sv:name="root">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">

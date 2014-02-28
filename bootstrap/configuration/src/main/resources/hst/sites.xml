@@ -5,20 +5,20 @@
     <sv:value>hst:sites</sv:value>
   </sv:property>
   
-  <sv:node sv:name="hipporestservices">
+  <sv:node sv:name="hippowebservices">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hst:site</sv:value>
     </sv:property>
     <sv:property sv:name="hst:content" sv:type="String">
-      <sv:value>/content/documents/hipporestservices</sv:value>
+      <sv:value>/content/documents/hippowebservices</sv:value>
     </sv:property>
   </sv:node>
-  <sv:node sv:name="hipporestservices-preview">
+  <sv:node sv:name="hippowebservices-preview">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hst:site</sv:value>
     </sv:property>
     <sv:property sv:name="hst:content" sv:type="String">
-      <sv:value>/content/documents/hipporestservices</sv:value>
+      <sv:value>/content/documents/hippowebservices</sv:value>
     </sv:property>
   </sv:node>
 

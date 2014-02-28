@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sv:node xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:ae="http://www.onehippo.org/jcr/autoexport/1.0" sv:name="hippo:initialize" ae:id="hippo-restservices">
+<sv:node xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:ae="http://www.onehippo.org/jcr/autoexport/1.0" sv:name="hippo:initialize" ae:id="hippo-webservices">
   <sv:property sv:name="jcr:primaryType" sv:type="Name">
     <sv:value>hippo:initializefolder</sv:value>
   </sv:property>
 
-  <sv:node sv:name="hipporestservices-content">
+  <sv:node sv:name="hippowebservices-content">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hippo:initializeitem</sv:value>
     </sv:property>
@@ -20,7 +20,7 @@
   </sv:node>
 
   <!-- Content -->
-  <sv:node sv:name="hipporestservices-documents">
+  <sv:node sv:name="hhippowebservicesdocuments">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hippo:initializeitem</sv:value>
     </sv:property>
@@ -28,13 +28,13 @@
       <sv:value>30400</sv:value>
     </sv:property>
     <sv:property sv:name="hippo:contentresource" sv:type="String">
-      <sv:value>content/documents/hippo-restservices.xml</sv:value>
+      <sv:value>content/documents/hippo-webservices.xml</sv:value>
     </sv:property>
     <sv:property sv:name="hippo:contentroot" sv:type="String">
       <sv:value>/content/documents</sv:value>
     </sv:property>
   </sv:node>
-  <sv:node sv:name="hipporestservices-common">
+  <sv:node sv:name="hihippowebservicesommon">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hippo:initializeitem</sv:value>
     </sv:property>
@@ -42,13 +42,13 @@
       <sv:value>30404</sv:value>
     </sv:property>
     <sv:property sv:name="hippo:contentresource" sv:type="String">
-      <sv:value>content/documents/hippo-restservices/common.xml</sv:value>
+      <sv:value>content/documents/hippo-webservices/common.xml</sv:value>
     </sv:property>
     <sv:property sv:name="hippo:contentroot" sv:type="String">
-      <sv:value>/content/documents/hipporestservices</sv:value>
+      <sv:value>/content/documents/hippowebservices</sv:value>
     </sv:property>
   </sv:node>
-  <sv:node sv:name="hipporestservices-news">
+  <sv:node sv:name="hipphippowebservicess">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hippo:initializeitem</sv:value>
     </sv:property>
@@ -56,15 +56,15 @@
       <sv:value>30404.1</sv:value>
     </sv:property>
     <sv:property sv:name="hippo:contentresource" sv:type="String">
-      <sv:value>content/documents/hippo-restservices/news.xml</sv:value>
+      <sv:value>content/documents/hippo-webservices/news.xml</sv:value>
     </sv:property>
     <sv:property sv:name="hippo:contentroot" sv:type="String">
-      <sv:value>/content/documents/hipporestservices</sv:value>
+      <sv:value>/content/documents/hippowebservices</sv:value>
     </sv:property>
   </sv:node>
 
   <!-- Gallery -->
-  <sv:node sv:name="hipporestservices-gallery">
+  <sv:node sv:name="hippowebservices-gallery">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>hippo:initializeitem</sv:value>
     </sv:property>
@@ -72,7 +72,7 @@
       <sv:value>30500</sv:value>
     </sv:property>
     <sv:property sv:name="hippo:contentresource" sv:type="String">
-      <sv:value>content/gallery/hippo-restservices.xml</sv:value>
+      <sv:value>content/gallery/hippo-webservices.xml</sv:value>
     </sv:property>
     <sv:property sv:name="hippo:contentroot" sv:type="String">
       <sv:value>/content/gallery</sv:value>

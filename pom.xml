@@ -8,10 +8,10 @@
     <version>7.8.7</version>
   </parent>
 
-  <name>Hippo REST Services Demo project</name>
-  <description>Hippo REST Services Demo project</description>
-  <groupId>org.onehippo.forge.restservices</groupId>
-  <artifactId>hippo-restservices</artifactId>
+  <name>Hippo WEB Services Demo project</name>
+  <description>Hippo WEB Services Demo project</description>
+  <groupId>org.onehippo.forge.webservices</groupId>
+  <artifactId>hippo-webservices</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 

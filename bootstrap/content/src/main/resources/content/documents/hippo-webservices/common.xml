@@ -12,7 +12,7 @@
     <sv:value>en</sv:value>
   </sv:property>
   <sv:property sv:name="hippotranslation:id" sv:type="String">
-    <sv:value>hipporestservices-common-id</sv:value>
+    <sv:value>hippowebservices-common-id</sv:value>
   </sv:property>
   <sv:property sv:name="hippostd:foldertype" sv:type="String">
     <sv:value>new-translated-folder</sv:value>
@@ -50,7 +50,7 @@
     </sv:node>
     <sv:node sv:name="homepage">
       <sv:property sv:name="jcr:primaryType" sv:type="Name">
-        <sv:value>hipporestservices:textdocument</sv:value>
+        <sv:value>hippowebservices:textdocument</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:mixinTypes" sv:type="Name">
         <sv:value>hippo:harddocument</sv:value>
@@ -91,13 +91,13 @@
       <sv:property sv:name="hippostdpubwf:publicationDate" sv:type="Date">
         <sv:value>2011-02-15T14:58:39.642Z</sv:value>
       </sv:property>
-      <sv:property sv:name="hipporestservices:summary" sv:type="String">
+      <sv:property sv:name="hippowebservices:summary" sv:type="String">
         <sv:value>This is the home page of the generated HST website.</sv:value>
       </sv:property>
-      <sv:property sv:name="hipporestservices:title" sv:type="String">
-        <sv:value>hipporestservices Home Page</sv:value>
+      <sv:property sv:name="hippowebservices:title" sv:type="String">
+        <sv:value>hippowebservices Home Page</sv:value>
       </sv:property>
-      <sv:node sv:name="hipporestservices:body">
+      <sv:node sv:name="hippowebservices:body">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
           <sv:value>hippostd:html</sv:value>
         </sv:property>
@@ -129,7 +129,7 @@
   </sv:node>
     <sv:node sv:name="about-us">
       <sv:property sv:name="jcr:primaryType" sv:type="Name">
-        <sv:value>hipporestservices:textdocument</sv:value>
+        <sv:value>hippowebservices:textdocument</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:mixinTypes" sv:type="Name">
         <sv:value>hippo:harddocument</sv:value>
@@ -171,13 +171,13 @@
       <sv:property sv:name="hippostdpubwf:creationDate" sv:type="Date">
         <sv:value>2010-01-21T12:34:11.055+02:00</sv:value>
       </sv:property>
-      <sv:property sv:name="hipporestservices:summary" sv:type="String">
+      <sv:property sv:name="hippowebservices:summary" sv:type="String">
         <sv:value>Who we are.</sv:value>
       </sv:property>
-      <sv:property sv:name="hipporestservices:title" sv:type="String">
+      <sv:property sv:name="hippowebservices:title" sv:type="String">
         <sv:value>About us</sv:value>
       </sv:property>
-      <sv:node sv:name="hipporestservices:body">
+      <sv:node sv:name="hippowebservices:body">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
           <sv:value>hippostd:html</sv:value>
         </sv:property>

@@ -26,7 +26,7 @@
         <sv:value>hippostd:publishableSummary</sv:value>
       </sv:property>
       <sv:property sv:name="hipposysedit:uri" sv:type="String">
-        <sv:value>http://www.onehippo.org/hipporestservices/nt/1.0</sv:value>
+        <sv:value>http://www.onehippo.org/hippowebservices/nt/1.0</sv:value>
       </sv:property>
     </sv:node>
   </sv:node>

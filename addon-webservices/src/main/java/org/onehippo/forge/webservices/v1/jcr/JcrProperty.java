@@ -8,15 +8,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "A representation of a JCR property")
 @XmlRootElement(name = "property")
 @XmlType(propOrder = {"name","type","multiple","values"})
 public class JcrProperty {
 
+    @ApiModelProperty(required = true)
     private String name;
+    @ApiModelProperty(required = true)
     private String type;
+    @ApiModelProperty(required = true)
     private boolean multiple;
+    @ApiModelProperty(required = true)
     private List<String> values;
 
     public String getName() {

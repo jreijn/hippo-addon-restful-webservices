@@ -6,23 +6,23 @@ import org.hippoecm.hst.content.beans.Node;
 import org.hippoecm.hst.content.beans.standard.HippoHtml;
 import org.hippoecm.hst.content.beans.standard.HippoGalleryImageSetBean;
 
-@Node(jcrType="hipporestservices:newsdocument")
+@Node(jcrType="hippowebservices:newsdocument")
 public class NewsDocument extends BaseDocument{
 
     public String getTitle() {
-        return getProperty("hipporestservices:title");
+        return getProperty("hippowebservices:title");
     }
     
     public String getSummary() {
-        return getProperty("hipporestservices:summary");
+        return getProperty("hippowebservices:summary");
     }
     
     public Calendar getDate() {
-        return getProperty("hipporestservices:date");
+        return getProperty("hippowebservices:date");
     }
 
     public HippoHtml getHtml(){
-        return getHippoHtml("hipporestservices:body");    
+        return getHippoHtml("hippowebservices:body");
     }
 
     /**
@@ -31,7 +31,7 @@ public class NewsDocument extends BaseDocument{
      * @return the imageset of the newspage
      */
     public HippoGalleryImageSetBean getImage() {
-        return getLinkedBean("hipporestservices:image", HippoGalleryImageSetBean.class);
+        return getLinkedBean("hippowebservices:image", HippoGalleryImageSetBean.class);
     }
 
 
