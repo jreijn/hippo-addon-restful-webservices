@@ -9,6 +9,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <name>Hippo WEB Services Demo project Addon web services</name>
+  <description>Hippo WEB Services Demo project Addon web services</description>
   <artifactId>addon-webservices</artifactId>
 
   <dependencies>
