@@ -52,7 +52,8 @@ public class SystemResource {
 
     @ApiOperation(
             value = "Display the system properties",
-            notes = "")
+            notes = "",
+            position = 1)
     @Path(value = "/properties")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -63,7 +64,8 @@ public class SystemResource {
 
     @ApiOperation(
             value = "Display the version information",
-            notes = "")
+            notes = "",
+            position = 2)
     @Path(value = "/versions")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -88,7 +90,8 @@ public class SystemResource {
 
     @ApiOperation(
             value = "Display the hardware information",
-            notes = "")
+            notes = "",
+            position = 3)
     @Path(value = "/hardware")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -113,7 +116,8 @@ public class SystemResource {
 
     @ApiOperation(
             value = "Display the memory information from the JVM",
-            notes = "")
+            notes = "",
+            position = 4)
     @Path(value = "/jvm")
     @GET
     @Produces(MediaType.APPLICATION_JSON)

@@ -54,7 +54,7 @@ public class NodesResource {
     @GET
     @Path("{path:.*}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @ApiOperation(value = "Get a node", notes = "Returns a node from the specified path")
+    @ApiOperation(value = "Get a node", notes = "Returns a node from the specified path",position = 1)
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK, response = JcrNode.class),
@@ -94,7 +94,7 @@ public class NodesResource {
     @Path("{path:.*}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @ApiOperation(value = "Create a node", notes = "Creates a node and adds provided properties")
+    @ApiOperation(value = "Create a node", notes = "Creates a node and adds provided properties",position = 2)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK),
             @ApiResponse(code = 201, message = ResponseConstants.STATUS_MESSAGE_CREATED),
@@ -147,7 +147,7 @@ public class NodesResource {
 
     @DELETE
     @Path("{path:.*}")
-    @ApiOperation(value = "Delete a node", notes = "Deletes a node (and child-nodes)")
+    @ApiOperation(value = "Delete a node", notes = "Deletes a node (and child-nodes)" ,position = 3)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = ResponseConstants.STATUS_MESSAGE_DELETED),
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
