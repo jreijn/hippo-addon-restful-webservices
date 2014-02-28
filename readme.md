@@ -1,8 +1,14 @@
-# Hippo WEB services project
+# Hippo Web services project
 
-This project is an initial attempt to have a pragmatic approach to provide a web service on top of the Hippo Repository.
+This project is a pragmatic approach to provide a web service on top of the Hippo Repository.
 
 Visit http://localhost:8080/cms/swagger/ after startup to see the available service end-points and their documentation.
+
+It requires basic authentication and you can use the default user name and password to login.
+
+username: admin
+password: admin
+
 
 Running locally
 ===============
