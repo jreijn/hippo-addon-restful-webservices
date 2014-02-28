@@ -160,10 +160,6 @@
     <level value="info"/>
   </logger>
 
-  <logger name="org.apache.cxf.jaxrs.interceptor">
-    <level value="debug"/>
-  </logger>
-
   <logger name="com.wordnik">
     <level value="warn"/>
   </logger>

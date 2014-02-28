@@ -2,12 +2,11 @@
 
 This project is a pragmatic approach to provide a web service on top of the Hippo Repository.
 
-Visit http://localhost:8080/cms/swagger/ after startup to see the available service end-points and their documentation.
+It requires basic authentication and you can use the default user name and password to login e.g (admin/admin).
 
-It requires basic authentication and you can use the default user name and password to login.
+This project uses [Swagger](https://helloreverb.com/developers/swagger) for the documentation of the APIs.
+Visit [http://localhost:8080/cms/swagger/](http://localhost:8080/cms/swagger/) after startup to see the available service end-points and their documentation.
 
-username: admin
-password: admin
 
 
 Running locally
