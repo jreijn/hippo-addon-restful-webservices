@@ -16,7 +16,7 @@ import org.onehippo.forge.webservices.jaxrs.exception.UnauthorizedException;
 import org.onehippo.forge.webservices.v1.jcr.RepositoryConnectionUtils;
 
 @Provider
-public class HippoAuthenticationHandler implements RequestHandler {
+public class HippoAuthenticationRequestHandler implements RequestHandler {
 
     public Response handleRequest(Message m, ClassResourceInfo resourceClass) {
         AuthorizationPolicy policy = m.get(AuthorizationPolicy.class);

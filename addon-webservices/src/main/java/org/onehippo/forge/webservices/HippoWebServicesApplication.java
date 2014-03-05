@@ -36,7 +36,7 @@ public class HippoWebServicesApplication extends Application {
         classes.add(JacksonJaxbJsonProvider.class);
         classes.add(ResourceListingProvider.class);
         classes.add(CustomWebApplicationExceptionMapper.class);
-        classes.add(HippoAuthenticationHandler.class);
+        classes.add(HippoAuthenticationRequestHandler.class);
         return classes;
     }
 

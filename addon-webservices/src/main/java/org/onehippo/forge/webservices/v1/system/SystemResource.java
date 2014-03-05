@@ -29,6 +29,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hippoecm.frontend.Home;
 import org.onehippo.forge.webservices.v1.jcr.RepositoryConnectionUtils;
 import org.slf4j.Logger;
@@ -96,21 +97,12 @@ public class SystemResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHardwareInfo() {
-        Session session = null;
         Map<String, String> info = new LinkedHashMap<String, String>();
-        try {
-            session = RepositoryConnectionUtils.createSession(request);
-            Runtime runtime = Runtime.getRuntime();
-            info.put("OS architecture", System.getProperty("os.arch"));
-            info.put("OS name", System.getProperty("os.name"));
-            info.put("OS version", System.getProperty("os.version"));
-            info.put("Processors", "# " + runtime.availableProcessors());
-        } catch (LoginException e) {
-            log.warn("An exception occurred while trying to login: {}", e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
-        }
-
+        Runtime runtime = Runtime.getRuntime();
+        info.put("OS architecture", System.getProperty("os.arch"));
+        info.put("OS name", System.getProperty("os.name"));
+        info.put("OS version", System.getProperty("os.version"));
+        info.put("Processors", "# " + runtime.availableProcessors());
         return Response.ok(info).build();
     }
 
@@ -137,6 +129,28 @@ public class SystemResource {
                 (runtime.maxMemory() - runtime.totalMemory() + runtime.freeMemory())) / MB) + " MB");
         return Response.ok(info).build();
     }
+
+    @ApiOperation(
+            value = "Display jackrabbit information",
+            notes = "",
+            position = 5)
+    @Path(value = "/jackrabbit")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getJackrabbitInfo() {
+        Session session = null;
+        Map<String, String> info = new LinkedHashMap<String, String>();
+        try {
+            session = RepositoryConnectionUtils.createSession(request);
+            info.put("Jackrabbit Cluster Node id", getClusterNodeId(session));
+        } catch (LoginException e) {
+            log.warn("An exception occurred while trying to login: {}", e);
+        } finally {
+            RepositoryConnectionUtils.cleanupSession(session);
+        }
+        return Response.ok(info).build();
+    }
+
 
     private String getHippoReleaseVersion() {
         try {
@@ -264,6 +278,17 @@ public class SystemResource {
             versionString.append(projectBuild);
         }
         return versionString.toString();
+    }
+
+    private String getClusterNodeId(Session session) {
+        String clusterNodeId = "";
+        if (session.getRepository() != null) {
+            final String clusterId = session.getRepository().getDescriptor("jackrabbit.cluster.id");
+            if(clusterId!=null){
+                clusterNodeId = clusterId;
+            }
+        }
+        return clusterNodeId;
     }
 
 
