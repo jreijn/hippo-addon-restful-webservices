@@ -24,7 +24,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class WebservicesIntegrationTest extends RepositoryTestCase {
 
-    private final static String ENDPOINT_ADDRESS = "local:///";
     private final static String HTTP_ENDPOINT_ADDRESS = "http://localhost:8080/rest";
     private final static String DEFAULT_REPO_LOCATION = "file://";
     private static Server server;
@@ -60,6 +59,18 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         assertTrue(response.contains("Java vendor"));
     }
 
+    @Test
+    public void testGetVersionInfo() {
+        WebClient client = WebClient.create(HTTP_ENDPOINT_ADDRESS, "admin", "admin", null);
+        final String response = client
+                .path("v1/system/versions")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(String.class);
+        assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
+        assertTrue(response.contains("Repository vendor"));
+    }
+
     @After
     public void tearDown() throws Exception {
         tearDown(false);
@@ -68,8 +79,10 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @AfterClass
     public static void destroy() throws Exception {
         tearDownClass();
-        server.stop();
-        server.destroy();
+        if(server!=null) {
+            server.stop();
+            server.destroy();
+        }
     }
 
     private static String getDefaultRepoPath() {

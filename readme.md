@@ -1,6 +1,8 @@
 # Hippo Web services project
 
-This project is a pragmatic approach to provide a web service on top of the Hippo Repository.
+!https://travis-ci.org/jreijn/hippo-addon-webservices.png?branch=master!:https://travis-ci.org/jreijn/hippo-addon-webservices
+
+This project is a pragmatic approach to provide web services on top of the Hippo Repository.
 
 It requires basic authentication and you can use the default user name and password to login e.g (admin/admin).
 
