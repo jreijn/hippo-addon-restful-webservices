@@ -1,6 +1,6 @@
 # Hippo Web services project
 
-!https://travis-ci.org/jreijn/hippo-addon-webservices.png?branch=master!:https://travis-ci.org/jreijn/hippo-addon-webservices
+[![Build Status](https://travis-ci.org/jreijn/hippo-addon-webservices.png?branch=master)](https://travis-ci.org/jreijn/hippo-addon-webservices)
 
 This project is a pragmatic approach to provide web services on top of the Hippo Repository.
 
