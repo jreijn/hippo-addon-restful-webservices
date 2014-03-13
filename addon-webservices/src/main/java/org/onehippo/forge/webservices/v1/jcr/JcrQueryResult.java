@@ -10,31 +10,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="result")
 public class JcrQueryResult {
 
-    private List<JcrNode> items;
-    private String type;
-    private String query;
+    private List<JcrNode> nodes;
+    private long hits;
 
-    public String getType() {
-        return type;
+    public long getHits() {
+        return hits;
     }
 
-    public void setType(final String type) {
-        this.type = type;
+    public void setHits(final long hits) {
+        this.hits = hits;
     }
 
-    public String getQuery() {
-        return query;
+    public List<JcrNode> getNodes() {
+        return nodes;
     }
 
-    public void setQuery(final String query) {
-        this.query = query;
-    }
-
-    public List<JcrNode> getItems() {
-        return items;
-    }
-
-    public void setItems(final List<JcrNode> items) {
-        this.items = items;
+    public void setNodes(final List<JcrNode> nodes) {
+        this.nodes = nodes;
     }
 }

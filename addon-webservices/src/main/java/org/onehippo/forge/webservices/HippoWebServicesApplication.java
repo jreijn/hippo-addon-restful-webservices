@@ -1,5 +1,6 @@
 package org.onehippo.forge.webservices;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
@@ -23,20 +24,24 @@ import org.reflections.util.ConfigurationBuilder;
 public class HippoWebServicesApplication extends Application {
 
     private String resourcePackage = "org.onehippo.forge.webservices";
+    private Set<Class<?>> classes = new HashSet<Class<?>>();
 
-    @Override
-    public Set<Class<?>> getClasses() {
+    public HippoWebServicesApplication() {
         final ConfigurationBuilder config = new ConfigurationBuilder();
         config.setUrls(ClasspathHelper.forPackage(this.resourcePackage)).setScanners(
                 new TypeAnnotationsScanner(), new SubTypesScanner());
 
-        final Set<Class<?>> classes = new Reflections(config).getTypesAnnotatedWith(Api.class);
+        classes = new Reflections(config).getTypesAnnotatedWith(Api.class);
         classes.add(ApiListingResourceJSON.class);
         classes.add(ApiDeclarationProvider.class);
         classes.add(JacksonJaxbJsonProvider.class);
         classes.add(ResourceListingProvider.class);
         classes.add(CustomWebApplicationExceptionMapper.class);
         classes.add(HippoAuthenticationRequestHandler.class);
+    }
+
+    @Override
+    public Set<Class<?>> getClasses() {
         return classes;
     }
 
