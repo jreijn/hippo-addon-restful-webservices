@@ -125,7 +125,13 @@ public class QueryResource {
         try {
             session = RepositoryConnectionUtils.createSession(request);
             Query query = session.getWorkspace().getQueryManager().createQuery(searchQuery.getStatement(), searchQuery.getLanguage());
-            query.setLimit(searchQuery.getLimit());
+            if(searchQuery.getLimit()>0) {
+                query.setLimit(searchQuery.getLimit());
+            }
+            if(searchQuery.getOffset()>0) {
+                query.setOffset(searchQuery.getOffset());
+            }
+
             javax.jcr.query.QueryResult queryResult = query.execute();
             HippoNodeIterator nodeIterator = (HippoNodeIterator) queryResult.getNodes();
             jcrQueryResult.setHits(nodeIterator.getTotalSize());

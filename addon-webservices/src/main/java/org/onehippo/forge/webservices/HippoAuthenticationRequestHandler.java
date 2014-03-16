@@ -14,9 +14,13 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.onehippo.forge.webservices.jaxrs.exception.UnauthorizedException;
 import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Provider
 public class HippoAuthenticationRequestHandler implements RequestHandler {
+
+    private static Logger log = LoggerFactory.getLogger(HippoAuthenticationRequestHandler.class);
 
     public Response handleRequest(Message m, ClassResourceInfo resourceClass) {
         AuthorizationPolicy policy = m.get(AuthorizationPolicy.class);
@@ -35,6 +39,7 @@ public class HippoAuthenticationRequestHandler implements RequestHandler {
                     return Response.status(401).header("WWW-Authenticate", "Basic").build();
                 }
             } catch (LoginException e) {
+                log.debug("Login failed: {}", e);
                 throw new UnauthorizedException(e.getMessage(), "Hippo API Realm");
             } finally {
                 RepositoryConnectionUtils.cleanupSession(session);

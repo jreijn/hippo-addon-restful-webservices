@@ -75,12 +75,10 @@ public class JcrDataBindingHelper {
                 }
             }
 
-            if(depth > 0) {
-                if(node.hasNodes()) {
-                    final NodeIterator childNodes = node.getNodes();
-                    while(childNodes.hasNext()) {
-                        jcrNode.addNode(getNodeRepresentation(childNodes.nextNode(), depth - 1));
-                    }
+            if(depth > 0 && node.hasNodes()) {
+                final NodeIterator childNodes = node.getNodes();
+                while(childNodes.hasNext()) {
+                    jcrNode.addNode(getNodeRepresentation(childNodes.nextNode(), depth - 1));
                 }
             }
         } catch (RepositoryException e) {
@@ -186,21 +184,28 @@ public class JcrDataBindingHelper {
 
     protected static Value getValueByType(final int propertyType, final String propertyValue, final ValueFactory valueFactory) throws RepositoryException {
         Value value = null;
-
         switch (propertyType) {
             case PropertyType.BINARY:
                 // Binary values to be base64 encoded
-                byte[] decodedPropertyValue = Base64.decodeBase64(propertyValue);
-                try {
-                    value = valueFactory.createValue(new BinaryImpl(new ByteArrayInputStream(decodedPropertyValue)));
-                } catch (IOException e) {
-                    log.error("An exception occurred while trying to create binary value {}", e);
-                }
+                value = getBinaryValue(propertyValue, valueFactory);
                 break;
             default:
                 value = valueFactory.createValue(propertyValue, propertyType);
+                break;
         }
 
+        return value;
+    }
+
+    private static Value getBinaryValue(final String propertyValue, final ValueFactory valueFactory) {
+        Value value = null;
+        byte[] decodedPropertyValue = Base64.decodeBase64(propertyValue);
+        try {
+
+            value = valueFactory.createValue(new BinaryImpl(new ByteArrayInputStream(decodedPropertyValue)));
+        } catch (IOException e) {
+            log.error("An exception occurred while trying to create binary value {}", e);
+        }
         return value;
     }
 }

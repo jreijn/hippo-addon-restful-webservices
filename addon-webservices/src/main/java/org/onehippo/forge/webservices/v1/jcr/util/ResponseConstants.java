@@ -11,4 +11,6 @@ public abstract class ResponseConstants {
     public static final String STATUS_MESSAGE_NODE_NOT_FOUND = "Node not found";
     public static final String STATUS_MESSAGE_ERROR_OCCURRED = "Error occurred";
 
+    private ResponseConstants() {
+    }
 }
