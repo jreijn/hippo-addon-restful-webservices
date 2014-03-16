@@ -30,6 +30,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.annotations.GZIP;
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrProperty;
 import org.onehippo.forge.webservices.v1.jcr.util.JcrDataBindingHelper;
@@ -41,6 +42,7 @@ import org.slf4j.LoggerFactory;
 @GZIP
 @Api(value = "v1/properties", description = "API for working with JCR properties")
 @Path("v1/properties")
+@CrossOriginResourceSharing(allowAllOrigins = true)
 public class PropertyResource {
 
     private static Logger log = LoggerFactory.getLogger(NodesResource.class);

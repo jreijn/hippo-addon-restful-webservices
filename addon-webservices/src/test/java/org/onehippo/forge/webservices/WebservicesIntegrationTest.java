@@ -1,6 +1,7 @@
 package org.onehippo.forge.webservices;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.ws.rs.core.MediaType;
@@ -18,6 +19,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrProperty;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrQueryResult;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrSearchQuery;
 import org.onehippo.repository.testutils.RepositoryTestCase;
@@ -90,6 +92,59 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         assertTrue(response.getName().equals(""));
         assertTrue(response.getPath().equals("/"));
         assertTrue(response.getPrimaryType().equals("rep:root"));
+    }
+
+    @Test
+    public void testGetJcrRootNodeWithDepth() {
+        final JcrNode response = client
+                .path("v1/nodes/")
+                .query("depth","1")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(JcrNode.class);
+        assertTrue(response.getName().equals(""));
+        assertTrue(response.getPath().equals("/"));
+        assertTrue(response.getPrimaryType().equals("rep:root"));
+        assertTrue(response.getNodes().size()==4);
+    }
+
+    @Test
+    public void testPostToJcrRootNode() {
+        final ArrayList<String> values = new ArrayList<String>(1);
+        final ArrayList<JcrProperty> properties = new ArrayList<JcrProperty>(1);
+        values.add("test");
+
+        JcrNode node = new JcrNode();
+        node.setName("newnode");
+        node.setPrimaryType("nt:unstructured");
+
+        final JcrProperty jcrProperty = new JcrProperty();
+        jcrProperty.setName("myproperty");
+        jcrProperty.setType("String");
+        jcrProperty.setMultiple(false);
+        jcrProperty.setValues(values);
+
+        properties.add(jcrProperty);
+        node.setProperties(properties);
+
+        final Response response = client
+                .path("v1/nodes/")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .post(node);
+        assertTrue(response.getStatus()==Response.Status.CREATED.getStatusCode());
+        assertTrue(response.getMetadata().getFirst("Location").equals(HTTP_ENDPOINT_ADDRESS+"/v1/nodes/newnode"));
+    }
+
+    @Test
+    public void testGetPropertyFromNode() {
+        final JcrProperty response = client.path("v1/properties/jcr:primaryType")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(JcrProperty.class);
+        assertTrue(response!=null);
+        assertTrue(response.getName().equals("jcr:primaryType"));
+        assertTrue(response.getValues().get(0).equals("rep:root"));
     }
 
     @Test

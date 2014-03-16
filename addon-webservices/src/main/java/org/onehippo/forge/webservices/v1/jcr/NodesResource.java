@@ -30,6 +30,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.annotations.GZIP;
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.v1.jcr.util.JcrDataBindingHelper;
 import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
@@ -45,6 +46,7 @@ import org.slf4j.LoggerFactory;
 @GZIP
 @Api(value = "v1/nodes", description = "API for working with JCR nodes")
 @Path("v1/nodes")
+@CrossOriginResourceSharing(allowAllOrigins = true)
 public class NodesResource {
 
     private static Logger log = LoggerFactory.getLogger(NodesResource.class);

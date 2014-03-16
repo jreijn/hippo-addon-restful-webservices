@@ -28,6 +28,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.hippoecm.repository.api.HippoNodeIterator;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrQueryResult;
@@ -40,13 +41,13 @@ import org.slf4j.LoggerFactory;
 
 @Api(value = "v1/query", description = "API for searching nodes")
 @Path("v1/query")
+@CrossOriginResourceSharing(allowAllOrigins = true)
 public class QueryResource {
 
     private static Logger log = LoggerFactory.getLogger(QueryResource.class);
 
     @Context
     private HttpServletRequest request;
-
 
     @GET
     @Path("/")
@@ -104,7 +105,6 @@ public class QueryResource {
         jcrQueryResult.setNodes(resultItems);
         return Response.ok(jcrQueryResult).build();
     }
-
 
     @POST
     @Path("/")
