@@ -23,7 +23,7 @@ import org.reflections.util.ConfigurationBuilder;
  */
 public class HippoWebServicesApplication extends Application {
 
-    private String resourcePackage = "org.onehippo.forge.webservices";
+    private String resourcePackage = "org.onehippo.forge";
     private Set<Class<?>> classes = new HashSet<Class<?>>();
 
     public HippoWebServicesApplication() {

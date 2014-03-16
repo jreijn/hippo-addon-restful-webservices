@@ -29,9 +29,8 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.hippoecm.frontend.Home;
-import org.onehippo.forge.webservices.v1.jcr.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

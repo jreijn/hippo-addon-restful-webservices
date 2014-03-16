@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.jcr;
+package org.onehippo.forge.webservices.v1.jcr.util;
 
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;

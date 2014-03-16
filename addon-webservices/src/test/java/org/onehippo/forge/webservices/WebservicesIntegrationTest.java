@@ -17,9 +17,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.onehippo.forge.webservices.v1.jcr.JcrNode;
-import org.onehippo.forge.webservices.v1.jcr.JcrQueryResult;
-import org.onehippo.forge.webservices.v1.jcr.SearchQuery;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrQueryResult;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrSearchQuery;
 import org.onehippo.repository.testutils.RepositoryTestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,7 +106,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
 
     @Test
     public void testGetQueryResultsWithBody() {
-        SearchQuery query = new SearchQuery();
+        JcrSearchQuery query = new JcrSearchQuery();
         query.setStatement("SELECT * FROM rep:root order by jcr:score");
         query.setLanguage("sql");
         final JcrQueryResult response = client

@@ -1,5 +1,6 @@
 package org.onehippo.forge.webservices.v1.jcr;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 import javax.jcr.Node;
@@ -18,6 +19,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -26,6 +29,12 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 
 import org.hippoecm.repository.api.HippoNodeIterator;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrQueryResult;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrSearchQuery;
+import org.onehippo.forge.webservices.v1.jcr.util.JcrDataBindingHelper;
+import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.v1.jcr.util.ResponseConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +65,8 @@ public class QueryResource {
                                @ApiParam(required = false, value = "Sets the maximum size of the result set.")
                                @QueryParam("limit") @DefaultValue("200") int limit,
                                @ApiParam(required = false, value = "Sets the start offset of the result set.")
-                               @QueryParam("offset") int offset) {
+                               @QueryParam("offset") int offset,
+                               @Context UriInfo ui) {
         JcrQueryResult jcrQueryResult = new JcrQueryResult();
         ArrayList<JcrNode> resultItems = new ArrayList<JcrNode>();
 
@@ -81,6 +91,8 @@ public class QueryResource {
             while(nodeIterator.hasNext()){
                 Node node = nodeIterator.nextNode();
                 final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(node, 0);
+                final URI nodeUri = getUriForNode(ui, nodeRepresentation);
+                nodeRepresentation.setLink(nodeUri);
                 resultItems.add(nodeRepresentation);
             }
         } catch (RepositoryException e) {
@@ -105,7 +117,7 @@ public class QueryResource {
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
     })
-    public Response getResults(SearchQuery searchQuery) {
+    public Response getResults(JcrSearchQuery searchQuery, @Context UriInfo ui) {
         JcrQueryResult jcrQueryResult = new JcrQueryResult();
         ArrayList<JcrNode> resultItems = new ArrayList<JcrNode>();
 
@@ -120,6 +132,8 @@ public class QueryResource {
             while(nodeIterator.hasNext()){
                 Node node = nodeIterator.nextNode();
                 final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(node, 0);
+                final URI nodeUri = getUriForNode(ui, nodeRepresentation);
+                nodeRepresentation.setLink(nodeUri);
                 resultItems.add(nodeRepresentation);
             }
         } catch (RepositoryException e) {
@@ -130,6 +144,11 @@ public class QueryResource {
 
         jcrQueryResult.setNodes(resultItems);
         return Response.ok(jcrQueryResult).build();
+    }
+
+    private URI getUriForNode(final UriInfo ui, final JcrNode nodeRepresentation) {
+        UriBuilder uriBuilder = ui.getBaseUriBuilder().path(NodesResource.class).path(NodesResource.class,"getNodeByPath");
+        return uriBuilder.build(nodeRepresentation.getPath().substring(1));
     }
 
 }

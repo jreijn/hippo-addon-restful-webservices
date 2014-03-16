@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.jcr;
+package org.onehippo.forge.webservices.v1.jcr.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,6 +20,8 @@ import javax.jcr.nodetype.NodeType;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jackrabbit.value.BinaryImpl;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,6 +107,12 @@ public class JcrDataBindingHelper {
         return data;
     }
 
+    /**
+     * Parses the list of mixins and applies them to the {@link Node}
+     * @param node
+     * @param mixins
+     * @throws RepositoryException
+     */
     public static void addMixinsFromRepresentation(final Node node, final List<String> mixins) throws RepositoryException {
         for(String mixin: mixins) {
             if(node.canAddMixin(mixin)) {

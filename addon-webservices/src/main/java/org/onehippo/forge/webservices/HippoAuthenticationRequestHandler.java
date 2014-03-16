@@ -13,7 +13,7 @@ import org.apache.cxf.jaxrs.model.ClassResourceInfo;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.onehippo.forge.webservices.jaxrs.exception.UnauthorizedException;
-import org.onehippo.forge.webservices.v1.jcr.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
 
 @Provider
 public class HippoAuthenticationRequestHandler implements RequestHandler {

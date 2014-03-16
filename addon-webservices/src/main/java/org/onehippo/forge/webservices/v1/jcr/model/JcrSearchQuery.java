@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.jcr;
+package org.onehippo.forge.webservices.v1.jcr.model;
 
 import java.util.Set;
 
@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 @XmlRootElement(name="search")
-public class SearchQuery {
+public class JcrSearchQuery {
     @ApiModelProperty(required = true)
     private String statement;
     @ApiModelProperty(required = true)
