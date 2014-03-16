@@ -30,6 +30,10 @@ import com.wordnik.swagger.annotations.ApiResponses;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.annotations.GZIP;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
+import org.onehippo.forge.webservices.v1.jcr.util.JcrDataBindingHelper;
+import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.v1.jcr.util.ResponseConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
