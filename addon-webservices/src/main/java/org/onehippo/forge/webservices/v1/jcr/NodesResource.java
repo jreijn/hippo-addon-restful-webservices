@@ -30,7 +30,6 @@ import com.wordnik.swagger.annotations.ApiResponses;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.annotations.GZIP;
-import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.v1.jcr.util.JcrDataBindingHelper;
 import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
@@ -46,7 +45,6 @@ import org.slf4j.LoggerFactory;
 @GZIP
 @Api(value = "v1/nodes", description = "API for working with JCR nodes")
 @Path("v1/nodes")
-@CrossOriginResourceSharing(allowAllOrigins = true)
 public class NodesResource {
 
     private static Logger log = LoggerFactory.getLogger(NodesResource.class);
@@ -60,7 +58,7 @@ public class NodesResource {
     @GET
     @Path("{path:.*}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @ApiOperation(value = "Get a node", notes = "Returns a node from the specified path",position = 1)
+    @ApiOperation(value = "Get a node", notes = "Returns a node from the specified path", position = 1)
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK, response = JcrNode.class),
@@ -100,7 +98,7 @@ public class NodesResource {
     @Path("{path:.*}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @ApiOperation(value = "Create a node", notes = "Creates a node and adds provided properties",position = 2)
+    @ApiOperation(value = "Create a node", notes = "Creates a node and adds provided properties", position = 2)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK),
             @ApiResponse(code = 201, message = ResponseConstants.STATUS_MESSAGE_CREATED),
@@ -153,7 +151,7 @@ public class NodesResource {
 
     @DELETE
     @Path("{path:.*}")
-    @ApiOperation(value = "Delete a node", notes = "Deletes a node (and child-nodes)" ,position = 3)
+    @ApiOperation(value = "Delete a node", notes = "Deletes a node (and child-nodes)", position = 3)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = ResponseConstants.STATUS_MESSAGE_DELETED),
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
@@ -165,7 +163,7 @@ public class NodesResource {
         final Session session = RepositoryConnectionUtils.createSession(request);
         String absolutePath = path;
 
-        if(StringUtils.isBlank(path)) {
+        if (StringUtils.isBlank(path)) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 

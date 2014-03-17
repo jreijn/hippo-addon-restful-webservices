@@ -30,7 +30,6 @@ import com.wordnik.swagger.annotations.ApiResponses;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.annotations.GZIP;
-import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.v1.jcr.model.JcrProperty;
 import org.onehippo.forge.webservices.v1.jcr.util.JcrDataBindingHelper;
@@ -42,7 +41,6 @@ import org.slf4j.LoggerFactory;
 @GZIP
 @Api(value = "v1/properties", description = "API for working with JCR properties")
 @Path("v1/properties")
-@CrossOriginResourceSharing(allowAllOrigins = true)
 public class PropertyResource {
 
     private static Logger log = LoggerFactory.getLogger(NodesResource.class);
@@ -127,10 +125,10 @@ public class PropertyResource {
         URI newPropertyUri = null;
         try {
             final Node parentNode = session.getNode(absolutePath);
-            JcrDataBindingHelper.addPropertyToNode(parentNode,jcrProperty);
+            JcrDataBindingHelper.addPropertyToNode(parentNode, jcrProperty);
             session.save();
-            UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getPropertyByPath");
-            newPropertyUri = ub.build(parentNode.getProperty(jcrProperty.getName()));
+            UriBuilder ub = ui.getBaseUriBuilder().path(this.getClass()).path(this.getClass(), "getPropertyByPath");
+            newPropertyUri = ub.build(parentNode.getProperty(jcrProperty.getName()).getPath().substring(1));
         } catch (Exception e) {
             throw new WebApplicationException(e);
         } finally {
@@ -141,6 +139,7 @@ public class PropertyResource {
 
     /**
      * Delete a property by it's path
+     *
      * @param path the path to the node
      * @return the Response status
      * @throws RepositoryException
@@ -154,7 +153,7 @@ public class PropertyResource {
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
     })
     public Response deletePropertyByPath(@ApiParam(required = true, value = "Path of the property to delete e.g. '/content/hippostd:foldertype'.")
-                                             @PathParam("path") String path) throws RepositoryException {
+                                         @PathParam("path") String path) throws RepositoryException {
 
         final Session session = RepositoryConnectionUtils.createSession(request);
         String absolutePath = path;

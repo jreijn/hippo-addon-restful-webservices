@@ -29,7 +29,6 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.hippoecm.frontend.Home;
 import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
 import org.slf4j.Logger;
@@ -41,7 +40,6 @@ import org.slf4j.LoggerFactory;
  */
 @Api(value = "v1/system", description = "API for system information")
 @Path(value = "v1/system")
-@CrossOriginResourceSharing(allowAllOrigins = true)
 public class SystemResource {
 
     private static Logger log = LoggerFactory.getLogger(SystemResource.class);
@@ -60,7 +58,6 @@ public class SystemResource {
     @Path(value = "/properties")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @CrossOriginResourceSharing(allowAllOrigins = true)
     public Response getSystemInfo() {
         Properties properties = System.getProperties();
         return Response.ok(properties).build();

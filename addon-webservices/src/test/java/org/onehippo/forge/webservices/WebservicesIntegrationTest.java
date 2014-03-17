@@ -3,7 +3,9 @@ package org.onehippo.forge.webservices;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 
+import javax.jcr.RepositoryException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.RuntimeDelegate;
@@ -61,13 +63,26 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
 
     @Test
     public void testGetSystemInfo() {
-        final String response = client
+        final LinkedHashMap response = client
                 .path("v1/system/jvm")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
-                .get(String.class);
+                .header("Origin",HTTP_ENDPOINT_ADDRESS)
+                .get(LinkedHashMap.class);
         assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
-        assertTrue(response.contains("Java vendor"));
+        assertTrue(response.get("Java vendor").equals(System.getProperty("java.vendor")));
+    }
+
+    @Test
+    public void testGetHardwareInfo() {
+        final LinkedHashMap response = client
+                .path("v1/system/hardware")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .header("Origin",HTTP_ENDPOINT_ADDRESS)
+                .get(LinkedHashMap.class);
+        assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
+        assertTrue(response.get("OS architecture").equals(System.getProperty("os.arch")));
     }
 
     @Test
@@ -92,6 +107,16 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         assertTrue(response.getName().equals(""));
         assertTrue(response.getPath().equals("/"));
         assertTrue(response.getPrimaryType().equals("rep:root"));
+    }
+
+    @Test
+    public void testNotFoundForJcrNode() {
+        final Response response = client
+                .path("v1/nodes/nonexistingnode")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(Response.class);
+        assertTrue(response.getStatus() == Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -137,6 +162,18 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     }
 
     @Test
+    public void testDeleteJcrNodeByPath() throws RepositoryException {
+        session.getRootNode().addNode("test","nt:unstructured");
+        session.save();
+        final Response response = client
+                .path("v1/nodes/test")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .delete();
+        assertTrue(response.getStatus() == Response.Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
     public void testGetPropertyFromNode() {
         final JcrProperty response = client.path("v1/properties/jcr:primaryType")
                 .accept(MediaType.APPLICATION_JSON)
@@ -145,6 +182,38 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         assertTrue(response!=null);
         assertTrue(response.getName().equals("jcr:primaryType"));
         assertTrue(response.getValues().get(0).equals("rep:root"));
+    }
+
+    @Test
+    public void testNotFoundOnGetProperty() {
+        final Response response = client.path("v1/properties/jcr:someProperty")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(Response.class);
+        assertTrue(response.getStatus()==Response.Status.NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    public void testPostProperty() throws RepositoryException {
+        session.getRootNode().addNode("test","nt:unstructured");
+        session.save();
+
+        final ArrayList<String> values = new ArrayList<String>(1);
+        values.add("test");
+
+        final JcrProperty jcrProperty = new JcrProperty();
+        jcrProperty.setName("myproperty");
+        jcrProperty.setType("String");
+        jcrProperty.setMultiple(false);
+        jcrProperty.setValues(values);
+
+        final Response response = client
+                .path("v1/properties/test")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .post(jcrProperty);
+        assertTrue(response.getStatus()==Response.Status.CREATED.getStatusCode());
+        assertTrue(response.getMetadata().getFirst("Location").equals(HTTP_ENDPOINT_ADDRESS+"/v1/properties/test/myproperty"));
     }
 
     @Test
@@ -157,6 +226,20 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrQueryResult.class);
         assertTrue(response.getHits()==1);
+    }
+
+    @Test
+    public void testGetQueryResultsWithLimit() {
+        final JcrQueryResult response = client
+                .path("v1/query/")
+                .query("statement","//element(*,hipposys:domain) order by @jcr:score")
+                .query("language","xpath")
+                .query("limit","1")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(JcrQueryResult.class);
+        assertTrue(response.getNodes().size()==1);
+        assertTrue(response.getHits() > 1);
     }
 
     @Test

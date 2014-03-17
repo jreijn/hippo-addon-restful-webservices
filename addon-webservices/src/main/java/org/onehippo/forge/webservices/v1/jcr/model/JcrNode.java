@@ -102,19 +102,4 @@ public class JcrNode {
         this.link = link;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("Node");
-        sb.append("{name='").append(name).append('\'');
-        sb.append(", primaryType='").append(primaryType).append('\'');
-        sb.append(", path='").append(path).append('\'');
-        sb.append(", identifier='").append(identifier).append('\'');
-        sb.append(", properties=").append(properties);
-        sb.append(", nodes=").append(nodes);
-        sb.append('}');
-        return sb.toString();
-    }
-
-
 }

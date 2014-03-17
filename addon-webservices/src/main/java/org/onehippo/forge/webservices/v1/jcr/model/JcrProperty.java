@@ -58,16 +58,4 @@ public class JcrProperty {
         this.values = values;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("JcrProperty");
-        sb.append("{name='").append(name).append('\'');
-        sb.append(", type='").append(type).append('\'');
-        sb.append(", multiple=").append(multiple);
-        sb.append('}');
-        return sb.toString();
-    }
-
-
 }
