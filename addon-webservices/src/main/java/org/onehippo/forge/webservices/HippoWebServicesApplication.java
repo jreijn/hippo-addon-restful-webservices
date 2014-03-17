@@ -11,6 +11,7 @@ import com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON;
 import com.wordnik.swagger.jaxrs.listing.ResourceListingProvider;
 
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.onehippo.forge.webservices.jaxrs.exception.CustomWebApplicationExceptionMapper;
 import org.reflections.Reflections;
@@ -39,7 +40,7 @@ public class HippoWebServicesApplication extends Application {
         classes.add(ResourceListingProvider.class);
         classes.add(CustomWebApplicationExceptionMapper.class);
         classes.add(HippoAuthenticationRequestHandler.class);
-        classes.add(CrossOriginResourceSharing.class);
+        classes.add(CrossOriginResourceSharingFilter.class);
     }
 
     @Override

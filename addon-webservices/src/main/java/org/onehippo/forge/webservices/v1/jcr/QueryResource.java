@@ -16,6 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -47,11 +48,10 @@ public class QueryResource {
     @Context
     private HttpServletRequest request;
 
-
     @GET
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Query for nodes", notes = "Returns a list of nodes",position = 1)
+    @ApiOperation(value = "Query for nodes", notes = "Returns a list of nodes", position = 1)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK, response = JcrQueryResult.class),
             @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
@@ -74,21 +74,21 @@ public class QueryResource {
         try {
             session = RepositoryConnectionUtils.createSession(request);
             Query jcrQuery = session.getWorkspace().getQueryManager().createQuery(statement, language);
-            if(limit > 0) {
+            if (limit > 0) {
                 jcrQuery.setLimit(limit);
             }
-            if(offset > 0) {
+            if (offset > 0) {
                 jcrQuery.setOffset(offset);
             }
             QueryResult queryResult = jcrQuery.execute();
             HippoNodeIterator nodeIterator = (HippoNodeIterator) queryResult.getNodes();
             long totalSize = nodeIterator.getTotalSize();
-            if(totalSize == -1) {
+            if (totalSize == -1) {
                 log.error("getTotalSize returned -1 for query. Should not be possible. Fallback to normal getSize()");
                 totalSize = nodeIterator.getSize();
             }
             jcrQueryResult.setHits(totalSize);
-            while(nodeIterator.hasNext()){
+            while (nodeIterator.hasNext()) {
                 Node node = nodeIterator.nextNode();
                 final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(node, 0);
                 final URI nodeUri = getUriForNode(ui, nodeRepresentation);
@@ -96,7 +96,8 @@ public class QueryResource {
                 resultItems.add(nodeRepresentation);
             }
         } catch (RepositoryException e) {
-            log.warn("An exception occurred while trying to perform query: {}",e);
+            log.warn("An exception occurred while trying to perform query: {}", e);
+            throw new WebApplicationException(e.getCause());
         } finally {
             RepositoryConnectionUtils.cleanupSession(session);
         }
@@ -105,12 +106,11 @@ public class QueryResource {
         return Response.ok(jcrQueryResult).build();
     }
 
-
     @POST
     @Path("/")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Query for nodes", notes = "Returns a list of nodes. This method is especially useful when the query exceeds the maximum length of the URL.",position = 2)
+    @ApiOperation(value = "Query for nodes", notes = "Returns a list of nodes. This method is especially useful when the query exceeds the maximum length of the URL.", position = 2)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK, response = JcrQueryResult.class),
             @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
@@ -125,17 +125,17 @@ public class QueryResource {
         try {
             session = RepositoryConnectionUtils.createSession(request);
             Query query = session.getWorkspace().getQueryManager().createQuery(searchQuery.getStatement(), searchQuery.getLanguage());
-            if(searchQuery.getLimit()>0) {
+            if (searchQuery.getLimit() > 0) {
                 query.setLimit(searchQuery.getLimit());
             }
-            if(searchQuery.getOffset()>0) {
+            if (searchQuery.getOffset() > 0) {
                 query.setOffset(searchQuery.getOffset());
             }
 
             javax.jcr.query.QueryResult queryResult = query.execute();
             HippoNodeIterator nodeIterator = (HippoNodeIterator) queryResult.getNodes();
             jcrQueryResult.setHits(nodeIterator.getTotalSize());
-            while(nodeIterator.hasNext()){
+            while (nodeIterator.hasNext()) {
                 Node node = nodeIterator.nextNode();
                 final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(node, 0);
                 final URI nodeUri = getUriForNode(ui, nodeRepresentation);
@@ -143,7 +143,7 @@ public class QueryResource {
                 resultItems.add(nodeRepresentation);
             }
         } catch (RepositoryException e) {
-            log.warn("An exception occurred while trying to perform query: {}",e);
+            log.warn("An exception occurred while trying to perform query: {}", e);
         } finally {
             RepositoryConnectionUtils.cleanupSession(session);
         }
@@ -153,7 +153,7 @@ public class QueryResource {
     }
 
     private URI getUriForNode(final UriInfo ui, final JcrNode nodeRepresentation) {
-        UriBuilder uriBuilder = ui.getBaseUriBuilder().path(NodesResource.class).path(NodesResource.class,"getNodeByPath");
+        UriBuilder uriBuilder = ui.getBaseUriBuilder().path(NodesResource.class).path(NodesResource.class, "getNodeByPath");
         return uriBuilder.build(nodeRepresentation.getPath().substring(1));
     }
 
