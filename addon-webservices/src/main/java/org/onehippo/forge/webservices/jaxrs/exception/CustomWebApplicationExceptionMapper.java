@@ -1,6 +1,7 @@
 package org.onehippo.forge.webservices.jaxrs.exception;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -36,7 +37,7 @@ public class CustomWebApplicationExceptionMapper implements ExceptionMapper<WebA
         ResponseExceptionRepresentation errorRepresentation = new ResponseExceptionRepresentation();
         errorRepresentation.setMessage(message);
         errorRepresentation.setStatusCode(status);
-        return Response.ok(errorRepresentation).status(status).build();
+        return Response.ok(errorRepresentation).status(status).type(MediaType.APPLICATION_JSON).build();
     }
 
     private String deriveStatusMessage(final String message, final int statusCode) {

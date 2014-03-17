@@ -30,6 +30,11 @@ import com.wordnik.swagger.annotations.ApiResponses;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.annotations.GZIP;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
+import org.onehippo.forge.webservices.v1.jcr.model.JcrProperty;
+import org.onehippo.forge.webservices.v1.jcr.util.JcrDataBindingHelper;
+import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.v1.jcr.util.ResponseConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,8 +151,8 @@ public class PropertyResource {
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
     })
-    public Response deleteNodeByPath(@ApiParam(required = true, value = "Path of the property to delete e.g. '/content/hippostd:foldertype'.")
-                                     @PathParam("path") String path) throws RepositoryException {
+    public Response deletePropertyByPath(@ApiParam(required = true, value = "Path of the property to delete e.g. '/content/hippostd:foldertype'.")
+                                             @PathParam("path") String path) throws RepositoryException {
 
         final Session session = RepositoryConnectionUtils.createSession(request);
         String absolutePath = path;

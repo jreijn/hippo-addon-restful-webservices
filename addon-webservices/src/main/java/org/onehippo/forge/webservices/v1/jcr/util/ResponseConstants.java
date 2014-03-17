@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.jcr;
+package org.onehippo.forge.webservices.v1.jcr.util;
 
 public abstract class ResponseConstants {
 
@@ -11,4 +11,6 @@ public abstract class ResponseConstants {
     public static final String STATUS_MESSAGE_NODE_NOT_FOUND = "Node not found";
     public static final String STATUS_MESSAGE_ERROR_OCCURRED = "Error occurred";
 
+    private ResponseConstants() {
+    }
 }

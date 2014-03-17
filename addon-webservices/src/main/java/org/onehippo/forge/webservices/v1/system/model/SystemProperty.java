@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.system;
+package org.onehippo.forge.webservices.v1.system.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

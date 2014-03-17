@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.system;
+package org.onehippo.forge.webservices.v1.system.model;
 
 import java.util.ArrayList;
 import java.util.List;
