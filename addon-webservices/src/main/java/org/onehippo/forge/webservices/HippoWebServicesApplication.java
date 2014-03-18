@@ -14,6 +14,10 @@ import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.onehippo.forge.webservices.jaxrs.exception.CustomWebApplicationExceptionMapper;
+import org.onehippo.forge.webservices.v1.jcr.NodesResource;
+import org.onehippo.forge.webservices.v1.jcr.PropertyResource;
+import org.onehippo.forge.webservices.v1.jcr.QueryResource;
+import org.onehippo.forge.webservices.v1.system.SystemResource;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -25,22 +29,20 @@ import org.reflections.util.ConfigurationBuilder;
  */
 public class HippoWebServicesApplication extends Application {
 
-    private String resourcePackage = "org.onehippo.forge";
     private Set<Class<?>> classes = new HashSet<Class<?>>();
 
     public HippoWebServicesApplication() {
-        final ConfigurationBuilder config = new ConfigurationBuilder();
-        config.setUrls(ClasspathHelper.forPackage(this.resourcePackage)).setScanners(
-                new TypeAnnotationsScanner(), new SubTypesScanner());
-
-        classes = new Reflections(config).getTypesAnnotatedWith(Api.class);
+        classes.add(SystemResource.class);
+        classes.add(NodesResource.class);
+        classes.add(QueryResource.class);
+        classes.add(PropertyResource.class);
         classes.add(ApiListingResourceJSON.class);
         classes.add(ApiDeclarationProvider.class);
         classes.add(JacksonJaxbJsonProvider.class);
         classes.add(ResourceListingProvider.class);
         classes.add(CustomWebApplicationExceptionMapper.class);
-        classes.add(HippoAuthenticationRequestHandler.class);
         classes.add(CrossOriginResourceSharingFilter.class);
+        classes.add(HippoAuthenticationRequestHandler.class);
     }
 
     @Override
