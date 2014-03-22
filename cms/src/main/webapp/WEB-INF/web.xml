@@ -175,8 +175,25 @@
     <servlet-name>RepositoryWebservicesServlet</servlet-name>
     <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
     <init-param>
-      <param-name>javax.ws.rs.Application</param-name>
-      <param-value>org.onehippo.forge.webservices.HippoWebServicesApplication</param-value>
+      <param-name>jaxrs.serviceClasses</param-name>
+      <param-value>
+        com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON,
+        org.onehippo.forge.webservices.v1.system.SystemResource,
+        org.onehippo.forge.webservices.v1.jcr.NodesResource,
+        org.onehippo.forge.webservices.v1.jcr.PropertiesResource,
+        org.onehippo.forge.webservices.v1.jcr.QueryResource
+      </param-value>
+    </init-param>
+    <init-param>
+      <param-name>jaxrs.providers</param-name>
+      <param-value>
+        org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider,
+        org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter,
+        org.onehippo.forge.webservices.jaxrs.exception.CustomWebApplicationExceptionMapper,
+        org.onehippo.forge.webservices.HippoAuthenticationRequestHandler,
+        com.wordnik.swagger.jaxrs.listing.ApiDeclarationProvider,
+        com.wordnik.swagger.jaxrs.listing.ResourceListingProvider
+      </param-value>
     </init-param>
     <init-param>
       <param-name>jaxrs.extensions</param-name>
@@ -186,19 +203,15 @@
   </servlet>
 
   <servlet>
-    <servlet-name>DefaultJaxrsConfig</servlet-name>
-    <servlet-class>com.wordnik.swagger.jaxrs.config.DefaultJaxrsConfig</servlet-class>
-    <init-param>
-      <param-name>api.version</param-name>
-      <param-value>1.0.0</param-value>
-    </init-param>
+    <servlet-name>ReflectiveJaxrsConfig</servlet-name>
+    <servlet-class>org.onehippo.forge.webservices.swagger.ReflectiveJaxrsConfig</servlet-class>
     <init-param>
       <param-name>swagger.api.basepath</param-name>
       <param-value>http://localhost:8080/cms/rest/api</param-value>
     </init-param>
     <init-param>
-      <param-name>swagger.api.license</param-name>
-      <param-value>Apache 2.0 License</param-value>
+      <param-name>api.version</param-name>
+      <param-value>0.1.0</param-value>
     </init-param>
     <load-on-startup>7</load-on-startup>
   </servlet>
