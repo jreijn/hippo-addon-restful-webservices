@@ -15,7 +15,7 @@ Visit [http://localhost:8080/cms/swagger/](http://localhost:8080/cms/swagger/) a
 
 + Nodes API ```/nodes```
 + Properties API ```/properties```
-+ Query API ```/queries```
++ Query API ```/query```
 + System API ```/system```
 
 ## Possible future plans

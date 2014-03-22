@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 public class HippoAuthenticationRequestHandler implements RequestHandler {
 
     private static Logger log = LoggerFactory.getLogger(HippoAuthenticationRequestHandler.class);
+    private static String WWW_AUTHENTICATE_HEADER_VALUE = "Basic realm=\"Default realm\"";
+    private static String WWW_AUTHENTICATE_HEADER_NAME = "WWW-Authenticate";
 
     public Response handleRequest(Message m, ClassResourceInfo resourceClass) {
         AuthorizationPolicy policy = m.get(AuthorizationPolicy.class);
@@ -36,7 +38,7 @@ public class HippoAuthenticationRequestHandler implements RequestHandler {
                     return null;
                 } else {
                     // authentication failed, request the authentication, add the realm name if needed to the value of WWW-Authenticate
-                    return Response.status(401).header("WWW-Authenticate", "Basic").build();
+                    return Response.status(401).header(WWW_AUTHENTICATE_HEADER_NAME, WWW_AUTHENTICATE_HEADER_VALUE).build();
                 }
             } catch (LoginException e) {
                 log.debug("Login failed: {}", e);
