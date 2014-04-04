@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -44,6 +45,7 @@ import org.onehippo.repository.testutils.RepositoryTestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -254,7 +256,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     }
 
     @Test
-    public void testPostProperty() throws RepositoryException {
+    public void testAddProperty() throws RepositoryException {
         session.getRootNode().addNode("test", "nt:unstructured");
         session.save();
 
@@ -274,6 +276,35 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
                 .post(jcrProperty);
         assertTrue(response.getStatus() == Response.Status.CREATED.getStatusCode());
         assertTrue(response.getMetadata().getFirst("Location").equals(HTTP_ENDPOINT_ADDRESS + "/v1/properties/test/myproperty"));
+        session.getRootNode().getNode("test").remove();
+        session.save();
+    }
+
+    @Test
+    public void testDeleteProperty() throws RepositoryException {
+        final Node test = session.getRootNode().addNode("test", "nt:unstructured");
+        test.setProperty("propname","propvalue");
+        session.save();
+
+        final Response emptyPathResponse = client
+                .path("v1/properties/")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .delete();
+
+        assertTrue(emptyPathResponse.getStatus() == Response.Status.NOT_FOUND.getStatusCode());
+
+        client.reset();
+
+        final Response response = client
+                .path("v1/properties/test/propname")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .delete();
+        assertTrue(response.getStatus() == Response.Status.NO_CONTENT.getStatusCode());
+        assertFalse(session.getNode("/test").hasProperty("propname"));
+        session.getNode("/test").remove();
+        session.save();
     }
 
     @Test
@@ -333,7 +364,10 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         final File tmpdir = new File(System.getProperty("java.io.tmpdir"));
         final File storage = new File(tmpdir, "repository");
         if (!storage.exists()) {
-            storage.mkdir();
+            final boolean createdDir = storage.mkdir();
+            if(!createdDir) {
+                log.error("Something went wrong while trying to create the repository directory at: {}", storage.getAbsolutePath());
+            }
         }
         return storage.getAbsolutePath();
     }
