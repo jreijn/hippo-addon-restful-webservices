@@ -178,10 +178,10 @@
       <param-name>jaxrs.serviceClasses</param-name>
       <param-value>
         com.wordnik.swagger.jaxrs.listing.ApiListingResourceJSON,
-        org.onehippo.forge.webservices.v1.system.SystemResource,
-        org.onehippo.forge.webservices.v1.jcr.NodesResource,
-        org.onehippo.forge.webservices.v1.jcr.PropertiesResource,
-        org.onehippo.forge.webservices.v1.jcr.QueryResource
+        org.onehippo.forge.webservices.jaxrs.system.SystemResource,
+        org.onehippo.forge.webservices.jaxrs.jcr.NodesResource,
+        org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource,
+        org.onehippo.forge.webservices.jaxrs.jcr.QueryResource
       </param-value>
     </init-param>
     <init-param>
@@ -205,6 +205,10 @@
   <servlet>
     <servlet-name>ReflectiveJaxrsConfig</servlet-name>
     <servlet-class>org.onehippo.forge.webservices.swagger.ReflectiveJaxrsConfig</servlet-class>
+    <init-param>
+      <param-name>resourcePackage</param-name>
+      <param-value>org.onehippo.forge.webservices.jaxrs</param-value>
+    </init-param>
     <init-param>
       <param-name>swagger.api.basepath</param-name>
       <param-value>http://localhost:8080/cms/rest/api</param-value>

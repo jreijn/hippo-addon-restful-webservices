@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.jcr.model;
+package org.onehippo.forge.webservices.jaxrs.jcr.model;
 
 import java.util.Set;
 
