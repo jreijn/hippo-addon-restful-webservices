@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.jcr.util;
+package org.onehippo.forge.webservices.jaxrs.jcr.util;
 
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 public class RepositoryConnectionUtils {
 
-    public static final String EMBEDDED_REPOSITORY_LOCATION = "vm://";
     private static Logger log = LoggerFactory.getLogger(RepositoryConnectionUtils.class);
 
     private RepositoryConnectionUtils() {
@@ -23,7 +22,7 @@ public class RepositoryConnectionUtils {
     public static Session createSession(HttpServletRequest request) throws LoginException {
         Session session = null;
         try {
-            final HippoRepository repository = HippoRepositoryFactory.getHippoRepository(EMBEDDED_REPOSITORY_LOCATION);
+            final HippoRepository repository = HippoRepositoryFactory.getHippoRepository();
             session = repository.login((SimpleCredentials) request.getAttribute(AuthenticationConstants.HIPPO_CREDENTIALS));
         } catch (LoginException le) {
             throw new LoginException(le);
@@ -36,7 +35,7 @@ public class RepositoryConnectionUtils {
     public static Session createSession(String username, String password) throws LoginException {
         Session session = null;
         try {
-            final HippoRepository repository = HippoRepositoryFactory.getHippoRepository(EMBEDDED_REPOSITORY_LOCATION);
+            final HippoRepository repository = HippoRepositoryFactory.getHippoRepository();
             session = repository.login(username, password.toCharArray());
         } catch (LoginException le) {
             throw new LoginException(le);

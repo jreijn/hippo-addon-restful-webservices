@@ -13,7 +13,7 @@ import org.apache.cxf.jaxrs.model.ClassResourceInfo;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.onehippo.forge.webservices.jaxrs.exception.UnauthorizedException;
-import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

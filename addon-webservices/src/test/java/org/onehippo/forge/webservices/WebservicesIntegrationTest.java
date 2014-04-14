@@ -26,6 +26,7 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.rs.security.cors.CorsHeaderConstants;
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
+import org.hippoecm.repository.HippoRepository;
 import org.hippoecm.repository.HippoRepositoryFactory;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -33,14 +34,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onehippo.forge.webservices.jaxrs.exception.CustomWebApplicationExceptionMapper;
-import org.onehippo.forge.webservices.v1.jcr.NodesResource;
-import org.onehippo.forge.webservices.v1.jcr.PropertiesResource;
-import org.onehippo.forge.webservices.v1.jcr.QueryResource;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrProperty;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrQueryResult;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrSearchQuery;
-import org.onehippo.forge.webservices.v1.system.SystemResource;
+import org.onehippo.forge.webservices.jaxrs.jcr.NodesResource;
+import org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource;
+import org.onehippo.forge.webservices.jaxrs.jcr.QueryResource;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrProperty;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrQueryResult;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrSearchQuery;
+import org.onehippo.forge.webservices.jaxrs.system.SystemResource;
 import org.onehippo.repository.testutils.RepositoryTestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,16 +60,18 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     private static Server server;
     private static Logger log = LoggerFactory.getLogger(WebservicesIntegrationTest.class);
     private static WebClient client;
+    static HippoRepository hippoRepository;
 
     @BeforeClass
     public static void initialize() throws Exception {
         setUpClass();
         startServer();
+        hippoRepository = HippoRepositoryFactory.getHippoRepository();
+        HippoRepositoryFactory.setDefaultRepository(hippoRepository);
     }
 
     @Before
     public void setUp() throws Exception {
-        HippoRepositoryFactory.setDefaultRepository(DEFAULT_REPO_LOCATION);
         setUp(false);
         client = WebClient.create(HTTP_ENDPOINT_ADDRESS, Collections.singletonList(new JacksonJaxbJsonProvider()), "admin", "admin", null);
     }
@@ -108,7 +111,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @Test
     public void testGetSystemInfo() {
         final LinkedHashMap response = client
-                .path("v1/system/jvm")
+                .path("system/jvm")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(LinkedHashMap.class);
@@ -119,7 +122,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @Test
     public void testGetHardwareInfo() {
         final LinkedHashMap response = client
-                .path("v1/system/hardware")
+                .path("system/hardware")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(LinkedHashMap.class);
@@ -130,7 +133,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @Test
     public void testGetVersionInfo() {
         final String response = client
-                .path("v1/system/versions")
+                .path("system/versions")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(String.class);
@@ -144,7 +147,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         HttpClient httpclient = new HttpClient();
         httpclient.getParams().setAuthenticationPreemptive(true);
         httpclient.getState().setCredentials(AuthScope.ANY, adminCredentials);
-        GetMethod getMethod = new GetMethod(HTTP_ENDPOINT_ADDRESS + "/v1/system/versions");
+        GetMethod getMethod = new GetMethod(HTTP_ENDPOINT_ADDRESS + "/system/versions");
         getMethod.addRequestHeader(CorsHeaderConstants.HEADER_ORIGIN, "http://somehost");
         getMethod.addRequestHeader("Accept", MediaType.APPLICATION_JSON);
 
@@ -161,7 +164,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @Test
     public void testGetJcrRootNode() {
         final JcrNode response = client
-                .path("v1/nodes/")
+                .path("nodes/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
@@ -174,7 +177,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @Test
     public void testNotFoundForJcrNode() {
         final Response response = client
-                .path("v1/nodes/nonexistingnode")
+                .path("nodes/nonexistingnode")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Response.class);
@@ -184,7 +187,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @Test
     public void testGetJcrRootNodeWithDepth() {
         final JcrNode response = client
-                .path("v1/nodes/")
+                .path("nodes/")
                 .query("depth", "1")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
@@ -215,12 +218,12 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         node.setProperties(properties);
 
         final Response response = client
-                .path("v1/nodes/")
+                .path("nodes/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(node);
         assertTrue(response.getStatus() == Response.Status.CREATED.getStatusCode());
-        assertTrue(response.getMetadata().getFirst("Location").equals(HTTP_ENDPOINT_ADDRESS + "/v1/nodes/newnode"));
+        assertTrue(response.getMetadata().getFirst("Location").equals(HTTP_ENDPOINT_ADDRESS + "/nodes/newnode"));
     }
 
     @Test
@@ -228,7 +231,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         session.getRootNode().addNode("test", "nt:unstructured");
         session.save();
         final Response response = client
-                .path("v1/nodes/test")
+                .path("nodes/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();
@@ -237,7 +240,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
 
     @Test
     public void testGetPropertyFromNode() {
-        final JcrProperty response = client.path("v1/properties/jcr:primaryType")
+        final JcrProperty response = client.path("properties/jcr:primaryType")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrProperty.class);
@@ -248,7 +251,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
 
     @Test
     public void testNotFoundOnGetProperty() {
-        final Response response = client.path("v1/properties/jcr:someProperty")
+        final Response response = client.path("properties/jcr:someProperty")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Response.class);
@@ -270,12 +273,12 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         jcrProperty.setValues(values);
 
         final Response response = client
-                .path("v1/properties/test")
+                .path("properties/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(jcrProperty);
         assertTrue(response.getStatus() == Response.Status.CREATED.getStatusCode());
-        assertTrue(response.getMetadata().getFirst("Location").equals(HTTP_ENDPOINT_ADDRESS + "/v1/properties/test/myproperty"));
+        assertTrue(response.getMetadata().getFirst("Location").equals(HTTP_ENDPOINT_ADDRESS + "/properties/test/myproperty"));
         session.getRootNode().getNode("test").remove();
         session.save();
     }
@@ -287,7 +290,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         session.save();
 
         final Response emptyPathResponse = client
-                .path("v1/properties/")
+                .path("properties/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();
@@ -297,7 +300,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         client.reset();
 
         final Response response = client
-                .path("v1/properties/test/propname")
+                .path("properties/test/propname")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();
@@ -310,7 +313,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @Test
     public void testGetQueryResults() {
         final JcrQueryResult response = client
-                .path("v1/query/")
+                .path("query/")
                 .query("statement", "//element(*,rep:root) order by @jcr:score")
                 .query("language", "xpath")
                 .accept(MediaType.APPLICATION_JSON)
@@ -322,7 +325,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @Test
     public void testGetQueryResultsWithLimit() {
         final JcrQueryResult response = client
-                .path("v1/query/")
+                .path("query/")
                 .query("statement", "//element(*,hipposys:domain) order by @jcr:score")
                 .query("language", "xpath")
                 .query("limit", "1")
@@ -339,7 +342,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         query.setStatement("SELECT * FROM rep:root order by jcr:score");
         query.setLanguage("sql");
         final JcrQueryResult response = client
-                .path("v1/query/")
+                .path("query/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(query, JcrQueryResult.class);
@@ -353,7 +356,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
 
     @AfterClass
     public static void destroy() throws Exception {
-        tearDownClass();
+        tearDownClass(true);
         if (server != null) {
             server.stop();
             server.destroy();

@@ -280,13 +280,6 @@
                     </properties>
                     <location>${project.basedir}/cms/target/cms.war</location>
                   </deployable>
-                  <deployable>
-                    <location>${project.basedir}/site/target/site.war</location>
-                    <type>war</type>
-                    <properties>
-                      <context>/site</context>
-                    </properties>
-                  </deployable>
                 </deployables>
                 <properties>
                   <catalina.servlet.uriencoding>UTF-8</catalina.servlet.uriencoding>

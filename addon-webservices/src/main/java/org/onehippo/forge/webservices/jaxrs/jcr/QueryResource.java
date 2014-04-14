@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.jcr;
+package org.onehippo.forge.webservices.jaxrs.jcr;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -31,17 +31,17 @@ import com.wordnik.swagger.annotations.ApiResponses;
 
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.hippoecm.repository.api.HippoNodeIterator;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrQueryResult;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrSearchQuery;
-import org.onehippo.forge.webservices.v1.jcr.util.JcrDataBindingHelper;
-import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
-import org.onehippo.forge.webservices.v1.jcr.util.ResponseConstants;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrQueryResult;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrSearchQuery;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrDataBindingHelper;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.ResponseConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Api(value = "v1/query", description = "API for searching nodes")
-@Path("v1/query")
+@Api(value = "query", description = "API for searching nodes")
+@Path("query")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class QueryResource {
 

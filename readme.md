@@ -17,24 +17,73 @@ Visit [http://localhost:8080/cms/swagger/](http://localhost:8080/cms/swagger/) a
 + Properties API ```/properties```
 + Query API ```/query```
 + System API ```/system```
++ HelloWorld API ```/hello```
 
 ## Possible future plans
 
-+ Support [Richardson Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html) and HATEOAS
-+ Add CORS support
++ Support [Richardson Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html) and HATEOAS?
++ Add CORS support?
++
 
 
-## Running locally
+## Using the webservices in your project
 
-This project uses the Maven Cargo plugin to run the CMS and site locally in Tomcat.
-From the project root folder, execute:
+See for a working demo the sample project.
+
+Add the webservices dependency to your projects cms module located in ```cms/pom.xml```
 
 ```
-  $ mvn clean package
-  $ mvn -P cargo.run
+<dependency>
+  <groupId>org.onehippo.forge.webservices</groupId>
+  <artifactId>addon-webservices</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+</dependency>
 ```
 
-Access the CMS at http://localhost:8080/cms, and the site at http://localhost:8080/site
-Logs are located in target/tomcat6x/logs
+Now add the servlet definition to your CMS web.xml located in ```cms/src/main/webapp/WEB-INF/web.xml```.
 
-Also you can see the WEB api docs by browsing to http://localhost:8080/cms/swagger/
+```
+<servlet>
+  <servlet-name>RepositoryWebServicesServlet</servlet-name>
+  <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
+  <init-param>
+    <param-name>jaxrs.serviceClasses</param-name>
+    <param-value>
+      org.onehippo.forge.webservices.jaxrs.HelloResource,
+      org.onehippo.forge.webservices.jaxrs.system.SystemResource,
+      org.onehippo.forge.webservices.jaxrs.jcr.NodesResource,
+      org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource,
+      org.onehippo.forge.webservices.jaxrs.jcr.QueryResource
+    </param-value>
+  </init-param>
+  <init-param>
+    <param-name>jaxrs.providers</param-name>
+    <param-value>
+      org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider,
+      org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter,
+      org.onehippo.forge.webservices.jaxrs.exception.CustomWebApplicationExceptionMapper,
+      org.onehippo.forge.webservices.HippoAuthenticationRequestHandler
+    </param-value>
+  </init-param>
+  <init-param>
+    <param-name>jaxrs.extensions</param-name>
+    <param-value>json=application/json, xml=application/xml</param-value>
+  </init-param>
+  <load-on-startup>6</load-on-startup>
+</servlet>
+
+```
+
+Next add the servlet mapping to the cms __web.xml__ :
+
+
+```
+<servlet-mapping>
+  <servlet-name>RepositoryWebServicesServlet</servlet-name>
+  <url-pattern>/rest/api/*</url-pattern>
+</servlet-mapping>
+
+```
+
+That's it. Now the web services should be available. In case you are using the default archetype you should be able to get
+a response by calling [http://localhost:8080/cms/rest/api/hello](http://localhost:8080/cms/rest/api/hello)
