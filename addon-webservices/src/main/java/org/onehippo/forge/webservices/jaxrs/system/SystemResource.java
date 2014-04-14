@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.system;
+package org.onehippo.forge.webservices.jaxrs.system;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +31,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.hippoecm.frontend.Home;
-import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +39,8 @@ import org.slf4j.LoggerFactory;
  * Api for system information
  * @author Jeroen Reijn
  */
-@Api(value = "v1/system", description = "API for system information")
-@Path(value = "v1/system")
+@Api(value = "system", description = "API for system information")
+@Path(value = "system")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class SystemResource {
 
@@ -152,7 +152,6 @@ public class SystemResource {
         }
         return Response.ok(info).build();
     }
-
 
     private String getHippoReleaseVersion() {
         try {
@@ -293,6 +292,5 @@ public class SystemResource {
         }
         return clusterNodeId;
     }
-
 
 }

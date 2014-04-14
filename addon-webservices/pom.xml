@@ -145,12 +145,6 @@
 
     <dependency>
       <groupId>org.onehippo.cms7</groupId>
-      <artifactId>hippo-repository-connector</artifactId>
-      <version>${hippo.repository.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.onehippo.cms7</groupId>
       <artifactId>hippo-repository-config</artifactId>
       <version>${hippo.repository.version}</version>
     </dependency>
@@ -159,13 +153,53 @@
       <groupId>org.onehippo.cms7</groupId>
       <artifactId>hippo-repository-testutils</artifactId>
       <version>${hippo.repository.version}</version>
-      <scope>tests</scope>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.sling</groupId>
+      <artifactId>org.apache.sling.commons.testing</artifactId>
+      <version>2.0.16</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>1.9.5</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
 
   <build>
     <plugins>
+      <!--<plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <configuration>
+              <target name="get markdown.mustache">
+                &lt;!&ndash; Need to download markdown.mustache first to use strapdown.html.mustache &ndash;&gt;
+                <get dest=".">
+                  <url url="https://raw.github.com/kongchen/api-doc-template/master/v2.0/markdown.mustache"/>
+                </get>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -175,6 +209,45 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
+      <!--<plugin>
+        <groupId>com.github.kongchen</groupId>
+        <artifactId>swagger-maven-plugin</artifactId>
+        <version>2.0</version>
+        <configuration>
+          <apiSources>
+            <apiSource>
+              <locations>org.onehippo.forge.webservices.jaxrs</locations>
+              <apiVersion>v1</apiVersion>
+              <basePath>http://host:port/apis</basePath>
+              <outputTemplate>
+                https://raw.github.com/kongchen/api-doc-template/master/v2.0/strapdown.html.mustache
+              </outputTemplate>
+              <outputPath>generated/strapdown.html</outputPath>
+              <swaggerDirectory>generated/apidocs</swaggerDirectory>
+            </apiSource>
+          </apiSources>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>javax.jcr</groupId>
+            <artifactId>jcr</artifactId>
+            <version>2.0</version>
+          </dependency>
+          <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>-->
     </plugins>
   </build>
 

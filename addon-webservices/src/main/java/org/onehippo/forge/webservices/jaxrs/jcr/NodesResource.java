@@ -1,9 +1,8 @@
-package org.onehippo.forge.webservices.v1.jcr;
+package org.onehippo.forge.webservices.jaxrs.jcr;
 
 import java.net.URI;
 
 import javax.jcr.Node;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -31,24 +31,23 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.annotations.GZIP;
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrProperty;
-import org.onehippo.forge.webservices.v1.jcr.util.JcrDataBindingHelper;
-import org.onehippo.forge.webservices.v1.jcr.util.RepositoryConnectionUtils;
-import org.onehippo.forge.webservices.v1.jcr.util.ResponseConstants;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrDataBindingHelper;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.ResponseConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Resource providing CRUD operations for JCR properties.
+ * Resource providing CRUD operations on JCR nodes.
  *
  * @author jreijn
  */
 @GZIP
-@Api(value = "v1/properties", description = "API for working with JCR properties")
-@Path("v1/properties")
+@Api(value = "nodes", description = "API for working with JCR nodes")
+@Path("nodes")
 @CrossOriginResourceSharing(allowAllOrigins = true)
-public class PropertiesResource {
+public class NodesResource {
 
     private static Logger log = LoggerFactory.getLogger(NodesResource.class);
 
@@ -56,60 +55,64 @@ public class PropertiesResource {
     private HttpServletRequest request;
 
     /**
-     * Gets a property by its path.
+     * Gets a node by its path.
      */
     @GET
     @Path("{path:.*}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @ApiOperation(value = "Get a property", notes = "Returns a property from the specified path")
+    @ApiOperation(value = "Get a node", notes = "Returns a node from the specified path", position = 1)
+
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK, response = JcrNode.class),
             @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
     })
-    public Response getPropertyByPath(@ApiParam(value = "Path of the node to retrieve e.g '/content/hippostd:foldertype'.", required = true) @PathParam("path") String path) throws RepositoryException {
+    public Response getNodeByPath(@ApiParam(value = "Path of the node to retrieve", required = true) @PathParam("path") @DefaultValue("/") String path,
+                                  @ApiParam(value = "Depth of the retrieval", required = false) @QueryParam("depth") @DefaultValue("0") int depth) throws RepositoryException {
 
         final Session session = RepositoryConnectionUtils.createSession(request);
-        JcrProperty jcrProperty = null;
+        JcrNode jcrNode = null;
         String absolutePath = StringUtils.defaultIfEmpty(path, "/");
         if (!absolutePath.startsWith("/")) {
             absolutePath = "/" + absolutePath;
         }
 
         try {
-            if (!session.propertyExists(absolutePath)) {
+            if (!session.nodeExists(absolutePath)) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-            final Property property = session.getProperty(absolutePath);
-            jcrProperty = JcrDataBindingHelper.getPropertyRepresentation(property);
+            final Node node = session.getNode(absolutePath);
+            jcrNode = JcrDataBindingHelper.getNodeRepresentation(node, depth);
         } catch (RepositoryException e) {
             log.error("Error: {}", e);
             throw new WebApplicationException(e);
         } finally {
             RepositoryConnectionUtils.cleanupSession(session);
         }
-        return Response.ok(jcrProperty).build();
+        return Response.ok(jcrNode).build();
     }
 
     /**
-     * Creates a new property.
+     * Creates a new node and populates it with the supplied properties.
      */
     @POST
     @Path("{path:.*}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @ApiOperation(value = "Add a property to a node", notes = "Adds a property to a node")
+    @ApiOperation(value = "Create a node", notes = "Creates a node and adds provided properties", position = 2)
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK),
             @ApiResponse(code = 201, message = ResponseConstants.STATUS_MESSAGE_CREATED),
             @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
             @ApiResponse(code = 403, message = ResponseConstants.STATUS_MESSAGE_ACCESS_DENIED),
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
     })
-    public Response createPropertyByPath(@ApiParam(required = true, value = "Path of the node to which to add the property to e.g. '/content/documents/'")
-                                         @PathParam("path") @DefaultValue("/") String parentPath,
-                                         @Context UriInfo ui,
-                                         JcrProperty jcrProperty) throws RepositoryException {
+    public Response createNodeByPath(@ApiParam(required = true, value = "Path of the node to which to add the new node e.g. '/content/documents/'")
+                                     @PathParam("path") @DefaultValue("/") String parentPath,
+                                     @Context UriInfo ui,
+                                     JcrNode jcrNode) throws RepositoryException {
 
         final Session session = RepositoryConnectionUtils.createSession(request);
 
@@ -121,46 +124,43 @@ public class PropertiesResource {
         if (!session.nodeExists(absolutePath)) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        if (StringUtils.isEmpty(jcrProperty.getName())) {
+        if (StringUtils.isEmpty(jcrNode.getName())) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        if (StringUtils.isEmpty(jcrProperty.getType())) {
+        if (StringUtils.isEmpty(jcrNode.getPrimaryType())) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        URI newPropertyUri = null;
+        URI newNodeUri = null;
         try {
             final Node parentNode = session.getNode(absolutePath);
-            JcrDataBindingHelper.addPropertyToNode(parentNode, jcrProperty);
+            final Node node = parentNode.addNode(jcrNode.getName(), jcrNode.getPrimaryType());
+            JcrDataBindingHelper.addMixinsFromRepresentation(node, jcrNode.getMixinTypes());
+            JcrDataBindingHelper.addPropertiesFromRepresentation(node, jcrNode.getProperties());
+            JcrDataBindingHelper.addChildNodesFromRepresentation(node, jcrNode.getNodes());
+            UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getNodeByPath");
+            newNodeUri = ub.build(node.getName());
             session.save();
-            UriBuilder ub = ui.getBaseUriBuilder().path(this.getClass()).path(this.getClass(), "getPropertyByPath");
-            newPropertyUri = ub.build(parentNode.getProperty(jcrProperty.getName()).getPath().substring(1));
         } catch (Exception e) {
             throw new WebApplicationException(e);
         } finally {
             RepositoryConnectionUtils.cleanupSession(session);
         }
-        return Response.created(newPropertyUri).build();
+
+        return Response.created(newNodeUri).build();
     }
 
-    /**
-     * Delete a property by it's path
-     *
-     * @param path the path to the node
-     * @return the Response status
-     * @throws RepositoryException
-     */
     @DELETE
     @Path("{path:.*}")
-    @ApiOperation(value = "Delete a property", notes = "Deletes a property")
+    @ApiOperation(value = "Delete a node", notes = "Deletes a node (and child-nodes)", position = 3)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = ResponseConstants.STATUS_MESSAGE_DELETED),
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
     })
-    public Response deletePropertyByPath(@ApiParam(required = true, value = "Path of the property to delete e.g. '/content/hippostd:foldertype'.")
-                                         @PathParam("path") String path) throws RepositoryException {
+    public Response deleteNodeByPath(@ApiParam(required = true, value = "Path of the node to delete e.g. '/content/documents/'")
+                                     @PathParam("path") String path) throws RepositoryException {
 
         final Session session = RepositoryConnectionUtils.createSession(request);
         String absolutePath = path;
@@ -173,13 +173,13 @@ public class PropertiesResource {
             absolutePath = "/" + absolutePath;
         }
 
-        if (!session.propertyExists(absolutePath)) {
+        if (!session.nodeExists(absolutePath)) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         try {
-            final Property property = session.getProperty(absolutePath);
-            property.remove();
+            final Node node = session.getNode(absolutePath);
+            node.remove();
             session.save();
         } catch (Exception e) {
             throw new WebApplicationException(e);

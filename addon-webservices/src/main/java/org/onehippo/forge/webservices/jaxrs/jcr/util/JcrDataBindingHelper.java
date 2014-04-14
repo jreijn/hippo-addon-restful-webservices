@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.jcr.util;
+package org.onehippo.forge.webservices.jaxrs.jcr.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,8 +20,8 @@ import javax.jcr.nodetype.NodeType;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.jackrabbit.value.BinaryImpl;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrNode;
-import org.onehippo.forge.webservices.v1.jcr.model.JcrProperty;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * Helper class for mapping to and from JCR.
  * @author jreijn
  */
-public class JcrDataBindingHelper {
+public final class JcrDataBindingHelper {
 
     private static Logger log = LoggerFactory.getLogger(JcrDataBindingHelper.class);
 
@@ -43,7 +43,7 @@ public class JcrDataBindingHelper {
     }
 
     private JcrDataBindingHelper(){
-
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -61,11 +61,13 @@ public class JcrDataBindingHelper {
             jcrNode.setPrimaryType(node.getPrimaryNodeType().getName());
 
             final NodeType[] mixinNodeTypes = node.getMixinNodeTypes();
-            List<String> mixins = new ArrayList<String>(mixinNodeTypes.length);
-            for(NodeType mixinNodeType : mixinNodeTypes) {
-                mixins.add(mixinNodeType.getName());
+            if(mixinNodeTypes!=null) {
+                List<String> mixins = new ArrayList<String>(mixinNodeTypes.length);
+                for (NodeType mixinNodeType : mixinNodeTypes) {
+                    mixins.add(mixinNodeType.getName());
+                }
+                jcrNode.setMixinTypes(mixins);
             }
-            jcrNode.setMixinTypes(mixins);
 
             PropertyIterator properties = node.getProperties();
             while (properties.hasNext()) {

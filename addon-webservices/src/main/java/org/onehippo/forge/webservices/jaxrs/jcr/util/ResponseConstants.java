@@ -1,4 +1,4 @@
-package org.onehippo.forge.webservices.v1.jcr.util;
+package org.onehippo.forge.webservices.jaxrs.jcr.util;
 
 public abstract class ResponseConstants {
 
