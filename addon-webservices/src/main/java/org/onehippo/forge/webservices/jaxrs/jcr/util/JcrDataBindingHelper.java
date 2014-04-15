@@ -144,7 +144,6 @@ public final class JcrDataBindingHelper {
     public static void addPropertyToNode(final Node node, final JcrProperty property) throws RepositoryException {
         ValueFactory valueFactory = node.getSession().getValueFactory();
         if(property.isMultiple()) {
-
             Value[] values;
             if (property.getValues() != null) {
                 values = new Value[property.getValues().size()];
@@ -157,21 +156,19 @@ public final class JcrDataBindingHelper {
                 values = new Value[0];
             }
 
-            String name = property.getName();
-            if (node.hasProperty(name)) {
-                Property existingProperty = node.getProperty(name);
+            String propName = property.getName();
+            if (node.hasProperty(propName)) {
+                Property existingProperty = node.getProperty(propName);
                 if (!existingProperty.isMultiple()) {
                     existingProperty.remove();
                 }
             }
             node.setProperty(property.getName(), values);
-
         } else {
             final int propertyType = PropertyType.valueFromName(property.getType());
             final String propertyValue = property.getValues().get(0);
 
             Value value = getValueByType(propertyType, propertyValue, valueFactory);
-
             String name = property.getName();
             if (node.hasProperty(name)) {
                 Property existingProperty = node.getProperty(name);
@@ -179,7 +176,6 @@ public final class JcrDataBindingHelper {
                     existingProperty.remove();
                 }
             }
-
             node.setProperty(property.getName(), value);
         }
     }
@@ -203,7 +199,6 @@ public final class JcrDataBindingHelper {
         Value value = null;
         byte[] decodedPropertyValue = Base64.decodeBase64(propertyValue);
         try {
-
             value = valueFactory.createValue(new BinaryImpl(new ByteArrayInputStream(decodedPropertyValue)));
         } catch (IOException e) {
             log.error("An exception occurred while trying to create binary value {}", e);

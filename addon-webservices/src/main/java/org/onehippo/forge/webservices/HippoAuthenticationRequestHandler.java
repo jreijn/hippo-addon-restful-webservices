@@ -47,7 +47,7 @@ public class HippoAuthenticationRequestHandler implements RequestHandler {
                 RepositoryConnectionUtils.cleanupSession(session);
             }
         }
-        return Response.status(401).header("WWW-Authenticate", "Basic").build();
+        return Response.status(401).header(WWW_AUTHENTICATE_HEADER_NAME, WWW_AUTHENTICATE_HEADER_VALUE).build();
     }
 
     private boolean isAuthenticated(Session session) {

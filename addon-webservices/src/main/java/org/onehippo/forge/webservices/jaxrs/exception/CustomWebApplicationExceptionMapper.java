@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory;
 @Provider
 public class CustomWebApplicationExceptionMapper implements ExceptionMapper<WebApplicationException> {
 
-    private static Logger log = LoggerFactory.getLogger(CustomWebApplicationExceptionMapper.class);
-
     @Override
     public Response toResponse(WebApplicationException ex) {
         String message = ex.getCause() == null ? ex.getMessage() : ex.getCause().getMessage();

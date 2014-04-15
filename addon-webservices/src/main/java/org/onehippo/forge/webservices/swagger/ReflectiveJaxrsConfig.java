@@ -24,7 +24,7 @@ public class ReflectiveJaxrsConfig extends DefaultJaxrsConfig {
         super.init(servletConfig);
         final ReflectiveJaxrsScanner reflectiveJaxrsScanner = new ReflectiveJaxrsScanner();
         final String resourcePackageParam = servletConfig.getInitParameter("resourcePackage");
-        if(StringUtils.notEmpty(resourcePackageParam)) {
+        if(StringUtils.isEmpty(resourcePackageParam)) {
             log.warn("Please specify the resourcePackage init parameter and point it to the package of your webservice resources");
         }
         reflectiveJaxrsScanner.setResourcePackage(resourcePackageParam);

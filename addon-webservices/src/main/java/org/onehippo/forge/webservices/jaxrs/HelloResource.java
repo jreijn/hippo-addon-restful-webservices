@@ -1,5 +1,8 @@
 package org.onehippo.forge.webservices.jaxrs;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -29,7 +32,9 @@ public class HelloResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getHelloWorld() {
-        return Response.ok("Hello World from Hippo CMS").build();
+        Map<String, String> messages = new LinkedHashMap<String, String>();
+        messages.put("message", "Hello World from Hippo CMS");
+        return Response.ok(messages).build();
     }
 
 }
