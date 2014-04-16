@@ -4,4 +4,4 @@ jdk:
   - oraclejdk7
 script: mvn verify
 after_success:
-  - mvn -X clean verify jacoco:report coveralls:jacoco
+  - mvn clean verify jacoco:report coveralls:jacoco
