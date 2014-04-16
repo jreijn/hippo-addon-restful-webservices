@@ -83,3 +83,12 @@ That's it. Now the web services should be available. In case you are using the d
 a response by calling [http://localhost:8080/cms/rest/api/hello](http://localhost:8080/cms/rest/api/hello)
 
 For a working example see this the [demo project repository](https://github.com/jreijn/hippo-addon-webservices-demo) on GitHub.
+
+
+## Issues
+
+If you have any problems, please [check the project issues](https://github.com/jreijn/hippo-addon-webservices/issues).
+
+## Contributions
+
+Pull requests are, of course, very welcome! Head over to the [open issues](https://github.com/jreijn/hippo-addon-webservices/issues) to see what we need help with. Make sure you let us know if you intend to work on something. Also, check out the [milestones](https://github.com/searls/jasmine-maven-plugin/issues/milestones) to see what is planned for future releases.
