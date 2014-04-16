@@ -2,5 +2,6 @@ install: true
 language: java
 jdk:
   - oraclejdk7
+script: script: mvn verify
 after_success:
-  - mvn test jacoco:report coveralls:jacoco
+  - mvn clean verify jacoco:report coveralls:jacoco
