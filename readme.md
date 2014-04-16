@@ -1,7 +1,7 @@
 # Hippo RESTful Web services project
 
 [![Build Status](https://travis-ci.org/jreijn/hippo-addon-webservices.png?branch=master)](https://travis-ci.org/jreijn/hippo-addon-webservices)
-[![Coverage Status](https://coveralls.io/repos/jreijn/hippo-addon-webservices/badge.png)](https://coveralls.io/r/jreijn/hippo-addon-webservices)
+[![Coverage Status](https://coveralls.io/repos/jreijn/hippo-addon-webservices/badge.png?branch=master)](https://coveralls.io/r/jreijn/hippo-addon-webservices?branch=master)
 
 This project is a pragmatic approach to provide RESTful web services on top of the Hippo CMS repository.
 
