@@ -91,4 +91,4 @@ If you have any problems, please [check the project issues](https://github.com/j
 
 ## Contributions
 
-Pull requests are, of course, very welcome! Head over to the [open issues](https://github.com/jreijn/hippo-addon-webservices/issues) to see what we need help with. Make sure you let us know if you intend to work on something. Also, check out the [milestones](https://github.com/searls/jasmine-maven-plugin/issues/milestones) to see what is planned for future releases.
+Pull requests are, of course, very welcome! Head over to the [open issues](https://github.com/jreijn/hippo-addon-webservices/issues) to see what we need help with. Make sure you let us know if you intend to work on something. Also, check out the [milestones](https://github.com/jreijn/hippo-addon-webservices/issues/milestones) to see what is planned for future releases.
