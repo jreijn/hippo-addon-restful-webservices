@@ -1,17 +1,13 @@
 # Hippo RESTful Web services project
 
 [![Build Status](https://travis-ci.org/jreijn/hippo-addon-webservices.png?branch=master)](https://travis-ci.org/jreijn/hippo-addon-webservices)
+[![Coverage Status](https://coveralls.io/repos/jreijn/hippo-addon-webservices/badge.png)](https://coveralls.io/r/jreijn/hippo-addon-webservices)
 
 This project is a pragmatic approach to provide RESTful web services on top of the Hippo CMS repository.
 
 It provides amongst others a full CRUD REST API for JCR nodes and properties.
 
-It requires basic authentication and you can use the default user name and password to login e.g (admin/admin).
-
-This project uses [Swagger](https://helloreverb.com/developers/swagger) for the documentation of the APIs.
-Visit [http://localhost:8080/cms/swagger/](http://localhost:8080/cms/swagger/) after startup to see the available service end-points and their documentation.
-
-## Currently Available APIs
+## Current Available APIs
 
 + Nodes API ```/nodes```
 + Properties API ```/properties```
@@ -19,23 +15,21 @@ Visit [http://localhost:8080/cms/swagger/](http://localhost:8080/cms/swagger/) a
 + System API ```/system```
 + HelloWorld API ```/hello```
 
-## Possible future plans
+## Future plans
 
 + Support [Richardson Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html) and HATEOAS?
-+ Add CORS support?
-+
++ Add CORS support so the API can be used from a Javascript app __(Done)__
 
+## Using the web services in your project
 
-## Using the webservices in your project
+See for a working demo the [sample project](https://github.com/jreijn/hippo-addon-webservices-demo).
 
-See for a working demo the sample project.
-
-Add the webservices dependency to your projects cms module located in ```cms/pom.xml```
+Add the web services dependency to your projects cms module located in ```cms/pom.xml```
 
 ```
 <dependency>
   <groupId>org.onehippo.forge.webservices</groupId>
-  <artifactId>addon-webservices</artifactId>
+  <artifactId>hippo-addon-webservices</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 </dependency>
 ```
@@ -87,3 +81,5 @@ Next add the servlet mapping to the cms __web.xml__ :
 
 That's it. Now the web services should be available. In case you are using the default archetype you should be able to get
 a response by calling [http://localhost:8080/cms/rest/api/hello](http://localhost:8080/cms/rest/api/hello)
+
+For a working example see this the [demo project repository](https://github.com/jreijn/hippo-addon-webservices-demo) on GitHub.
