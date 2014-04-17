@@ -1,4 +1,4 @@
-# Hippo RESTful Web services project
+# Hippo RESTful Web services add-on
 
 [![Build Status](https://travis-ci.org/jreijn/hippo-addon-webservices.png?branch=master)](https://travis-ci.org/jreijn/hippo-addon-webservices)
 
@@ -74,7 +74,7 @@ Now add the servlet definition to your CMS web.xml located in ```cms/src/main/we
 
 ```
 
-Next add the servlet mapping to the cms __web.xml__ :
+We will also need to add the servlet mapping, so that the API is exposed at _/rest/api_ :
 
 
 ```
@@ -82,7 +82,6 @@ Next add the servlet mapping to the cms __web.xml__ :
   <servlet-name>RepositoryWebServicesServlet</servlet-name>
   <url-pattern>/rest/api/*</url-pattern>
 </servlet-mapping>
-
 ```
 
 That's it. Now the web services should be available. In case you are using the default archetype you should be able to get
