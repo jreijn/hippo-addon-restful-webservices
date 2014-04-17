@@ -34,6 +34,8 @@ Add the web services dependency to your projects cms module located in ```cms/po
 </dependency>
 ```
 
+Because this plugin is not yet available in a public Maven repository you will have to [build it from source](#source) before you can use it.
+
 Now add the servlet definition to your CMS web.xml located in ```cms/src/main/webapp/WEB-INF/web.xml```.
 
 ```
@@ -82,6 +84,18 @@ That's it. Now the web services should be available. In case you are using the d
 a response by calling [http://localhost:8080/cms/rest/api/hello](http://localhost:8080/cms/rest/api/hello)
 
 For a working example see this the [demo project repository](https://github.com/jreijn/hippo-addon-webservices-demo) on GitHub.
+
+## <a name="source"></a>Building from source
+
+Since this plugin is not yet released you will have to build it from source before you can use it.
+
+This plugin requires [Maven](http://maven.apache.org) to build the module from source.
+
+After you have installed Maven you can build the module with:
+
+```
+$ mvn install
+```
 
 
 ## Issues
