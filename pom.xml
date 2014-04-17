@@ -2,50 +2,43 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.onehippo.cms7</groupId>
-    <artifactId>hippo-cms7-release</artifactId>
-    <version>7.8.8</version>
-  </parent>
-
-  <name>Hippo WEB Services Demo project</name>
-  <description>Hippo WEB Services Demo project</description>
+  <name>Hippo WebServices Addon</name>
+  <description>Hippo WebServices Addon project</description>
   <groupId>org.onehippo.forge.webservices</groupId>
-  <artifactId>hippo-webservices</artifactId>
+  <artifactId>hippo-addon-webservices</artifactId>
   <version>0.1.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
 
-  <!-- 
-    The below project elements are emptied/overridden as otherwise their metadata would be
-    inherited or merged from the parent hippo-cms7-release pom (or its hippo-cms7-project pom).
+  <url>https://github.com/jreijn/hippo-webservices-addon</url>
+  <inceptionYear>2014</inceptionYear>
 
-    DO NOT remove these tags but instead fill them in appropriately as needed, 
-    UNLESS the inherited values are valid for your project.
-  -->
-  <url/>
-  <inceptionYear/>
-  <organization/>
-  <licenses>
-    <license/>
-  </licenses>
-  <mailingLists>
-    <mailingList/>
-  </mailingLists>
   <developers>
-    <developer/>
+    <developer>
+      <id>jreijn</id>
+      <email>j.reijn@onehippo.com</email>
+      <organization>Hippo</organization>
+      <organizationUrl>http://www.onehippo.com</organizationUrl>
+      <timezone>+1</timezone>
+    </developer>
   </developers>
+
   <contributors>
     <contributor/>
   </contributors>
-  <issueManagement/>
-  <!--
+
+  <issueManagement>
+    <system>github</system>
+    <url>https://github.com/jreijn/hippo-addon-webservices/issues</url>
+  </issueManagement>
   <scm>
-    <connection/>
-    <developerConnection/>
-    <url/>
+    <url>https://github.com/jreijn/hippo-addon-webservices</url>
+    <connection>scm:git:https://github.com/jreijn/hippo-addon-webservices.git</connection>
+    <developerConnection>scm:git:https://jreijn@github.com/jreijn/hippo-addon-webservices.git</developerConnection>
   </scm>
-  -->
-  <ciManagement/>
+  <ciManagement>
+    <system>travis-ci</system>
+    <url>https://travis-ci.org/jreijn/hippo-addon-webservices</url>
+  </ciManagement>
   <distributionManagement>
     <repository>
       <id>-</id>
@@ -56,26 +49,36 @@
       <url>-</url>
     </snapshotRepository>
   </distributionManagement>
-  <!-- End of emptied/overridden metadata from parent hippo-cms7-release pom. -->
+
+  <prerequisites>
+    <maven>3.0.0</maven>
+  </prerequisites>
 
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <!--***START temporary override of versions*** -->
-    <!-- ***END temporary override of versions*** -->
+    <hippo.repository.version>2.24.14</hippo.repository.version>
+    <hippo.cms.version>2.24.10</hippo.cms.version>
+    <hippo.services.version>1.02.03</hippo.services.version>
 
-    <jstl.version>1.1.2</jstl.version>
-    <taglibs.version>1.1.2</taglibs.version>
+    <javax.jcr.version>2.0</javax.jcr.version>
+    <jackrabbit.patched.version>2.2.13-h14</jackrabbit.patched.version>
+    <jackrabbit.version>2.2.13</jackrabbit.version>
+    <slf4j.version>1.6.4</slf4j.version>
+    <log4j.version>1.2.16</log4j.version>
+    <commons-logging.version>1.1.1</commons-logging.version>
+    <commons-logging-api.version>1.1</commons-logging-api.version>
+
     <commons.lang.version>2.6</commons.lang.version>
     <junit.version>4.10</junit.version>
     <easymock.version>3.1</easymock.version>
-    <freemarker.version>2.3.18</freemarker.version>
-     
-    <filesync.override>false</filesync.override>
-    <maven.plugins.filesync.version>1.0.0</maven.plugins.filesync.version>
-    <cxf.version>2.6.13</cxf.version>
-    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-    <sonar.jacoco.reportPath>${project.basedir}/target/reports/coverage/jacoco.exec</sonar.jacoco.reportPath>
 
+    <cxf.version>2.6.13</cxf.version>
+    <jackson.version>1.9.5</jackson.version>
+
+    <servlet-api.version>2.5</servlet-api.version>
+    <jta.version>1.1</jta.version>
 
   </properties>
 
@@ -90,34 +93,12 @@
   <dependencyManagement>
     <dependencies>
       
-      <!-- other predefined runtime scope versioned dependencies -->
-      <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>jstl</artifactId>
-        <version>${jstl.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>taglibs</groupId>
-        <artifactId>standard</artifactId>
-        <version>${taglibs.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-
-      <!-- other predefined compile scope versioned dependencies -->
       <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
         <version>${commons.lang.version}</version>
       </dependency>
 
-      <dependency>
-        <groupId>org.freemarker</groupId>
-        <artifactId>freemarker</artifactId>
-        <version>${freemarker.version}</version>
-      </dependency>
-      
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -132,93 +113,335 @@
         <scope>test</scope>
       </dependency>
 
-      <dependency>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-rt-core</artifactId>
-        <version>${cxf.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-api</artifactId>
-        <version>${cxf.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-rt-bindings-xml</artifactId>
-        <version>${cxf.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-rt-transports-http</artifactId>
-        <version>${cxf.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-        <version>${cxf.version}</version>
-      </dependency>
-
     </dependencies>
   </dependencyManagement>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${servlet-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-jta_1.1_spec</artifactId>
+      <version>${jta.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-rs-extension-providers</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-rs-security-cors</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-transports-http-jetty</artifactId>
+      <version>${cxf.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.jettison</groupId>
+      <artifactId>jettison</artifactId>
+      <version>1.3.5</version>
+    </dependency>
+
+    <!-- jackson -->
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-xc</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-jaxrs</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.jcr</groupId>
+      <artifactId>jcr</artifactId>
+      <version>${javax.jcr.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.9</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.wordnik</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>1.3.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.wordnik</groupId>
+      <artifactId>swagger-jaxrs_2.10</artifactId>
+      <version>1.3.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.wordnik</groupId>
+      <artifactId>swagger-servlet_2.10</artifactId>
+      <version>1.3.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-api</artifactId>
+      <version>${hippo.repository.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-connector</artifactId>
+      <version>${hippo.repository.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-engine</artifactId>
+      <version>${hippo.repository.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-config</artifactId>
+      <version>${hippo.repository.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-repository-testutils</artifactId>
+      <version>${hippo.repository.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-cms-api</artifactId>
+      <version>${hippo.cms.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jackrabbit</groupId>
+      <artifactId>jackrabbit-core</artifactId>
+      <version>${jackrabbit.patched.version}</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.derby</groupId>
+          <artifactId>derby</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.sling</groupId>
+      <artifactId>org.apache.sling.commons.testing</artifactId>
+      <version>2.0.16</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- test dependencies -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>1.9.5</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.onehippo.cms7</groupId>
+      <artifactId>hippo-services</artifactId>
+      <version>${hippo.services.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${log4j.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>${commons-logging.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging-api</artifactId>
+      <version>${commons-logging-api.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
   
   <build>
     <defaultGoal>package</defaultGoal>
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>com.googlecode.mavenfilesync</groupId>
-          <artifactId>maven-filesync-plugin</artifactId>
-          <version>${maven.plugins.filesync.version}</version>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.3</version>
           <configuration>
-            <override>${filesync.override}</override>
+            <skipDeploy>true</skipDeploy>
           </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>generate</goal>
-              </goals>
-            </execution>
-          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-module-markdown</artifactId>
+              <version>1.5</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.7</version>
         </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <version>${maven.plugin.buildnumber.version}</version>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
-          </execution>
-        </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.15</version>
         <configuration>
-          <doCheck>false</doCheck>
-          <doUpdate>false</doUpdate>
-          <revisionOnScmFailure>-1</revisionOnScmFailure>
+          <systemPropertyVariables>
+            <org.onehippo.repository.test.keepserver>true</org.onehippo.repository.test.keepserver>
+          </systemPropertyVariables>
+          <excludes>
+            <exclude>**/*IntegrationTest.java</exclude>
+          </excludes>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>${maven.plugin.jar.version}</version>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.17</version>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>integration-test</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>verify</id>
+            <goals>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
-          <archive>
-            <manifest>
-              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-            </manifest>
-            <manifestEntries>
-              <Implementation-Build>${buildNumber}</Implementation-Build>
-            </manifestEntries>
-          </archive>
+          <systemPropertyVariables>
+            <org.onehippo.repository.test.keepserver>true</org.onehippo.repository.test.keepserver>
+          </systemPropertyVariables>
+          <includes>
+            <include>**/*IntegrationTest.java</include>
+          </includes>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.8</version>
+        <configuration>
+          <message>Generating site for ${project.version}</message>
+          <server>github</server>
+          <noJekyll>true</noJekyll>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>site-deploy</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.eluder.coveralls</groupId>
+        <artifactId>coveralls-maven-plugin</artifactId>
+        <version>2.2.0</version>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
@@ -226,19 +449,9 @@
         <version>0.6.4.201312101107</version>
         <executions>
           <execution>
-            <id>jacoco-initialize</id>
+            <id>prepare-agent</id>
             <goals>
               <goal>prepare-agent</goal>
-            </goals>
-            <configuration>
-              <destFile>${project.basedir}/target/reports/coverage/jacoco.exec</destFile>
-            </configuration>
-          </execution>
-          <execution>
-            <id>jacoco-site</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>report</goal>
             </goals>
           </execution>
         </executions>
@@ -246,111 +459,94 @@
     </plugins>
   </build>
 
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.7</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>index</report>
+              <report>summary</report>
+              <report>project-team</report>
+              <report>license</report>
+              <report>issue-tracking</report>
+              <report>scm</report>
+              <report>cim</report>
+              <report>distribution-management</report>
+              <report>dependencies</report>
+              <report>plugins</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changes-plugin</artifactId>
+        <version>2.9</version>
+        <configuration>
+          <columnNames>Id,Summary,Reporter,Assignee,Status,Type,Created,Fix Version</columnNames>
+          <onlyCurrentVersion>true</onlyCurrentVersion>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>github-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
   <profiles>
-
     <profile>
-      <id>default</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-        <property>
-          <name>jrebel</name>
-        </property>
-      </activation>
-      <modules>
-        <module>bootstrap</module>
-        <module>cms</module>
-        <module>addon-webservices</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>cargo.run</id>
+      <id>pedantic</id>
       <build>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.cargo</groupId>
-            <artifactId>cargo-maven2-plugin</artifactId>
+            <groupId>org.apache.rat</groupId>
+            <artifactId>apache-rat-plugin</artifactId>
+            <version>0.9.RAT125</version>
+            <inherited>false</inherited>
+            <executions>
+              <execution>
+                <phase>validate</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
             <configuration>
-              <configuration>
-                <deployables>
-                  <deployable>
-                    <type>war</type>
-                    <properties>
-                      <context>/cms</context>
-                    </properties>
-                    <location>${project.basedir}/cms/target/cms.war</location>
-                  </deployable>
-                </deployables>
-                <properties>
-                  <catalina.servlet.uriencoding>UTF-8</catalina.servlet.uriencoding>
-                  <cargo.tomcat.connector.emptySessionPath>false</cargo.tomcat.connector.emptySessionPath>
-                </properties>
-                <configfiles>
-                  <configfile>
-                    <file>${project.basedir}/conf/context.xml</file>
-                    <todir>conf/</todir>
-                    <tofile>context.xml</tofile>
-                  </configfile>
-                </configfiles>
-              </configuration>
-              <container>
-                <systemProperties>
-                  <derby.stream.error.file>${project.basedir}/target/derby.log</derby.stream.error.file>
-                  <log4j.configuration>file:${project.basedir}/conf/log4j-dev.xml</log4j.configuration>
-                  <rebel.log4j-plugin>true</rebel.log4j-plugin>
-                  <!-- enables auto export: -->
-                  <project.basedir>${project.basedir}</project.basedir>
-                </systemProperties>
-              </container>
+              <addDefaultLicenseMatchers>false</addDefaultLicenseMatchers>
+              <excludeSubProjects>false</excludeSubProjects>
+              <licenses>
+                <license implementation="org.apache.rat.analysis.license.AppliedApacheSoftwareLicense20">
+                  <copyrightOwner>Hippo B\.V\. \(http://www\.onehippo\.com\)</copyrightOwner>
+                </license>
+              </licenses>
+              <excludes>
+                <!-- no license headers needed for these files -->
+                <exclude>TODO</exclude>
+                <exclude>atlassian-ide-plugin.xml</exclude>
+                <exclude>**/*.cnd</exclude>
+                <exclude>**/*.json</exclude>
+                <exclude>**/*.log</exclude>
+                <exclude>**/*.patch</exclude>
+                <exclude>**/*.plxarc</exclude>
+                <exclude>**/*.properties</exclude>
+                <exclude>**/log4j.dtd</exclude>
+                <exclude>**/MANIFEST.MF</exclude>
+                <!-- exclude IntelliJ module files of sub-projects -->
+                <exclude>**/*.iml</exclude>
+              </excludes>
             </configuration>
           </plugin>
         </plugins>
       </build>
     </profile>
-
-    <profile>
-      <id>dist</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>jcl-over-slf4j</artifactId>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
-      <build>
-        <defaultGoal>validate</defaultGoal>
-        <plugins>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>distro-assembly</id>
-                <phase>validate</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <descriptors>
-                    <descriptor>${project.basedir}/src/main/assembly/distribution.xml</descriptor>
-                  </descriptors>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
   </profiles>
 
 </project>
