@@ -137,6 +137,17 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     }
 
     @Test
+    public void testGetProperties() {
+        final LinkedHashMap response = client
+                .path("system/properties")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(LinkedHashMap.class);
+        assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
+        assertTrue(response.values().size() > 0);
+    }
+
+    @Test
     public void testGetHardwareInfo() {
         final LinkedHashMap response = client
                 .path("system/hardware")

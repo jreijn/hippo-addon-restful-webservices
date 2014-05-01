@@ -197,11 +197,11 @@ public class NodesResource {
             absolutePath = "/" + absolutePath;
         }
 
-        if (!session.nodeExists(absolutePath)) {
+        /*if (!session.nodeExists(absolutePath)) {
 
         } else {
             
-        }
+        }*/
 
         if (StringUtils.isEmpty(jcrNode.getName())) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -227,8 +227,7 @@ public class NodesResource {
             RepositoryConnectionUtils.cleanupSession(session);
         }
 
-        Response build = Response.created(newNodeUri).build();
-        return build;
+        return Response.created(newNodeUri).build();
     }
 
     @DELETE

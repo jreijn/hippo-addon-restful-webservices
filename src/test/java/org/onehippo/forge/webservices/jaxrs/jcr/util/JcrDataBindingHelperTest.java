@@ -21,17 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFactory;
 import javax.jcr.nodetype.NodeType;
 
+import org.apache.sling.commons.testing.jcr.MockProperty;
 import org.apache.sling.commons.testing.jcr.MockValue;
 import org.junit.Test;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrProperty;
 import org.onehippo.forge.webservices.testing.jcr.MockNode;
-import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
-
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -44,14 +45,15 @@ import static org.mockito.Mockito.when;
 public class JcrDataBindingHelperTest {
 
     public static final String MIX_VERSIONABLE = "mix:versionable";
+    public static final String HIPPO_PATHS_PROPERTY = "hippo:paths";
 
     @Test
     public void testGetNodeRepresentation() throws Exception {
 
-        MockNode mockRootNode = new MockNode("/","jcr:root");
+        MockNode mockRootNode = new MockNode("/", "jcr:root");
         final Node testNode = mockRootNode.addNode("/test", "hippo:handle");
-        testNode.addNode("/test/test1","hippo:document");
-        testNode.addNode("/test/test2","hippo:document");
+        testNode.addNode("/test/test1", "hippo:document");
+        testNode.addNode("/test/test2", "hippo:document");
 
         final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(mockRootNode.getNode("test"), 2);
         assertTrue(nodeRepresentation.getName().equals("test"));
@@ -63,11 +65,14 @@ public class JcrDataBindingHelperTest {
 
     @Test
     public void testGetPropertyRepresentation() throws Exception {
-        MockNode mockRootNode = new MockNode("/","jcr:root");
-        Node testNode = mockRootNode.addNode("/test", "hippo:document");
+        MockNode mockRootNode = new MockNode("/", "jcr:root");
+        MockNode testNode = (MockNode) mockRootNode.addNode("/test", "hippo:document");
         testNode.setProperty("hippostdpubwf:createdBy", "admin");
+        testNode.setProperty(HIPPO_PATHS_PROPERTY, new String[]{"test", "test2"});
         JcrProperty propertyRepresentation = JcrDataBindingHelper.getPropertyRepresentation(mockRootNode.getNode("test").getProperty("hippostdpubwf:createdBy"));
-        assertEquals(propertyRepresentation.getName(),"hippostdpubwf:createdBy");
+        assertEquals(propertyRepresentation.getName(), "hippostdpubwf:createdBy");
+        JcrProperty pathsPropertyRepresentation = JcrDataBindingHelper.getPropertyRepresentation(mockRootNode.getNode("test").getProperty(HIPPO_PATHS_PROPERTY));
+        assertTrue(pathsPropertyRepresentation.isMultiple());
     }
 
     @Test
@@ -75,15 +80,15 @@ public class JcrDataBindingHelperTest {
         List<String> mixins = new ArrayList<String>();
         mixins.add(MIX_VERSIONABLE);
 
-        MockNode rootNode = new MockNode("/","jcr:root");
+        MockNode rootNode = new MockNode("/", "jcr:root");
         Node testNode = rootNode.addNode("/test", "hippo:document");
         testNode.setProperty("hippostdpubwf:createdBy", "admin");
         JcrDataBindingHelper.addMixinsFromRepresentation(rootNode, mixins);
         NodeType[] mixinNodeTypes = rootNode.getMixinNodeTypes();
         boolean mixinFound = false;
-        if(mixinNodeTypes!=null) {
-            for(NodeType type : mixinNodeTypes) {
-                if(type.getName().equals(MIX_VERSIONABLE)) {
+        if (mixinNodeTypes != null) {
+            for (NodeType type : mixinNodeTypes) {
+                if (type.getName().equals(MIX_VERSIONABLE)) {
                     mixinFound = true;
                 }
             }
@@ -96,7 +101,7 @@ public class JcrDataBindingHelperTest {
         List<String> propValues = new ArrayList<String>();
         propValues.add("value1");
 
-        MockNode mockRootNode = new MockNode("/","jcr:root");
+        MockNode mockRootNode = new MockNode("/", "jcr:root");
         Session mockSession = mock(Session.class);
         mockRootNode.setSession(mockSession);
         Node testNode = mockRootNode.addNode("/test", "hippo:document");
@@ -109,8 +114,29 @@ public class JcrDataBindingHelperTest {
         jcrProperty.setMultiple(false);
         final ValueFactory valueFactory = mock(ValueFactory.class);
         when(mockRootNode.getSession().getValueFactory()).thenReturn(valueFactory);
-        when(valueFactory.createValue("value1",1)).thenReturn(new MockValue("value1"));
-        JcrDataBindingHelper.addPropertyToNode(mockRootNode,jcrProperty);
+        when(valueFactory.createValue("value1", 1)).thenReturn(new MockValue("value1"));
+        JcrDataBindingHelper.addPropertyToNode(mockRootNode, jcrProperty);
         assertTrue(mockRootNode.hasProperty("propname"));
+    }
+
+    @Test
+    public void testAddChildNodesFromRepresentation() throws Exception {
+        List<JcrNode> nodes = new ArrayList<JcrNode>(2);
+        final JcrNode node1 = new JcrNode();
+        node1.setName("test1");
+        node1.setPrimaryType("hippo:document");
+        final JcrNode subnode1 = new JcrNode();
+        subnode1.setName("subtest1");
+        subnode1.setPrimaryType("hippo:compound");
+        node1.addNode(subnode1);
+        nodes.add(node1);
+
+        final JcrNode node2 = new JcrNode();
+        node2.setName("test2");
+        node1.setPrimaryType("hippo:document");
+        nodes.add(node2);
+        MockNode testMock = new MockNode("/","jcr:root");
+        JcrDataBindingHelper.addChildNodesFromRepresentation(testMock,nodes);
+        assertEquals(2,testMock.getNodes().getSize());
     }
 }

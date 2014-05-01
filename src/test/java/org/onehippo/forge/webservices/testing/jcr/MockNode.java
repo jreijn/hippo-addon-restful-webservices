@@ -16,16 +16,26 @@
 
 package org.onehippo.forge.webservices.testing.jcr;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
+import javax.jcr.Value;
+import javax.jcr.ValueFormatException;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeType;
+import javax.jcr.version.VersionException;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.sling.commons.testing.jcr.MockNodeIterator;
-import org.apache.sling.commons.testing.jcr.MockNodeType;
+import org.apache.sling.commons.testing.jcr.*;
 
 /**
  * Simple implementation supporthing child nodes.
@@ -33,6 +43,7 @@ import org.apache.sling.commons.testing.jcr.MockNodeType;
  */
 public class MockNode extends org.apache.sling.commons.testing.jcr.MockNode {
 
+    private Map<String, Property> properties = new HashMap<String, Property>();
     private List<MockNode> childNodes = new ArrayList<MockNode>();
     private List<MockNodeType> mixins = new ArrayList<MockNodeType>();
 
@@ -98,4 +109,24 @@ public class MockNode extends org.apache.sling.commons.testing.jcr.MockNode {
         this.parent = parent;
     }
 
+    @Override
+    public Property getProperty(final String relPath) {
+        return properties.get(relPath);
+    }
+
+    @Override
+    public Property setProperty(final String name, final String[] values) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+        MockProperty p = new MockProperty(name);
+        p.setValue(values);
+        properties.put(name, p);
+        return p;
+    }
+
+    @Override
+    public Property setProperty(final String name, final String value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException {
+        MockProperty p = new MockProperty(name);
+        p.setValue(value);
+        properties.put(name, p);
+        return p;
+    }
 }
