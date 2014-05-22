@@ -226,7 +226,6 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         assertTrue(response.getNodes().size() == 4);
     }
 
-    @Ignore
     @Test
     public void testPostToJcrRootNode() {
         final ArrayList<JcrProperty> properties = new ArrayList<JcrProperty>(1);
@@ -255,14 +254,14 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
         multipleStringJcrProperty.setValues(values);
         properties.add(multipleStringJcrProperty);
 
-        final JcrProperty longJcrProperty = new JcrProperty();
-        longJcrProperty.setName("myproperty");
-        longJcrProperty.setType("Long");
-        longJcrProperty.setMultiple(false);
+        final JcrProperty doubleJcrProperty = new JcrProperty();
+        doubleJcrProperty.setName("mydoubleproperty");
+        doubleJcrProperty.setType("Double");
+        doubleJcrProperty.setMultiple(false);
         values = new ArrayList<String>(1);
         values.add("3.14");
-        longJcrProperty.setValues(values);
-        properties.add(longJcrProperty);
+        doubleJcrProperty.setValues(values);
+        properties.add(doubleJcrProperty);
 
         final JcrProperty booleanJcrProperty = new JcrProperty();
         booleanJcrProperty.setName("myboolproperty");
@@ -279,18 +278,33 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(node);
-        assertTrue("Document was not created. Status code: " + response.getStatus(),
+        assertTrue("Document was not created. Status code: " + response.getStatus() + " " + response,
                 response.getStatus() == Response.Status.CREATED.getStatusCode());
 
-        assertTrue(response.getMetadata().getFirst("Location").equals(HTTP_ENDPOINT_ADDRESS + "/nodes/newnode"));
-
-        final JcrNode getResponse = client
+        final Object location = response.getMetadata().getFirst("Location");
+        assertTrue((HTTP_ENDPOINT_ADDRESS + "/nodes/newnode").equals(location));
+        client.reset();
+        final JcrNode newJcrNode = client
                 .path("nodes/newnode")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
 
-        assertTrue(getResponse.getProperties().size()==4);
+        assertTrue(newJcrNode.getProperties().size()==4);
+    }
+
+    @Test
+    public void testPostToNonExistingNode() {
+        JcrNode node = new JcrNode();
+        node.setName("newnode");
+        node.setPrimaryType("nt:unstructured");
+
+        final Response response = client
+                .path("nodes/mynonexistingnode")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .post(node);
+        assertTrue(response.getStatus() == Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
