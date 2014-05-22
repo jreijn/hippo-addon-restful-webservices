@@ -16,7 +16,6 @@
 
 package org.onehippo.forge.webservices;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,7 +70,6 @@ import static org.junit.Assert.assertTrue;
 public class WebservicesIntegrationTest extends RepositoryTestCase {
 
     private final static String HTTP_ENDPOINT_ADDRESS = "http://localhost:8080/rest";
-    private final static String DEFAULT_REPO_LOCATION_PROTOCOL = "file://";
     private static Server server;
     private static Logger log = LoggerFactory.getLogger(WebservicesIntegrationTest.class);
     private static WebClient client;
@@ -288,7 +286,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
 
-        assertTrue(newJcrNode.getProperties().size()==4);
+        assertTrue(newJcrNode.getProperties().size() == 4);
     }
 
     @Test
@@ -365,7 +363,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @Test
     public void testDeleteProperty() throws RepositoryException {
         final Node test = session.getRootNode().addNode("test", "nt:unstructured");
-        test.setProperty("propname","propvalue");
+        test.setProperty("propname", "propvalue");
         session.save();
 
         final Response emptyPathResponse = client
@@ -440,18 +438,6 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
             server.stop();
             server.destroy();
         }
-    }
-
-    private static String getDefaultRepoPath() {
-        final File tmpdir = new File(System.getProperty("java.io.tmpdir"));
-        final File storage = new File(tmpdir, "repository");
-        if (!storage.exists()) {
-            final boolean createdDir = storage.mkdir();
-            if(!createdDir) {
-                log.error("Something went wrong while trying to create the repository directory at: {}", storage.getAbsolutePath());
-            }
-        }
-        return storage.getAbsolutePath();
     }
 
 }
