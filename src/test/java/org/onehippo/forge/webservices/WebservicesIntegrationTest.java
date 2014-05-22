@@ -48,7 +48,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.onehippo.forge.webservices.jaxrs.exception.CustomWebApplicationExceptionMapper;
 import org.onehippo.forge.webservices.jaxrs.jcr.NodesResource;
@@ -73,7 +72,6 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
 
     private final static String HTTP_ENDPOINT_ADDRESS = "http://localhost:8080/rest";
     private final static String DEFAULT_REPO_LOCATION_PROTOCOL = "file://";
-    private static final String DEFAULT_REPO_LOCATION = DEFAULT_REPO_LOCATION_PROTOCOL + getDefaultRepoPath();
     private static Server server;
     private static Logger log = LoggerFactory.getLogger(WebservicesIntegrationTest.class);
     private static WebClient client;
@@ -229,7 +227,7 @@ public class WebservicesIntegrationTest extends RepositoryTestCase {
     @Test
     public void testPostToJcrRootNode() {
         final ArrayList<JcrProperty> properties = new ArrayList<JcrProperty>(1);
-        ArrayList<String> values = new ArrayList<String>(1);
+        ArrayList<String> values;
 
         JcrNode node = new JcrNode();
         node.setName("newnode");
