@@ -110,7 +110,6 @@ public class QueryResource {
                 Node node = nodeIterator.nextNode();
                 final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(node, 0);
                 final URI nodeUri = getUriForNode(ui, nodeRepresentation);
-                nodeRepresentation.setLink(nodeUri);
                 resultItems.add(nodeRepresentation);
             }
         } catch (RepositoryException e) {
@@ -157,7 +156,6 @@ public class QueryResource {
                 Node node = nodeIterator.nextNode();
                 final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(node, 0);
                 final URI nodeUri = getUriForNode(ui, nodeRepresentation);
-                nodeRepresentation.setLink(nodeUri);
                 resultItems.add(nodeRepresentation);
             }
         } catch (RepositoryException e) {

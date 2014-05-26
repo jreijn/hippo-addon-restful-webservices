@@ -30,8 +30,6 @@ public class JcrSearchQuery {
     private String language;
     private int limit = 200;
     private int offset;
-    private int size;
-    private Set<String> sort;
 
     public String getStatement() {
         return statement;
@@ -65,19 +63,4 @@ public class JcrSearchQuery {
         this.offset = offset;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(final int size) {
-        this.size = size;
-    }
-
-    public Set<String> getSort() {
-        return sort;
-    }
-
-    public void setSort(final Set<String> sort) {
-        this.sort = sort;
-    }
 }

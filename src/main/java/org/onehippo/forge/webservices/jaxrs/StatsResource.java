@@ -29,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.apache.jackrabbit.api.stats.RepositoryStatistics;
@@ -45,7 +46,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jeroen Reijn
  */
-@Api(value = "", description = "Accessing the root of a Hippo instance returns meta information about the instance. The response is a JSON structure containing information about the server, including a welcome message and the version of the server.")
+@Api(value = "_stats", description = "Accessing the root of a Hippo instance returns meta information about the instance. The response is a JSON structure containing information about the server, including a welcome message and the version of the server.")
 @Path(value = "_stats")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class StatsResource {
@@ -57,6 +58,10 @@ public class StatsResource {
 
     private static Logger log = LoggerFactory.getLogger(StatsResource.class);
 
+    @ApiOperation(
+            value = "Display statistics about the repository instance; nr of sessions, queries, bundle operations",
+            notes = "",
+            position = 1)
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInstanceInformation() {

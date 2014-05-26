@@ -16,7 +16,6 @@
 
 package org.onehippo.forge.webservices.jaxrs.jcr.model;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "A representation of a JCR node")
 @XmlRootElement(name = "node")
-@XmlType(propOrder = {"name","identifier","path","link","primaryType","mixinTypes","properties","nodes"})
+@XmlType(propOrder = {"name", "identifier", "path", "primaryType", "mixinTypes", "properties", "nodes"})
 public class JcrNode {
 
     @ApiModelProperty(required = true)
@@ -41,7 +40,6 @@ public class JcrNode {
     private String path;
     @ApiModelProperty(required = false)
     private String identifier;
-    private URI link;
     private List<String> mixinTypes = new ArrayList<String>();
     private List<JcrProperty> properties = new ArrayList<JcrProperty>();
     private List<JcrNode> nodes = new ArrayList<JcrNode>();
@@ -110,12 +108,5 @@ public class JcrNode {
         this.mixinTypes = mixinTypes;
     }
 
-    public URI getLink() {
-        return link;
-    }
-
-    public void setLink(final URI link) {
-        this.link = link;
-    }
 
 }

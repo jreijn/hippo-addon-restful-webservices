@@ -31,6 +31,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
@@ -38,9 +39,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *  * @author Jeroen Reijn
+ * @author Jeroen Reijn
  */
-@Api(value = "", description = "Accessing the root of a Hippo instance returns meta information about the instance. The response is a JSON structure containing information about the server, including a welcome message and the version of the server.")
+@Api(value = "/", description = "Meta information about the repository instance.")
 @Path(value = "/")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class RootResource {
@@ -50,6 +51,10 @@ public class RootResource {
 
     private static Logger log = LoggerFactory.getLogger(RootResource.class);
 
+    @ApiOperation(
+            value = "Display basic information about the repository instance",
+            notes = "",
+            position = 1)
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInstanceInformation() {
