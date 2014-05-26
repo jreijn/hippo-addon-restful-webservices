@@ -17,8 +17,6 @@
 package org.onehippo.forge.webservices.jaxrs;
 
 import java.lang.reflect.Field;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.jcr.LoginException;
 import javax.jcr.Session;
@@ -37,13 +35,14 @@ import org.apache.jackrabbit.api.stats.RepositoryStatistics;
 import org.apache.jackrabbit.core.RepositoryContext;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.stats.RepositoryStatisticsImpl;
-import org.hippoecm.repository.LocalHippoRepository;
 import org.hippoecm.repository.impl.RepositoryDecorator;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Resource for showing statistics http://wiki.apache.org/jackrabbit/Statistics
+ *
  * @author Jeroen Reijn
  */
 @Api(value = "", description = "Accessing the root of a Hippo instance returns meta information about the instance. The response is a JSON structure containing information about the server, including a welcome message and the version of the server.")
@@ -62,25 +61,23 @@ public class StatsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInstanceInformation() {
         Session session = null;
-        Map<String, Object> info = new LinkedHashMap<String, Object>();
-        Map<String, Object> sessions = new LinkedHashMap<String, Object>();
+        RepositoryStatistics repositoryStatistics = null;
         try {
             session = RepositoryConnectionUtils.createSession(request);
-            final RepositoryStatistics repositoryStatistics = getStatistics(session);
-            info.put("statistics",repositoryStatistics);
+            repositoryStatistics = getStatistics(session);
         } catch (LoginException e) {
             log.warn("An exception occurred while trying to login: {}", e);
         } finally {
             RepositoryConnectionUtils.cleanupSession(session);
         }
-        return Response.ok(info).build();
+        return Response.ok(repositoryStatistics).build();
     }
 
     private RepositoryStatistics getStatistics(Session session) {
-        if(statistics==null) {
+        if (statistics == null) {
             try {
                 Field contextField = RepositoryImpl.class.getDeclaredField("context");
-                if ( !contextField.isAccessible() ) {
+                if (!contextField.isAccessible()) {
                     contextField.setAccessible(true);
                 }
                 RepositoryContext respositoryContext = (RepositoryContext) contextField.get(RepositoryDecorator.unwrap(session.getRepository()));
