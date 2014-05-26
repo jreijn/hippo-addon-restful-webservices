@@ -9,11 +9,12 @@ It provides amongst others a full CRUD REST API for JCR nodes and properties.
 
 ## Current Available APIs
 
++ Info ```/```
 + Nodes API ```/nodes```
 + Properties API ```/properties```
 + Query API ```/query```
 + System API ```/system```
-+ HelloWorld API ```/hello```
++ Statistics API ```/_stats```
 
 ## Future plans
 
@@ -45,11 +46,12 @@ Now add the servlet definition to your CMS web.xml located in ```cms/src/main/we
   <init-param>
     <param-name>jaxrs.serviceClasses</param-name>
     <param-value>
-      org.onehippo.forge.webservices.jaxrs.HelloResource,
+      org.onehippo.forge.webservices.jaxrs.RootResource,
       org.onehippo.forge.webservices.jaxrs.system.SystemResource,
       org.onehippo.forge.webservices.jaxrs.jcr.NodesResource,
       org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource,
       org.onehippo.forge.webservices.jaxrs.jcr.QueryResource
+      org.onehippo.forge.webservices.jaxrs.StatsResource,
     </param-value>
   </init-param>
   <init-param>
