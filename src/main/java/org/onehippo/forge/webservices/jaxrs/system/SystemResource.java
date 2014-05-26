@@ -20,8 +20,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.NumberFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,7 +28,6 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import javax.jcr.LoginException;
-import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -44,15 +41,14 @@ import javax.ws.rs.core.Response;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
-import org.hippoecm.frontend.Home;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Api for system information
+ *
  * @author Jeroen Reijn
  */
 @Api(value = "system", description = "API for system information")
@@ -94,10 +90,7 @@ public class SystemResource {
         try {
             session = RepositoryConnectionUtils.createSession(request);
             info.put("Hippo Release Version", getHippoReleaseVersion());
-            info.put("Hippo CMS version", getCMSVersion());
             info.put("Project Version", getProjectVersion());
-            info.put("Repository vendor", getRepositoryVendor(session));
-            info.put("Repository version", getRepositoryVersion(session));
         } catch (LoginException e) {
             log.warn("An exception occurred while trying to login: {}", e);
         } finally {
@@ -148,27 +141,6 @@ public class SystemResource {
         return Response.ok(info).build();
     }
 
-    @ApiOperation(
-            value = "Display jackrabbit information",
-            notes = "",
-            position = 5)
-    @Path(value = "/jackrabbit")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getJackrabbitInfo() {
-        Session session = null;
-        Map<String, String> info = new LinkedHashMap<String, String>();
-        try {
-            session = RepositoryConnectionUtils.createSession(request);
-            info.put("Jackrabbit Cluster Node id", getClusterNodeId(session));
-        } catch (LoginException e) {
-            log.warn("An exception occurred while trying to login: {}", e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
-        }
-        return Response.ok(info).build();
-    }
-
     private String getHippoReleaseVersion() {
         try {
             final Manifest manifest = getWebAppManifest();
@@ -206,80 +178,6 @@ public class SystemResource {
         return null;
     }
 
-    private String getRepositoryVersion(Session session) {
-        Repository repository = session.getRepository();
-        if (repository != null) {
-            return repository.getDescriptor(Repository.REP_VERSION_DESC);
-        } else {
-            return "unknown";
-        }
-    }
-
-    private String getRepositoryVendor(Session session) {
-        Repository repository = session.getRepository();
-        if (repository != null) {
-            return repository.getDescriptor(Repository.REP_NAME_DESC);
-        } else {
-            return "unknown";
-        }
-    }
-
-    private String getCMSVersion() {
-        try {
-            Manifest manifest = getManifest(Home.class);
-            if (manifest == null) {
-                manifest = getWebAppManifest();
-            }
-            if (manifest != null) {
-                return buildVersionString(manifest, "Implementation-Version", "Implementation-Build");
-            }
-        } catch (IOException iOException) {
-            log.debug("Error occurred getting the cms version from the manifest.", iOException);
-        }
-
-        return "unknown";
-    }
-
-    /**
-     * @param clazz the class object for which to obtain a reference to the manifest
-     * @return the URL of the manifest found, or {@code null} if it could not be obtained
-     */
-    private static URL getManifestURL(Class clazz) {
-        try {
-            final StringBuilder sb = new StringBuilder();
-            final String[] classElements = clazz.getName().split("\\.");
-            for (int i = 0; i < classElements.length - 1; i++) {
-                sb.append("../");
-            }
-            sb.append("META-INF/MANIFEST.MF");
-            final URL classResource = clazz.getResource(classElements[classElements.length - 1] + ".class");
-            if (classResource != null) {
-                return new URL(classResource, new String(sb));
-            }
-        } catch (MalformedURLException exception) {
-            log.warn("Invalid URL detected while trying to get the URl for the Manifest: {}", exception);
-        }
-        return null;
-    }
-
-    /**
-     * @param clazz the class object for which to obtain the manifest
-     * @return the manifest object, or {@code null} if it could not be obtained
-     * @throws IOException if something went wrong while reading the manifest
-     */
-    private static Manifest getManifest(Class clazz) throws IOException {
-        final URL url = getManifestURL(clazz);
-        if (url != null) {
-            final InputStream is = url.openStream();
-            try {
-                return new Manifest(is);
-            } finally {
-                IOUtils.closeQuietly(is);
-            }
-        }
-        return null;
-    }
-
     private String buildVersionString(final Manifest manifest, final String versionAttribute, final String buildAttribute) {
         StringBuilder versionString = new StringBuilder();
 
@@ -296,17 +194,6 @@ public class SystemResource {
             versionString.append(projectBuild);
         }
         return versionString.toString();
-    }
-
-    private String getClusterNodeId(Session session) {
-        String clusterNodeId = "";
-        if (session.getRepository() != null) {
-            final String clusterId = session.getRepository().getDescriptor("jackrabbit.cluster.id");
-            if(clusterId!=null){
-                clusterNodeId = clusterId;
-            }
-        }
-        return clusterNodeId;
     }
 
 }

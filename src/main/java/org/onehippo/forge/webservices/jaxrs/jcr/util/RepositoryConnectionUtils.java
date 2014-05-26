@@ -16,6 +16,7 @@
 
 package org.onehippo.forge.webservices.jaxrs.jcr.util;
 
+import javax.jcr.Credentials;
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -39,7 +40,7 @@ public class RepositoryConnectionUtils {
         Session session = null;
         try {
             final HippoRepository repository = HippoRepositoryFactory.getHippoRepository();
-            session = repository.login((SimpleCredentials) request.getAttribute(AuthenticationConstants.HIPPO_CREDENTIALS));
+            session = repository.login((Credentials) request.getAttribute(AuthenticationConstants.HIPPO_CREDENTIALS));
         } catch (LoginException le) {
             throw new LoginException(le);
         } catch (RepositoryException e) {

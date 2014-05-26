@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onehippo.forge.webservices.jaxrs.system.model;
+package org.onehippo.forge.webservices.jaxrs.models;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

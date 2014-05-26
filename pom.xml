@@ -81,13 +81,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <hippo.repository.version>2.24.14</hippo.repository.version>
-    <hippo.cms.version>2.24.10</hippo.cms.version>
+    <hippo.repository.version>2.26.00</hippo.repository.version>
     <hippo.services.version>1.02.03</hippo.services.version>
 
     <javax.jcr.version>2.0</javax.jcr.version>
-    <jackrabbit.patched.version>2.2.13-h14</jackrabbit.patched.version>
-    <jackrabbit.version>2.2.13</jackrabbit.version>
+    <jackrabbit.patched.version>2.6.5-h1</jackrabbit.patched.version>
+    <jackrabbit.version>2.6.5</jackrabbit.version>
     <slf4j.version>1.6.4</slf4j.version>
     <log4j.version>1.2.16</log4j.version>
     <commons-logging.version>1.1.1</commons-logging.version>
@@ -102,6 +101,10 @@
 
     <servlet-api.version>2.5</servlet-api.version>
     <jta.version>1.1</jta.version>
+
+    <repo.path>${project.build.directory}/storage</repo.path>
+    <repo.config />
+    <surefire.forkmode>once</surefire.forkmode>
 
   </properties>
 
@@ -288,12 +291,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.onehippo.cms7</groupId>
-      <artifactId>hippo-cms-api</artifactId>
-      <version>${hippo.cms.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.jackrabbit</groupId>
       <artifactId>jackrabbit-core</artifactId>
       <version>${jackrabbit.patched.version}</version>
@@ -408,8 +405,11 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.15</version>
         <configuration>
+          <forkMode>${surefire.forkmode}</forkMode>
           <systemPropertyVariables>
             <org.onehippo.repository.test.keepserver>true</org.onehippo.repository.test.keepserver>
+            <repo.path>${repo.path}</repo.path>
+            <repo.config>${repo.config}</repo.config>
           </systemPropertyVariables>
           <excludes>
             <exclude>**/*IntegrationTest.java</exclude>

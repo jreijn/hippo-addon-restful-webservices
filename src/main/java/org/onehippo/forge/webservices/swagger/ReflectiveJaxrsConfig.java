@@ -22,7 +22,7 @@ import com.wordnik.swagger.config.ScannerFactory;
 import com.wordnik.swagger.jaxrs.config.DefaultJaxrsConfig;
 import com.wordnik.swagger.jaxrs.config.ReflectiveJaxrsScanner;
 
-import org.datanucleus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
