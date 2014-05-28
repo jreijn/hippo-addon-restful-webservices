@@ -30,7 +30,7 @@ public class QueryIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetQueryResults() {
         final JcrQueryResult response = client
-                .path("query/")
+                .path("_query/")
                 .query("statement", "//element(*,rep:root) order by @jcr:score")
                 .query("language", "xpath")
                 .accept(MediaType.APPLICATION_JSON)
@@ -42,7 +42,7 @@ public class QueryIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetQueryResultsWithLimit() {
         final JcrQueryResult response = client
-                .path("query/")
+                .path("_query/")
                 .query("statement", "//element(*,hipposys:domain) order by @jcr:score")
                 .query("language", "xpath")
                 .query("limit", "1")
@@ -59,7 +59,7 @@ public class QueryIntegrationTest extends WebservicesIntegrationTest {
         query.setStatement("SELECT * FROM rep:root order by jcr:score");
         query.setLanguage("sql");
         final JcrQueryResult response = client
-                .path("query/")
+                .path("_query/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(query, JcrQueryResult.class);
