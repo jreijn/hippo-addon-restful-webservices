@@ -23,6 +23,7 @@ import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -33,6 +34,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.apache.jackrabbit.api.stats.RepositoryStatistics;
+import org.apache.jackrabbit.api.stats.TimeSeries;
 import org.apache.jackrabbit.core.RepositoryContext;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.stats.RepositoryStatisticsImpl;
@@ -59,7 +61,7 @@ public class StatsResource {
     private static Logger log = LoggerFactory.getLogger(StatsResource.class);
 
     @ApiOperation(
-            value = "Display statistics about the repository instance; nr of sessions, queries, bundle operations",
+            value = "Display all statistics about the repository instance; nr of sessions, queries, bundle operations",
             notes = "",
             position = 1)
     @GET
@@ -78,6 +80,29 @@ public class StatsResource {
         return Response.ok(repositoryStatistics).build();
     }
 
+    @ApiOperation(
+            value = "Display specific statistics based on the key about the repository instance",
+            notes = "",
+            position = 2)
+    @GET
+    @Path("/type/{key}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getInstanceInformationByKey(@PathParam("key") String key) {
+        Session session = null;
+        TimeSeries timeSeries = null;
+        try {
+            session = RepositoryConnectionUtils.createSession(request);
+            RepositoryStatistics repositoryStatistics = getStatistics(session);
+            timeSeries = repositoryStatistics.getTimeSeries(RepositoryStatistics.Type.getType(key));
+        } catch (LoginException e) {
+            log.warn("An exception occurred while trying to login: {}", e);
+        } finally {
+            RepositoryConnectionUtils.cleanupSession(session);
+        }
+        return Response.ok(timeSeries).build();
+    }
+
+
     private RepositoryStatistics getStatistics(Session session) {
         if (statistics == null) {
             try {
@@ -85,8 +110,8 @@ public class StatsResource {
                 if (!contextField.isAccessible()) {
                     contextField.setAccessible(true);
                 }
-                RepositoryContext respositoryContext = (RepositoryContext) contextField.get(RepositoryDecorator.unwrap(session.getRepository()));
-                this.statistics = respositoryContext.getRepositoryStatistics();
+                RepositoryContext repositoryContext = (RepositoryContext) contextField.get(RepositoryDecorator.unwrap(session.getRepository()));
+                this.statistics = repositoryContext.getRepositoryStatistics();
             } catch (SecurityException e) {
                 throw new IllegalArgumentException(e);
             } catch (NoSuchFieldException e) {
