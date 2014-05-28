@@ -56,8 +56,8 @@ import org.onehippo.forge.webservices.jaxrs.jcr.util.ResponseConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Api(value = "query", description = "API for searching nodes")
-@Path("query")
+@Api(value = "_query", description = "API for searching nodes")
+@Path("_query")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class QueryResource {
 

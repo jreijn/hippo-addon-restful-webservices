@@ -12,9 +12,14 @@ It provides amongst others a full CRUD REST API for JCR nodes and properties.
 + Info ```/```
 + Nodes API ```/nodes```
 + Properties API ```/properties```
-+ Query API ```/query```
-+ System API ```/system```
++ Query API ```/_query```
++ System API ```/_system```
 + Statistics API ```/_stats```
+
+The resources have been defided into two types:
+
++ CRUD resources (without underscore)
++ Non-CRUD resources (with underscore)
 
 ## Future plans
 
