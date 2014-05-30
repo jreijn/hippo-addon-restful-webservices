@@ -41,15 +41,15 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Jeroen Reijn
  */
-@Api(value = "/", description = "Meta information about the repository instance.")
+@Api(value = "/", description = "Meta information about the repository instance.", position = 1)
 @Path(value = "/")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class RootResource {
 
+    private static Logger log = LoggerFactory.getLogger(RootResource.class);
+
     @Context
     private HttpServletRequest request;
-
-    private static Logger log = LoggerFactory.getLogger(RootResource.class);
 
     @ApiOperation(
             value = "Display basic information about the repository instance",

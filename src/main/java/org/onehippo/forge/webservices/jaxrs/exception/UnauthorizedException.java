@@ -27,14 +27,15 @@ import javax.ws.rs.core.Response.*;
 public class UnauthorizedException extends WebApplicationException {
 
     private static final long serialVersionUID = 1L;
- 
+    private static String WWW_AUTHENTICATE_HEADER_VALUE = "Basic realm=\"Default realm\"";
+
     public UnauthorizedException() {
-        this("Please authenticate.", "Name of your web service");
+        this("Please authenticate.");
     }
  
-    public UnauthorizedException(String message, String realm) {
+    public UnauthorizedException(String message) {
         super(Response.status(Status.UNAUTHORIZED).header(HttpHeaders.WWW_AUTHENTICATE,
-                                                          "Basic realm=\"" + realm + "\"")
+                WWW_AUTHENTICATE_HEADER_VALUE)
                 .entity(message).build());
     }
 }

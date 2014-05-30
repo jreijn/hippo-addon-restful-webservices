@@ -61,7 +61,7 @@ import org.slf4j.LoggerFactory;
  * @author jreijn
  */
 @GZIP
-@Api(value = "nodes", description = "API for working with JCR nodes")
+@Api(value = "nodes", description = "JCR node API", position = 2)
 @Path("nodes")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class NodesResource {
@@ -76,7 +76,7 @@ public class NodesResource {
      */
     @GET
     @Path("{path:.*}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "Get a node", notes = "Returns a node from the specified path", position = 1)
 
     @ApiResponses(value = {
@@ -115,8 +115,8 @@ public class NodesResource {
      */
     @POST
     @Path("{path:.*}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "Creates a new sub node", notes = "Adds a node and it's properties as a child of the provided location", position = 2)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK),
@@ -174,8 +174,8 @@ public class NodesResource {
      */
     @PUT
     @Path("{path:.*}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "Update a node", notes = "Updates a node and it's properties", position = 3)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK),

@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jeroen Reijn
  */
-@Api(value = "_stats", description = "Shows statistics about the repository, sessions, queries and cache.")
+@Api(value = "_stats", description = "Shows statistics about the repository, sessions, queries and cache.", position = 5)
 @Path(value = "_stats")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class StatsResource {

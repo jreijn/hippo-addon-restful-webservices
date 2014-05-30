@@ -45,13 +45,12 @@ public class CustomWebApplicationExceptionMapper implements ExceptionMapper<WebA
                 message = "no cause is available";
             }
         }
-
         message = deriveStatusMessage(message, status);
 
         ResponseExceptionRepresentation errorRepresentation = new ResponseExceptionRepresentation();
         errorRepresentation.setMessage(message);
         errorRepresentation.setStatusCode(status);
-        return Response.ok(errorRepresentation).status(status).type(MediaType.APPLICATION_JSON).build();
+        return Response.status(status).entity(errorRepresentation).type(MediaType.APPLICATION_JSON).build();
     }
 
     private String deriveStatusMessage(final String message, final int statusCode) {
@@ -67,6 +66,7 @@ public class CustomWebApplicationExceptionMapper implements ExceptionMapper<WebA
             case NOT_FOUND:
             case INTERNAL_SERVER_ERROR:
             case NOT_ACCEPTABLE:
+            case UNAUTHORIZED:
                 return status.getReasonPhrase();
             default:
                 return message;
