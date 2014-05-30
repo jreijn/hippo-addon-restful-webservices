@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Jeroen Reijn
  */
-@Api(value = "/", description = "Meta information about the repository instance.", position = 1)
+@Api(value = "/", description = "API Root.", position = 1)
 @Path(value = "/")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class RootResource {
