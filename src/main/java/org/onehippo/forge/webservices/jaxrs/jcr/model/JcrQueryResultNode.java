@@ -16,35 +16,42 @@
 
 package org.onehippo.forge.webservices.jaxrs.jcr.model;
 
-import java.util.List;
+import java.net.URI;
 
-import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * @author Jeroen Reijn
  */
-@XmlRootElement(name="results")
-@XmlType(propOrder = {"hits", "nodes"})
-public class JcrQueryResult {
+@XmlRootElement(name = "result")
+public class JcrQueryResultNode {
 
-    private List<JcrQueryResultNode> nodes;
-    private long hits;
+    private JcrNode node;
+    private double score;
+    private URI link;
 
-    public long getHits() {
-        return hits;
+
+    public JcrNode getNode() {
+        return node;
     }
 
-    public void setHits(final long hits) {
-        this.hits = hits;
+    public void setNode(final JcrNode node) {
+        this.node = node;
     }
 
-    public List<JcrQueryResultNode> getNodes() {
-        return nodes;
+    public double getScore() {
+        return score;
     }
 
-    public void setNodes(final List<JcrQueryResultNode> nodes) {
-        this.nodes = nodes;
+    public void setScore(final double score) {
+        this.score = score;
+    }
+
+    public URI getLink() {
+        return link;
+    }
+
+    public void setLink(final URI link) {
+        this.link = link;
     }
 }

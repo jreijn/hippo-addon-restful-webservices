@@ -16,19 +16,19 @@
 
 package org.onehippo.forge.webservices.jaxrs.jcr.model;
 
-import java.util.Set;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-@XmlRootElement(name="search")
+@XmlRootElement(name = "search")
 public class JcrSearchQuery {
     @ApiModelProperty(required = true)
     private String statement;
     @ApiModelProperty(required = true)
     private String language;
+    @ApiModelProperty(required = false)
     private int limit = 200;
+    @ApiModelProperty(required = false)
     private int offset;
 
     public String getStatement() {

@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jeroen Reijn
  */
-@Api(value = "_stats", description = "Accessing the root of a Hippo instance returns meta information about the instance. The response is a JSON structure containing information about the server, including a welcome message and the version of the server.")
+@Api(value = "_stats", description = "Shows statistics about the repository, sessions, queries and cache.")
 @Path(value = "_stats")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class StatsResource {

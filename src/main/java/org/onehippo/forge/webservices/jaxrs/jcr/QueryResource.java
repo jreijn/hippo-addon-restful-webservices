@@ -19,11 +19,12 @@ package org.onehippo.forge.webservices.jaxrs.jcr;
 import java.net.URI;
 import java.util.ArrayList;
 
-import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
+import javax.jcr.query.Row;
+import javax.jcr.query.RowIterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -49,6 +50,7 @@ import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.hippoecm.repository.api.HippoNodeIterator;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrQueryResult;
+import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrQueryResultNode;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrSearchQuery;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrDataBindingHelper;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
@@ -76,7 +78,7 @@ public class QueryResource {
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
     })
-    public Response getResults(@ApiParam(required = true, value = "JCR valid query syntax. '//element(*,hippo:document) order by @jcr:score'")
+    public Response getResults(@ApiParam(required = true, value = "JCR valid query syntax. '//element(*,hippo:document) order by @jcr:score descending'")
                                @QueryParam("statement") String statement,
                                @ApiParam(required = true, value = "JCR query language e.g 'xpath, sql' or 'JCR-SQL2'")
                                @QueryParam("language") String language,
@@ -86,7 +88,7 @@ public class QueryResource {
                                @QueryParam("offset") int offset,
                                @Context UriInfo ui) {
         JcrQueryResult jcrQueryResult = new JcrQueryResult();
-        ArrayList<JcrNode> resultItems = new ArrayList<JcrNode>();
+        ArrayList<JcrQueryResultNode> resultItems = new ArrayList<JcrQueryResultNode>();
 
         Session session = null;
         try {
@@ -99,18 +101,20 @@ public class QueryResource {
                 jcrQuery.setOffset(offset);
             }
             QueryResult queryResult = jcrQuery.execute();
+            final RowIterator rowIterator = queryResult.getRows();
             HippoNodeIterator nodeIterator = (HippoNodeIterator) queryResult.getNodes();
             long totalSize = nodeIterator.getTotalSize();
-            if (totalSize == -1) {
-                log.error("getTotalSize returned -1 for query. Should not be possible. Fallback to normal getSize()");
-                totalSize = nodeIterator.getSize();
-            }
             jcrQueryResult.setHits(totalSize);
-            while (nodeIterator.hasNext()) {
-                Node node = nodeIterator.nextNode();
-                final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(node, 0);
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.nextRow();
+                final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(row.getNode(), 0);
                 final URI nodeUri = getUriForNode(ui, nodeRepresentation);
-                resultItems.add(nodeRepresentation);
+
+                final JcrQueryResultNode queryResultNode = new JcrQueryResultNode();
+                queryResultNode.setNode(nodeRepresentation);
+                queryResultNode.setLink(nodeUri);
+                queryResultNode.setScore(row.getScore());
+                resultItems.add(queryResultNode);
             }
         } catch (RepositoryException e) {
             log.warn("An exception occurred while trying to perform query: {}", e);
@@ -136,7 +140,7 @@ public class QueryResource {
     })
     public Response getResults(JcrSearchQuery searchQuery, @Context UriInfo ui) {
         JcrQueryResult jcrQueryResult = new JcrQueryResult();
-        ArrayList<JcrNode> resultItems = new ArrayList<JcrNode>();
+        ArrayList<JcrQueryResultNode> resultItems = new ArrayList<JcrQueryResultNode>();
 
         Session session = null;
         try {
@@ -150,13 +154,19 @@ public class QueryResource {
             }
 
             javax.jcr.query.QueryResult queryResult = query.execute();
-            HippoNodeIterator nodeIterator = (HippoNodeIterator) queryResult.getNodes();
-            jcrQueryResult.setHits(nodeIterator.getTotalSize());
-            while (nodeIterator.hasNext()) {
-                Node node = nodeIterator.nextNode();
-                final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(node, 0);
+            final RowIterator rowIterator = queryResult.getRows();
+            long totalSize = rowIterator.getSize();
+            jcrQueryResult.setHits(totalSize);
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.nextRow();
+                final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(row.getNode(), 0);
                 final URI nodeUri = getUriForNode(ui, nodeRepresentation);
-                resultItems.add(nodeRepresentation);
+
+                final JcrQueryResultNode queryResultNode = new JcrQueryResultNode();
+                queryResultNode.setNode(nodeRepresentation);
+                queryResultNode.setLink(nodeUri);
+                queryResultNode.setScore(row.getScore());
+                resultItems.add(queryResultNode);
             }
         } catch (RepositoryException e) {
             log.warn("An exception occurred while trying to perform query: {}", e);
