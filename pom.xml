@@ -116,6 +116,19 @@
     </repository>
   </repositories>
 
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sonatype-snapshot</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
   <dependencyManagement>
     <dependencies>
       
@@ -442,6 +455,34 @@
             <include>**/*IntegrationTest.java</include>
           </includes>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.kongchen</groupId>
+        <artifactId>swagger-maven-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+          <apiSources>
+            <apiSource>
+              <locations>org.onehippo.forge.webservices.jaxrs</locations>
+              <apiVersion>v1</apiVersion>
+              <basePath>http://host:port/cms/rest/api</basePath>
+              <outputTemplate>https://raw.github.com/kongchen/api-doc-template/master/v2.0/markdown.mustache</outputTemplate>
+              <outputPath>src/site/markdown/rest-api-docs.md</outputPath>
+              <swaggerUIDocBasePath>http://www.example.com/apidocsf</swaggerUIDocBasePath>
+              <!--swaggerDirectory>generated/apidocs</swaggerDirectory-->
+              <!--useOutputFlatStructure>false</useOutputFlatStructure-->
+              <!--mustacheFileRoot>${basedir}/src/main/resources/</mustacheFileRoot-->
+            </apiSource>
+          </apiSources>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>site</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>com.github.github</groupId>

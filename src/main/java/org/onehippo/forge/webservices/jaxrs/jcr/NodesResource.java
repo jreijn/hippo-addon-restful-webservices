@@ -19,8 +19,12 @@ package org.onehippo.forge.webservices.jaxrs.jcr;
 import java.net.URI;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.nodetype.NodeType;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -169,8 +173,9 @@ public class NodesResource {
         return Response.created(newNodeUri).build();
     }
 
+    //TODO keep stable UUIDs / Do only update and not delete properties
     /**
-     * Updates a new node.
+     * Updates a node.
      */
     @PUT
     @Path("{path:.*}")
@@ -187,21 +192,16 @@ public class NodesResource {
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
     })
     public Response updateNodeByPath(@ApiParam(required = true, value = "Path of the node to update. '/content/documents/'")
-                                     @PathParam("path") @DefaultValue("/") String parentPath,
+                                     @PathParam("path") String parentPath,
                                      @Context UriInfo ui,
                                      JcrNode jcrNode) throws RepositoryException {
 
         final Session session = RepositoryConnectionUtils.createSession(request);
+        //TODO default?
         String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
         if (!absolutePath.startsWith("/")) {
             absolutePath = "/" + absolutePath;
         }
-
-        /*if (!session.nodeExists(absolutePath)) {
-
-        } else {
-            
-        }*/
 
         if (StringUtils.isEmpty(jcrNode.getName())) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -211,15 +211,36 @@ public class NodesResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        URI newNodeUri = null;
+        if (!session.nodeExists(absolutePath)) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
         try {
-            final Node parentNode = session.getNode(absolutePath);
-            final Node node = parentNode.addNode(jcrNode.getName(), jcrNode.getPrimaryType());
-            JcrDataBindingHelper.addMixinsFromRepresentation(node, jcrNode.getMixinTypes());
-            JcrDataBindingHelper.addPropertiesFromRepresentation(node, jcrNode.getProperties());
-            JcrDataBindingHelper.addChildNodesFromRepresentation(node, jcrNode.getNodes());
-            UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getNodeByPath");
-            newNodeUri = ub.build(node.getName());
+            final Node parentNode = session.getNode(absolutePath).getParent();
+            final Node nodeToUpdate = parentNode.getNode(StringUtils.substringAfterLast(absolutePath, "/"));
+            final PropertyIterator properties = nodeToUpdate.getProperties();
+            final NodeIterator childNodes = nodeToUpdate.getNodes();
+            final NodeType[] mixinNodeTypes = nodeToUpdate.getMixinNodeTypes();
+
+            //remove properties, childnodes and mixins before updating
+            while(properties.hasNext()) {
+                final Property property = properties.nextProperty();
+                if(!property.getName().startsWith("jcr:")) {
+                    property.remove();
+                }
+            }
+
+            while(childNodes.hasNext()) {
+                final Node nextNode = childNodes.nextNode();
+                nextNode.remove();
+            }
+            for (NodeType mixinNodeType : mixinNodeTypes) {
+                nodeToUpdate.removeMixin(mixinNodeType.getName());
+            }
+
+            JcrDataBindingHelper.addMixinsFromRepresentation(nodeToUpdate, jcrNode.getMixinTypes());
+            JcrDataBindingHelper.addPropertiesFromRepresentation(nodeToUpdate, jcrNode.getProperties());
+            JcrDataBindingHelper.addChildNodesFromRepresentation(nodeToUpdate, jcrNode.getNodes());
             session.save();
         } catch (Exception e) {
             throw new WebApplicationException(e);
@@ -227,7 +248,7 @@ public class NodesResource {
             RepositoryConnectionUtils.cleanupSession(session);
         }
 
-        return Response.created(newNodeUri).build();
+        return Response.noContent().build();
     }
 
     @DELETE

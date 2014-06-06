@@ -100,11 +100,14 @@ public class QueryResource {
             if (offset > 0) {
                 jcrQuery.setOffset(offset);
             }
+            final long start = System.currentTimeMillis();
             QueryResult queryResult = jcrQuery.execute();
+            jcrQueryResult.setTook(System.currentTimeMillis() - start);
             final RowIterator rowIterator = queryResult.getRows();
             HippoNodeIterator nodeIterator = (HippoNodeIterator) queryResult.getNodes();
             long totalSize = nodeIterator.getTotalSize();
             jcrQueryResult.setHits(totalSize);
+
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.nextRow();
                 final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(row.getNode(), 0);
@@ -152,11 +155,13 @@ public class QueryResource {
             if (searchQuery.getOffset() > 0) {
                 query.setOffset(searchQuery.getOffset());
             }
-
+            final long start = System.currentTimeMillis();
             javax.jcr.query.QueryResult queryResult = query.execute();
+            jcrQueryResult.setTook(System.currentTimeMillis() - start);
             final RowIterator rowIterator = queryResult.getRows();
             long totalSize = rowIterator.getSize();
             jcrQueryResult.setHits(totalSize);
+
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.nextRow();
                 final JcrNode nodeRepresentation = JcrDataBindingHelper.getNodeRepresentation(row.getNode(), 0);

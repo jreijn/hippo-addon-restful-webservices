@@ -16,7 +16,7 @@ It provides amongst others a full CRUD REST API for JCR nodes and properties.
 + System API ```/_system```
 + Statistics API ```/_stats```
 
-The resources have been defided into two types:
+The resources have been defined into two types:
 
 + CRUD resources (without underscore)
 + Non-CRUD resources (with underscore)

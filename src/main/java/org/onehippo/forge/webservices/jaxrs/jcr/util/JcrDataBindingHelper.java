@@ -149,8 +149,8 @@ public final class JcrDataBindingHelper {
     public static void addChildNodesFromRepresentation(final Node node, List<JcrNode> nodes) throws RepositoryException {
         for (JcrNode jcrNode : nodes) {
             Node childNode = node.addNode(jcrNode.getName(), jcrNode.getPrimaryType());
-            addPropertiesFromRepresentation(childNode, jcrNode.getProperties());
             addMixinsFromRepresentation(childNode, jcrNode.getMixinTypes());
+            addPropertiesFromRepresentation(childNode, jcrNode.getProperties());
             if (!jcrNode.getNodes().isEmpty()) {
                 addChildNodesFromRepresentation(childNode, jcrNode.getNodes());
             }

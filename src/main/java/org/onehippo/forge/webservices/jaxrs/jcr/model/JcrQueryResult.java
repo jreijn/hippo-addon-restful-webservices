@@ -18,20 +18,46 @@ package org.onehippo.forge.webservices.jaxrs.jcr.model;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorOrder;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Jeroen Reijn
  */
 @XmlRootElement(name="results")
-@XmlType(propOrder = {"hits", "nodes"})
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {"took", "hits", "nodes"})
 public class JcrQueryResult {
 
+    @ApiModelProperty(notes = "The nodes found by the query")
     private List<JcrQueryResultNode> nodes;
+    @ApiModelProperty(notes = "The amount of nodes found")
     private long hits;
+    @ApiModelProperty(notes = "The time it took to execute the query")
+    private long took;
 
+    /**
+     * Returns the time it took to perform the query (milliseconds)
+     * @return the time in milliseconds
+     */
+    public long getTook() {
+        return took;
+    }
+
+    public void setTook(final long took) {
+        this.took = took;
+    }
+
+    /**
+     * Total number of found results
+     * @return number of found results
+     */
     public long getHits() {
         return hits;
     }
@@ -47,4 +73,5 @@ public class JcrQueryResult {
     public void setNodes(final List<JcrQueryResultNode> nodes) {
         this.nodes = nodes;
     }
+
 }
