@@ -173,7 +173,7 @@ public class NodesResource {
         return Response.created(newNodeUri).build();
     }
 
-    //TODO keep stable UUIDs / Do only update and not delete properties
+    //TODO keep stable UUIDs? / Do only update and not delete properties?
     /**
      * Updates a node.
      */
@@ -237,6 +237,8 @@ public class NodesResource {
             for (NodeType mixinNodeType : mixinNodeTypes) {
                 nodeToUpdate.removeMixin(mixinNodeType.getName());
             }
+
+            nodeToUpdate.setPrimaryType(jcrNode.getPrimaryType());
 
             JcrDataBindingHelper.addMixinsFromRepresentation(nodeToUpdate, jcrNode.getMixinTypes());
             JcrDataBindingHelper.addPropertiesFromRepresentation(nodeToUpdate, jcrNode.getProperties());
