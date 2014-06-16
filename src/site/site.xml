@@ -34,6 +34,7 @@
 
     <menu name="Overview">
       <item name="Introduction" href="index.html"/>
+      <item name="API docs" href="rest-api-docs.html"/>
     </menu>
 
     <menu ref="reports"/>

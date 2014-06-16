@@ -25,11 +25,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Jeroen Reijn
  */
+@ApiModel(value = "Representation of a QueryResult")
 @XmlRootElement(name="results")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {"took", "hits", "nodes"})

@@ -18,8 +18,10 @@ package org.onehippo.forge.webservices.jaxrs.jcr.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+@ApiModel(value = "Representation of a search query")
 @XmlRootElement(name = "search")
 public class JcrSearchQuery {
     @ApiModelProperty(required = true)

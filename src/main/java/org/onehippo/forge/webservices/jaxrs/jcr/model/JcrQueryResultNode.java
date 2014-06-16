@@ -18,18 +18,19 @@ package org.onehippo.forge.webservices.jaxrs.jcr.model;
 
 import java.net.URI;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-/**
- * @author Jeroen Reijn
- */
 @XmlRootElement(name = "result")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {"node", "link", "score"})
 public class JcrQueryResultNode {
 
     private JcrNode node;
     private double score;
     private URI link;
-
 
     public JcrNode getNode() {
         return node;

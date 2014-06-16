@@ -28,6 +28,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -116,7 +117,7 @@ public class PropertiesResource {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(value = "Add a property to a node", notes = "Adds a property to a node")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = ResponseConstants.STATUS_MESSAGE_CREATED),
+            @ApiResponse(code = 201, message = ResponseConstants.STATUS_MESSAGE_CREATED, response = JcrProperty.class),
             @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
             @ApiResponse(code = 403, message = ResponseConstants.STATUS_MESSAGE_ACCESS_DENIED),
@@ -161,6 +162,56 @@ public class PropertiesResource {
     }
 
     /**
+     * Updates a property.
+     */
+    @PUT
+    @Path("{path:.*}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(value = "Updates a property of a node", notes = "Updates a property of a node")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = ResponseConstants.STATUS_MESSAGE_UPDATED),
+            @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
+            @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_PROPERTY_NOT_FOUND),
+            @ApiResponse(code = 403, message = ResponseConstants.STATUS_MESSAGE_ACCESS_DENIED),
+            @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
+    })
+    public Response updatePropertyByPath(@ApiParam(required = true, value = "Path of the property to update e.g. '/content/documents/hippostd:foldertypes'")
+                                         @PathParam("path") @DefaultValue("/") String parentPath,
+                                         @Context UriInfo ui,
+                                         JcrProperty jcrProperty) throws RepositoryException {
+
+        final Session session = RepositoryConnectionUtils.createSession(request);
+
+        String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
+        if (!absolutePath.startsWith("/")) {
+            absolutePath = "/" + absolutePath;
+        }
+
+        if (!session.propertyExists(absolutePath)) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        if (StringUtils.isEmpty(jcrProperty.getName())) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if (StringUtils.isEmpty(jcrProperty.getType())) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        try {
+            final Property property = session.getProperty(absolutePath);
+            final Node node = property.getParent();
+            JcrDataBindingHelper.addPropertyToNode(node,jcrProperty);
+            session.save();
+        } catch (Exception e) {
+            throw new WebApplicationException(e);
+        } finally {
+            RepositoryConnectionUtils.cleanupSession(session);
+        }
+        return Response.noContent().build();
+    }
+
+    /**
      * Delete a property by it's path
      *
      * @param path the path to the node
@@ -181,12 +232,12 @@ public class PropertiesResource {
         final Session session = RepositoryConnectionUtils.createSession(request);
         String absolutePath = path;
 
-        if (StringUtils.isBlank(path)) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
         if (!absolutePath.startsWith("/")) {
             absolutePath = "/" + absolutePath;
+        }
+
+        if (StringUtils.isBlank(path)) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         if (!session.propertyExists(absolutePath)) {

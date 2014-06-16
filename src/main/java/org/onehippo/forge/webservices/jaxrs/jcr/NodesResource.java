@@ -184,7 +184,7 @@ public class NodesResource {
     @ApiOperation(value = "Update a node", notes = "Updates a node and it's properties", position = 3)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK),
-            @ApiResponse(code = 201, message = ResponseConstants.STATUS_MESSAGE_CREATED),
+            @ApiResponse(code = 204, message = ResponseConstants.STATUS_MESSAGE_UPDATED),
             @ApiResponse(code = 400, message = ResponseConstants.STATUS_MESSAGE_BAD_REQUEST),
             @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
