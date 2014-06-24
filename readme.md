@@ -1,11 +1,11 @@
-# Hippo RESTful Web services add-on
+# Hippo web services add-on
 
 [![Build Status](https://travis-ci.org/jreijn/hippo-addon-webservices.png?branch=master)](https://travis-ci.org/jreijn/hippo-addon-webservices)
 [![Coverage Status](https://coveralls.io/repos/jreijn/hippo-addon-webservices/badge.png?branch=master)](https://coveralls.io/r/jreijn/hippo-addon-webservices?branch=master)
 
-This project is a pragmatic approach to provide RESTful web services on top of the Hippo CMS repository.
+This project is a pragmatic approach to provide web services on top of the Hippo CMS repository.
 
-It provides amongst others a full CRUD REST API for JCR nodes and properties.
+It provides amongst others a full CRUD API for JCR nodes and properties.
 
 ## Current Available APIs
 
@@ -23,7 +23,7 @@ The resources have been defined into two types:
 
 ## Future plans
 
-+ Support [Richardson Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html) and HATEOAS?
++ Support [Richardson Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html) and HATEOAS to be fully RESTful.
 + Add CORS support so the API can be used from a Javascript app __(Done)__
 
 ## Using the web services in your project
