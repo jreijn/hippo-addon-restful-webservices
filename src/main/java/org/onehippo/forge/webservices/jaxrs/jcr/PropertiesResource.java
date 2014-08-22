@@ -87,14 +87,16 @@ public class PropertiesResource {
     })
     public Response getPropertyByPath(@ApiParam(value = "Path of the node to retrieve e.g '/content/hippostd:foldertype'.", required = true) @PathParam("path") String path) throws RepositoryException {
 
-        final Session session = RepositoryConnectionUtils.createSession(request);
+        Session session = null;
         JcrProperty jcrProperty = null;
-        String absolutePath = StringUtils.defaultIfEmpty(path, "/");
-        if (!absolutePath.startsWith("/")) {
-            absolutePath = "/" + absolutePath;
-        }
 
         try {
+            session = RepositoryConnectionUtils.createSession(request);
+            String absolutePath = StringUtils.defaultIfEmpty(path, "/");
+            if (!absolutePath.startsWith("/")) {
+                absolutePath = "/" + absolutePath;
+            }
+
             if (!session.propertyExists(absolutePath)) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
@@ -128,26 +130,26 @@ public class PropertiesResource {
                                          @Context UriInfo ui,
                                          JcrProperty jcrProperty) throws RepositoryException {
 
-        final Session session = RepositoryConnectionUtils.createSession(request);
-
-        String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
-        if (!absolutePath.startsWith("/")) {
-            absolutePath = "/" + absolutePath;
-        }
-
-        if (!session.nodeExists(absolutePath)) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        if (StringUtils.isEmpty(jcrProperty.getName())) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        if (StringUtils.isEmpty(jcrProperty.getType())) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
+        Session session = null;
         URI newPropertyUri = null;
         try {
+            session = RepositoryConnectionUtils.createSession(request);
+            String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
+            if (!absolutePath.startsWith("/")) {
+                absolutePath = "/" + absolutePath;
+            }
+
+            if (!session.nodeExists(absolutePath)) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            if (StringUtils.isEmpty(jcrProperty.getName())) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+
+            if (StringUtils.isEmpty(jcrProperty.getType())) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+
             final Node parentNode = session.getNode(absolutePath);
             JcrDataBindingHelper.addPropertyToNode(parentNode, jcrProperty);
             session.save();
@@ -179,26 +181,26 @@ public class PropertiesResource {
                                          @PathParam("path") @DefaultValue("/") String parentPath,
                                          @Context UriInfo ui,
                                          JcrProperty jcrProperty) throws RepositoryException {
-
-        final Session session = RepositoryConnectionUtils.createSession(request);
-
-        String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
-        if (!absolutePath.startsWith("/")) {
-            absolutePath = "/" + absolutePath;
-        }
-
-        if (!session.propertyExists(absolutePath)) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        if (StringUtils.isEmpty(jcrProperty.getName())) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        if (StringUtils.isEmpty(jcrProperty.getType())) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
+        Session session = null;
         try {
+            session = RepositoryConnectionUtils.createSession(request);
+
+            String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
+            if (!absolutePath.startsWith("/")) {
+                absolutePath = "/" + absolutePath;
+            }
+
+            if (!session.propertyExists(absolutePath)) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            if (StringUtils.isEmpty(jcrProperty.getName())) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+
+            if (StringUtils.isEmpty(jcrProperty.getType())) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+
             final Property property = session.getProperty(absolutePath);
             final Node node = property.getParent();
             JcrDataBindingHelper.addPropertyToNode(node,jcrProperty);
@@ -228,23 +230,23 @@ public class PropertiesResource {
     })
     public Response deletePropertyByPath(@ApiParam(required = true, value = "Path of the property to delete e.g. '/content/hippostd:foldertype'.")
                                          @PathParam("path") String path) throws RepositoryException {
-
-        final Session session = RepositoryConnectionUtils.createSession(request);
-        String absolutePath = path;
-
-        if (!absolutePath.startsWith("/")) {
-            absolutePath = "/" + absolutePath;
-        }
-
-        if (StringUtils.isBlank(path)) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        if (!session.propertyExists(absolutePath)) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
+        Session session = null;
         try {
+            session = RepositoryConnectionUtils.createSession(request);
+            String absolutePath = path;
+
+            if (!absolutePath.startsWith("/")) {
+                absolutePath = "/" + absolutePath;
+            }
+
+            if (StringUtils.isBlank(path)) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            if (!session.propertyExists(absolutePath)) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
             final Property property = session.getProperty(absolutePath);
             property.remove();
             session.save();

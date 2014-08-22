@@ -93,14 +93,15 @@ public class NodesResource {
                                   @ApiParam(value = "Depth of the retrieval", required = false) @QueryParam("depth") @DefaultValue("0") int depth,
                                   @Context UriInfo ui) throws RepositoryException {
 
-        final Session session = RepositoryConnectionUtils.createSession(request);
+        Session session = null;
         JcrNode jcrNode = null;
-        String absolutePath = StringUtils.defaultIfEmpty(path, "/");
-        if (!absolutePath.startsWith("/")) {
-            absolutePath = "/" + absolutePath;
-        }
-
         try {
+            session = RepositoryConnectionUtils.createSession(request);
+            String absolutePath = StringUtils.defaultIfEmpty(path, "/");
+            if (!absolutePath.startsWith("/")) {
+                absolutePath = "/" + absolutePath;
+            }
+
             if (!session.nodeExists(absolutePath)) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
@@ -139,26 +140,27 @@ public class NodesResource {
                                      @Context UriInfo ui,
                                      JcrNode jcrNode) throws RepositoryException {
 
-        final Session session = RepositoryConnectionUtils.createSession(request);
-
-        String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
-        if (!absolutePath.startsWith("/")) {
-            absolutePath = "/" + absolutePath;
-        }
-
-        if (!session.nodeExists(absolutePath)) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        if (StringUtils.isEmpty(jcrNode.getName())) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        if (StringUtils.isEmpty(jcrNode.getPrimaryType())) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
+        Session session = null;
         URI newNodeUri = null;
+
         try {
+            session = RepositoryConnectionUtils.createSession(request);
+            String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
+            if (!absolutePath.startsWith("/")) {
+                absolutePath = "/" + absolutePath;
+            }
+
+            if (!session.nodeExists(absolutePath)) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            if (StringUtils.isEmpty(jcrNode.getName())) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+
+            if (StringUtils.isEmpty(jcrNode.getPrimaryType())) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+
             final Node parentNode = session.getNode(absolutePath);
             final Node node = parentNode.addNode(jcrNode.getName(), jcrNode.getPrimaryType());
             JcrDataBindingHelper.addMixinsFromRepresentation(node, jcrNode.getMixinTypes());
@@ -199,27 +201,27 @@ public class NodesResource {
                                      @PathParam("path") String parentPath,
                                      @Context UriInfo ui,
                                      JcrNode jcrNode) throws RepositoryException {
-
-        final Session session = RepositoryConnectionUtils.createSession(request);
-        //TODO default?
-        String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
-        if (!absolutePath.startsWith("/")) {
-            absolutePath = "/" + absolutePath;
-        }
-
-        if (StringUtils.isEmpty(jcrNode.getName())) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        if (StringUtils.isEmpty(jcrNode.getPrimaryType())) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        if (!session.nodeExists(absolutePath)) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
+        Session session = null;
         try {
+            session = RepositoryConnectionUtils.createSession(request);
+            //TODO default?
+            String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
+            if (!absolutePath.startsWith("/")) {
+                absolutePath = "/" + absolutePath;
+            }
+
+            if (StringUtils.isEmpty(jcrNode.getName())) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+
+            if (StringUtils.isEmpty(jcrNode.getPrimaryType())) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+
+            if (!session.nodeExists(absolutePath)) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+
             final Node parentNode = session.getNode(absolutePath).getParent();
             final Node nodeToUpdate = parentNode.getNode(StringUtils.substringAfterLast(absolutePath, "/"));
             final PropertyIterator properties = nodeToUpdate.getProperties();
@@ -268,22 +270,23 @@ public class NodesResource {
     public Response deleteNodeByPath(@ApiParam(required = true, value = "Path of the node to delete e.g. '/content/documents/'")
                                      @PathParam("path") String path) throws RepositoryException {
 
-        final Session session = RepositoryConnectionUtils.createSession(request);
-        String absolutePath = path;
-
-        if (StringUtils.isBlank(path)) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        if (!absolutePath.startsWith("/")) {
-            absolutePath = "/" + absolutePath;
-        }
-
-        if (!session.nodeExists(absolutePath)) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        Session session = null;
 
         try {
+            String absolutePath = path;
+            session = RepositoryConnectionUtils.createSession(request);
+            if (StringUtils.isBlank(path)) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            if (!absolutePath.startsWith("/")) {
+                absolutePath = "/" + absolutePath;
+            }
+
+            if (!session.nodeExists(absolutePath)) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
             final Node node = session.getNode(absolutePath);
             node.remove();
             session.save();
