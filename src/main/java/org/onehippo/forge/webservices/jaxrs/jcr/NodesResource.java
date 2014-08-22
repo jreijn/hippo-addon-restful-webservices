@@ -90,7 +90,8 @@ public class NodesResource {
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
     })
     public Response getNodeByPath(@ApiParam(value = "Path of the node to retrieve", required = true) @PathParam("path") @DefaultValue("/") String path,
-                                  @ApiParam(value = "Depth of the retrieval", required = false) @QueryParam("depth") @DefaultValue("0") int depth) throws RepositoryException {
+                                  @ApiParam(value = "Depth of the retrieval", required = false) @QueryParam("depth") @DefaultValue("0") int depth,
+                                  @Context UriInfo ui) throws RepositoryException {
 
         final Session session = RepositoryConnectionUtils.createSession(request);
         JcrNode jcrNode = null;
@@ -105,6 +106,8 @@ public class NodesResource {
             }
             final Node node = session.getNode(absolutePath);
             jcrNode = JcrDataBindingHelper.getNodeRepresentation(node, depth);
+
+
         } catch (RepositoryException e) {
             log.error("Error: {}", e);
             throw new WebApplicationException(e);
@@ -174,6 +177,7 @@ public class NodesResource {
     }
 
     //TODO keep stable UUIDs? / Do only update and not delete properties?
+
     /**
      * Updates a node.
      */
@@ -223,14 +227,14 @@ public class NodesResource {
             final NodeType[] mixinNodeTypes = nodeToUpdate.getMixinNodeTypes();
 
             //remove properties, childnodes and mixins before updating
-            while(properties.hasNext()) {
+            while (properties.hasNext()) {
                 final Property property = properties.nextProperty();
-                if(!property.getName().startsWith("jcr:")) {
+                if (!property.getName().startsWith("jcr:")) {
                     property.remove();
                 }
             }
 
-            while(childNodes.hasNext()) {
+            while (childNodes.hasNext()) {
                 final Node nextNode = childNodes.nextNode();
                 nextNode.remove();
             }
@@ -290,6 +294,12 @@ public class NodesResource {
         }
         return Response.noContent().build();
 
+    }
+
+
+    private URI getUriForNode(final UriInfo ui, final JcrNode nodeRepresentation) {
+        UriBuilder uriBuilder = ui.getBaseUriBuilder().path(NodesResource.class).path(NodesResource.class, "getNodeByPath");
+        return uriBuilder.build(nodeRepresentation.getPath().substring(1));
     }
 
 }

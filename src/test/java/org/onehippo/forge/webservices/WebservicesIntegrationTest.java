@@ -33,6 +33,7 @@ import org.hippoecm.repository.HippoRepositoryFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.onehippo.forge.webservices.jaxrs.RootResource;
+import org.onehippo.forge.webservices.jaxrs.StatsResource;
 import org.onehippo.forge.webservices.jaxrs.exception.CustomWebApplicationExceptionMapper;
 import org.onehippo.forge.webservices.jaxrs.jcr.NodesResource;
 import org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource;
@@ -80,6 +81,7 @@ public abstract class WebservicesIntegrationTest extends RepositoryTestCase {
         serviceClasses.add(NodesResource.class);
         serviceClasses.add(PropertiesResource.class);
         serviceClasses.add(QueryResource.class);
+        serviceClasses.add(StatsResource.class);
 
         JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
 
