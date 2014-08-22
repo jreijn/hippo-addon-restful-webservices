@@ -35,4 +35,15 @@ public class StatsResourceIntegrationTest extends WebservicesIntegrationTest {
                 .get(Response.class);
         assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
     }
+
+    @Test
+    public void testGetInstanceInformationByKey() throws Exception {
+        final Response statistics = client
+                .path("_stats/type/SESSION_COUNT")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(Response.class);
+        assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
+    }
+
 }
