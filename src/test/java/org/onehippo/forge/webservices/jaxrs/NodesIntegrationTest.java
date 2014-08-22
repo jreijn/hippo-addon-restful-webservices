@@ -22,8 +22,6 @@ import javax.jcr.RepositoryException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.onehippo.forge.webservices.WebservicesIntegrationTest;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
@@ -32,12 +30,6 @@ import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrProperty;
 import static org.junit.Assert.assertTrue;
 
 public class NodesIntegrationTest extends WebservicesIntegrationTest {
-
-    @Override
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
 
     @Test
     public void testGetJcrRootNode() {
@@ -173,10 +165,24 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         assertTrue(response.getStatus() == Response.Status.NO_CONTENT.getStatusCode());
     }
 
-
-    @Override
-    @After
-    public void tearDown() throws Exception {
-        super.tearDown();
+    @Test
+    public void testDeleteNonExistingJcrNodeByPath() throws RepositoryException {
+        final Response response = client
+                .path("nodes/nonexistingnode")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .delete();
+        assertTrue(response.getStatus() == Response.Status.NOT_FOUND.getStatusCode());
     }
+
+    @Test
+    public void testDeleteWithEmptyPath() throws RepositoryException {
+        final Response response = client
+                .path("nodes/")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .delete();
+        assertTrue(response.getStatus() == Response.Status.NOT_FOUND.getStatusCode());
+    }
+
 }
