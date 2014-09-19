@@ -55,7 +55,7 @@ Now add the servlet definition to your CMS web.xml located in ```cms/src/main/we
       org.onehippo.forge.webservices.jaxrs.system.SystemResource,
       org.onehippo.forge.webservices.jaxrs.jcr.NodesResource,
       org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource,
-      org.onehippo.forge.webservices.jaxrs.jcr.QueryResource
+      org.onehippo.forge.webservices.jaxrs.jcr.QueryResource,
       org.onehippo.forge.webservices.jaxrs.StatsResource,
     </param-value>
   </init-param>
