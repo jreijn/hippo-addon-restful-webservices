@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Custom implementation of the DefaultJaxrsConfig,
  * so we can use the reflective scanner instead of using an CXF application.
- * @author jreijn
  */
 public class ReflectiveJaxrsConfig extends DefaultJaxrsConfig {
 

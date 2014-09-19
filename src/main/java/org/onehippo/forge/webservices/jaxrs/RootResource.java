@@ -39,7 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Jeroen Reijn
+ * The root resource which will be there for consumers to go to a default api endpoint.
  */
 @Api(value = "/", description = "API Root.", position = 1)
 @Path(value = "/")

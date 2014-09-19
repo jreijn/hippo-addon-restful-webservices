@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author Jeroen Reijn
+ * Version info representation.
  */
 @XmlRootElement(name="versions")
 public class HippoVersionInfo {

@@ -29,7 +29,7 @@ import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
- * @author Jeroen Reijn
+ * Query result representation.
  */
 @ApiModel(value = "Representation of a QueryResult")
 @XmlRootElement(name="results")

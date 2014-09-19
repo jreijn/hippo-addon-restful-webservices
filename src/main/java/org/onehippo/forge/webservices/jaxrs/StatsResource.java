@@ -44,9 +44,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Resource for showing statistics http://wiki.apache.org/jackrabbit/Statistics
+ * Resource for showing repository statistics
+ * @see "http://wiki.apache.org/jackrabbit/Statistics" for more information
  *
- * @author Jeroen Reijn
  */
 @Api(value = "_stats", description = "Statistics API.", position = 5)
 @Path(value = "_stats")

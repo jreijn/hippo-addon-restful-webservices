@@ -62,7 +62,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Resource providing CRUD operations on JCR nodes.
  *
- * @author jreijn
  */
 @GZIP
 @Api(value = "nodes", description = "JCR node API", position = 2)

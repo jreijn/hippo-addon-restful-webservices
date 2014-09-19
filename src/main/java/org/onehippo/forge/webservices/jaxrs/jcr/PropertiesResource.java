@@ -59,7 +59,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Resource providing CRUD operations for JCR properties.
  *
- * @author jreijn
  */
 @GZIP
 @Api(value = "properties", description = "JCR property API", position = 3)

@@ -49,7 +49,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Api for system information
  *
- * @author Jeroen Reijn
  */
 @Api(value = "_system", description = "System API", position = 6)
 @Path(value = "_system")

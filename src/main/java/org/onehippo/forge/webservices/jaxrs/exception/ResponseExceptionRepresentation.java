@@ -23,7 +23,6 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Representation of exception status.
  *
- * @author Jeroen Reijn
  */
 @XmlType(propOrder = {"statusCode", "message"})
 @XmlRootElement(name = "status")

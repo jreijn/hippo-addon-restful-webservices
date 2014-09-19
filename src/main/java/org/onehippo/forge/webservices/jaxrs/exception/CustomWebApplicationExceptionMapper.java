@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
  * Maps {@link WebApplicationException}'s to an exception representation and response code. This exception mapper is
  * used to represent a response when any exception occurs within the service.
  *
- * @author Jeroen Reijn
  */
 @Provider
 public class CustomWebApplicationExceptionMapper implements ExceptionMapper<WebApplicationException> {

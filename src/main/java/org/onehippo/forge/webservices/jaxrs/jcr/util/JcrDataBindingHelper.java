@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Helper class for mapping to and from JCR.
  *
- * @author jreijn
  */
 public final class JcrDataBindingHelper {
 
