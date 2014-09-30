@@ -105,7 +105,7 @@ We will also need to add the servlet mapping, so that the API is exposed at _/re
 ```
 
 That's it. Now the web services should be available. In case you are using the default archetype you should be able to get
-a response by calling [http://localhost:8080/cms/rest/api/hello](http://localhost:8080/cms/rest/api/hello)
+a response by calling the root endpoint [http://localhost:8080/cms/rest/api/](http://localhost:8080/cms/rest/api/)
 
 For a working example see this the [demo project repository](https://github.com/jreijn/hippo-addon-webservices-demo) on GitHub.
 
