@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class JcrDataBindingHelper {
 
-    private static Logger log = LoggerFactory.getLogger(JcrDataBindingHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(JcrDataBindingHelper.class);
 
     private static final Map<Integer, String> HIPPO_PROPERTY_BLACKLIST = createMap();
 
@@ -103,6 +103,12 @@ public final class JcrDataBindingHelper {
         return jcrNode;
     }
 
+    /**
+     * Get a presentation of a JCR property.
+     * @param property the property
+     * @return a {@link org.onehippo.forge.webservices.jaxrs.jcr.model.JcrProperty}
+     * @throws RepositoryException
+     */
     public static JcrProperty getPropertyRepresentation(Property property) throws RepositoryException {
         JcrProperty data = new JcrProperty();
         data.setName(property.getName());
@@ -124,8 +130,8 @@ public final class JcrDataBindingHelper {
     /**
      * Parses the list of mixins and applies them to the {@link Node}
      *
-     * @param node
-     * @param mixins
+     * @param node the node to which to apply the mixins to.
+     * @param mixins a {@link java.util.List} of mixins that need to be applied.
      * @throws RepositoryException
      */
     public static void addMixinsFromRepresentation(final Node node, final List<String> mixins) throws RepositoryException {
@@ -136,6 +142,12 @@ public final class JcrDataBindingHelper {
         }
     }
 
+    /**
+     * Add properties to a node
+     * @param node the node to which the properties need to be applied to
+     * @param jcrProperties a {@link java.util.List} of properties
+     * @throws RepositoryException
+     */
     public static void addPropertiesFromRepresentation(final Node node, final List<JcrProperty> jcrProperties) throws RepositoryException {
         for (JcrProperty property : jcrProperties) {
             if (HIPPO_PROPERTY_BLACKLIST.containsValue(property.getName())) {
@@ -145,6 +157,12 @@ public final class JcrDataBindingHelper {
         }
     }
 
+    /**
+     * Add child nodes to the node.
+     * @param node the {@link javax.jcr.Node} to which to add the child nodes to.
+     * @param nodes a {@link java.util.List} of child nodes.
+     * @throws RepositoryException
+     */
     public static void addChildNodesFromRepresentation(final Node node, List<JcrNode> nodes) throws RepositoryException {
         for (JcrNode jcrNode : nodes) {
             Node childNode = node.addNode(jcrNode.getName(), jcrNode.getPrimaryType());
@@ -156,6 +174,12 @@ public final class JcrDataBindingHelper {
         }
     }
 
+    /**
+     * Add a property to a node
+     * @param node the {@link javax.jcr.Node} on which to set the property
+     * @param property the property
+     * @throws RepositoryException
+     */
     public static void addPropertyToNode(final Node node, final JcrProperty property) throws RepositoryException {
         ValueFactory valueFactory = node.getSession().getValueFactory();
         if (property.isMultiple()) {

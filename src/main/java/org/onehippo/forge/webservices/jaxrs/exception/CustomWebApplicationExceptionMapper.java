@@ -22,13 +22,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Maps {@link WebApplicationException}'s to an exception representation and response code. This exception mapper is
  * used to represent a response when any exception occurs within the service.
- *
  */
 @Provider
 public class CustomWebApplicationExceptionMapper implements ExceptionMapper<WebApplicationException> {

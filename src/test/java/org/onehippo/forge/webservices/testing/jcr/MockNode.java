@@ -16,9 +16,7 @@
 
 package org.onehippo.forge.webservices.testing.jcr;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,25 +25,23 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
-import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.VersionException;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.sling.commons.testing.jcr.*;
+import org.apache.sling.commons.testing.jcr.MockNodeIterator;
+import org.apache.sling.commons.testing.jcr.MockNodeType;
 
 /**
- * Simple implementation supporthing child nodes.
- * Created by jreijn on 14/04/14.
+ * Simple implementation supporthing child nodes. Created by jreijn on 14/04/14.
  */
 public class MockNode extends org.apache.sling.commons.testing.jcr.MockNode {
 
-    private Map<String, Property> properties = new HashMap<String, Property>();
-    private List<MockNode> childNodes = new ArrayList<MockNode>();
-    private List<MockNodeType> mixins = new ArrayList<MockNodeType>();
+    private final Map<String, Property> properties = new HashMap<String, Property>();
+    private final List<MockNode> childNodes = new ArrayList<MockNode>();
+    private final List<MockNodeType> mixins = new ArrayList<MockNodeType>();
 
     private MockNode parent;
 
@@ -59,9 +55,9 @@ public class MockNode extends org.apache.sling.commons.testing.jcr.MockNode {
 
     @Override
     public Node getNode(final String relPath) {
-        for(MockNode node : childNodes) {
+        for (MockNode node : childNodes) {
             final String childNodeName = node.getPath().substring(node.getPath().lastIndexOf('/') + 1);
-            if(childNodeName.equals(relPath)) {
+            if (childNodeName.equals(relPath)) {
                 return node;
             }
         }
@@ -98,7 +94,7 @@ public class MockNode extends org.apache.sling.commons.testing.jcr.MockNode {
 
     @Override
     public NodeType[] getMixinNodeTypes() {
-        return mixins.toArray(new NodeType [mixins.size()]);
+        return mixins.toArray(new NodeType[mixins.size()]);
     }
 
     public MockNode getParent() {

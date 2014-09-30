@@ -20,7 +20,6 @@ import javax.jcr.Credentials;
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hippoecm.repository.HippoRepository;
@@ -31,11 +30,20 @@ import org.slf4j.LoggerFactory;
 
 public class RepositoryConnectionUtils {
 
-    private static Logger log = LoggerFactory.getLogger(RepositoryConnectionUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(RepositoryConnectionUtils.class);
 
     private RepositoryConnectionUtils() {
     }
 
+    /**
+     * Creates a JCR session based upon the credentials available from the servlet request.
+     * Once the session is not needed anymore make sure you logout the session or call
+     * the {@link org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils#cleanupSession(javax.jcr.Session)}
+     * method.
+     * @param request an HttpServletRequest
+     * @return a {@link javax.jcr.Session}
+     * @throws LoginException
+     */
     public static Session createSession(HttpServletRequest request) throws LoginException {
         Session session = null;
         try {
@@ -49,6 +57,13 @@ public class RepositoryConnectionUtils {
         return session;
     }
 
+    /**
+     * Creates a JCR session based upon the provided credentials
+     * @param username the username
+     * @param password the password
+     * @return a {@link javax.jcr.Session}
+     * @throws LoginException
+     */
     public static Session createSession(String username, String password) throws LoginException {
         Session session = null;
         try {
@@ -62,6 +77,10 @@ public class RepositoryConnectionUtils {
         return session;
     }
 
+    /**
+     * Cleanup and logout the Session
+     * @param session the JCR session
+     */
     public static void cleanupSession(final Session session) {
         if (session != null && session.isLive()) {
             session.logout();

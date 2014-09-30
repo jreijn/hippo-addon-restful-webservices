@@ -33,7 +33,7 @@ public class StatsResourceIntegrationTest extends WebservicesIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Response.class);
-        assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
+        assertTrue(statistics.getStatus() == Response.Status.OK.getStatusCode());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class StatsResourceIntegrationTest extends WebservicesIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Response.class);
-        assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
+        assertTrue(statistics.getStatus() == Response.Status.OK.getStatusCode());
     }
 
 }

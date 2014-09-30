@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class SystemResource {
 
-    private static Logger log = LoggerFactory.getLogger(SystemResource.class);
+    private static final Logger log = LoggerFactory.getLogger(SystemResource.class);
     private static final double MB = 1024 * 1024;
 
     @Context

@@ -23,14 +23,15 @@ The resources have been defined into two types:
 
 ## Future plans
 
-+ Support [Richardson Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html) and HATEOAS.
++ Support [Richardson Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html) and HATEOAS to be fully RESTful.
 + Add CORS support so the API can be used from a Javascript app __(Done)__
 
 ## Using the web services in your project
 
 See for a working demo the [sample project](https://github.com/jreijn/hippo-addon-webservices-demo).
 
-Add the web services dependency to your projects cms module located in ```cms/pom.xml```
+
+To install this project into a local project you need to add the web services dependency to your projects _cms_ module located in ```cms/pom.xml```
 
 ```
 <dependency>
@@ -40,11 +41,28 @@ Add the web services dependency to your projects cms module located in ```cms/po
 </dependency>
 ```
 
-Because this plugin is not yet available in a public Maven repository you will have to [build it from source](#source) before you can use it.
+Since the project is not yet released, the snapshot artifacts can be found in the Sonatype snapshot repository.
+
+Add the following repository to your repository section in your pom.xml
+
+``` xml
+<repositories>
+  <repository>
+    <id>sonatype-snapshot</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    <releases>
+      <enabled>false</enabled>
+    </releases>
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+  </repository>
+<repositories>
+```
 
 Now add the servlet definition to your CMS web.xml located in ```cms/src/main/webapp/WEB-INF/web.xml```.
 
-```
+``` xml
 <servlet>
   <servlet-name>RepositoryWebServicesServlet</servlet-name>
   <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
@@ -55,7 +73,7 @@ Now add the servlet definition to your CMS web.xml located in ```cms/src/main/we
       org.onehippo.forge.webservices.jaxrs.system.SystemResource,
       org.onehippo.forge.webservices.jaxrs.jcr.NodesResource,
       org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource,
-      org.onehippo.forge.webservices.jaxrs.jcr.QueryResource
+      org.onehippo.forge.webservices.jaxrs.jcr.QueryResource,
       org.onehippo.forge.webservices.jaxrs.StatsResource,
     </param-value>
   </init-param>
@@ -74,7 +92,6 @@ Now add the servlet definition to your CMS web.xml located in ```cms/src/main/we
   </init-param>
   <load-on-startup>6</load-on-startup>
 </servlet>
-
 ```
 
 We will also need to add the servlet mapping, so that the API is exposed at _/rest/api_ :

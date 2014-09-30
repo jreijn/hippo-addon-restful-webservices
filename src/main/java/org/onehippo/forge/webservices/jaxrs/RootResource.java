@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class RootResource {
 
-    private static Logger log = LoggerFactory.getLogger(RootResource.class);
+    private static final Logger log = LoggerFactory.getLogger(RootResource.class);
 
     @Context
     private HttpServletRequest request;

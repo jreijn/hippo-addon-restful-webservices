@@ -58,7 +58,7 @@ public class StatsResource {
 
     private RepositoryStatisticsImpl statistics;
 
-    private static Logger log = LoggerFactory.getLogger(StatsResource.class);
+    private static final Logger log = LoggerFactory.getLogger(StatsResource.class);
 
     @ApiOperation(
             value = "Display all statistics about the repository instance; nr of sessions, queries, bundle operations",

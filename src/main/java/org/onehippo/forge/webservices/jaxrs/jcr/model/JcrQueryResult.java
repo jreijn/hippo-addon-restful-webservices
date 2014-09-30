@@ -19,9 +19,7 @@ package org.onehippo.forge.webservices.jaxrs.jcr.model;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -32,7 +30,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
  * Query result representation.
  */
 @ApiModel(value = "Representation of a QueryResult")
-@XmlRootElement(name="results")
+@XmlRootElement(name = "results")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {"took", "hits", "nodes"})
 public class JcrQueryResult {
@@ -46,6 +44,7 @@ public class JcrQueryResult {
 
     /**
      * Returns the time it took to perform the query (milliseconds)
+     *
      * @return the time in milliseconds
      */
     public long getTook() {
@@ -58,6 +57,7 @@ public class JcrQueryResult {
 
     /**
      * Total number of found results
+     *
      * @return number of found results
      */
     public long getHits() {

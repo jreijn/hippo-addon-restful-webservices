@@ -16,26 +16,26 @@
 
 package org.onehippo.forge.webservices.jaxrs.exception;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.*;
- 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 /**
- * Throw this exception to return a 401 Unauthorized response.
- * The WWW-Authenticate header is set appropriately and a short message is included in the response entity.
- **/
+ * Throw this exception to return a 401 Unauthorized response. The WWW-Authenticate header is set appropriately and a
+ * short message is included in the response entity.
+ */
 public class UnauthorizedException extends WebApplicationException {
 
     private static final long serialVersionUID = 1L;
-    private static String WWW_AUTHENTICATE_HEADER_VALUE = "Basic realm=\"Default realm\"";
 
     public UnauthorizedException() {
         this("Please authenticate.");
     }
- 
+
     public UnauthorizedException(String message) {
         super(Response.status(Status.UNAUTHORIZED).header(HttpHeaders.WWW_AUTHENTICATE,
-                WWW_AUTHENTICATE_HEADER_VALUE)
+                "Basic realm=\"Default realm\"")
                 .entity(message).build());
     }
 }

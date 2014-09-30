@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 @Provider
 public class HippoAuthenticationRequestHandler implements RequestHandler {
 
-    private static Logger log = LoggerFactory.getLogger(HippoAuthenticationRequestHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(HippoAuthenticationRequestHandler.class);
 
     public Response handleRequest(Message m, ClassResourceInfo resourceClass) {
         AuthorizationPolicy policy = m.get(AuthorizationPolicy.class);
@@ -64,9 +64,6 @@ public class HippoAuthenticationRequestHandler implements RequestHandler {
     }
 
     private boolean isAuthenticated(Session session) {
-        if (session != null) {
-            return true;
-        }
-        return false;
+        return session != null;
     }
 }

@@ -21,13 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFactory;
 import javax.jcr.nodetype.NodeType;
 
-import org.apache.sling.commons.testing.jcr.MockProperty;
 import org.apache.sling.commons.testing.jcr.MockValue;
 import org.junit.Test;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
@@ -44,8 +42,8 @@ import static org.mockito.Mockito.when;
  */
 public class JcrDataBindingHelperTest {
 
-    public static final String MIX_VERSIONABLE = "mix:versionable";
-    public static final String HIPPO_PATHS_PROPERTY = "hippo:paths";
+    private static final String MIX_VERSIONABLE = "mix:versionable";
+    private static final String HIPPO_PATHS_PROPERTY = "hippo:paths";
 
     @Test
     public void testGetNodeRepresentation() throws Exception {
@@ -135,8 +133,8 @@ public class JcrDataBindingHelperTest {
         node2.setName("test2");
         node1.setPrimaryType("hippo:document");
         nodes.add(node2);
-        MockNode testMock = new MockNode("/","jcr:root");
-        JcrDataBindingHelper.addChildNodesFromRepresentation(testMock,nodes);
-        assertEquals(2,testMock.getNodes().getSize());
+        MockNode testMock = new MockNode("/", "jcr:root");
+        JcrDataBindingHelper.addChildNodesFromRepresentation(testMock, nodes);
+        assertEquals(2, testMock.getNodes().getSize());
     }
 }
