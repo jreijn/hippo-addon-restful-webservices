@@ -78,6 +78,107 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
     }
 
     @Test
+    public void testAddPropertyNotFoundWithIncorrectPath() throws RepositoryException {
+        final ArrayList<String> values = new ArrayList<String>(1);
+        values.add("test");
+
+        final JcrProperty jcrProperty = new JcrProperty();
+        jcrProperty.setName("myproperty");
+        jcrProperty.setType("String");
+        jcrProperty.setMultiple(false);
+        jcrProperty.setValues(values);
+
+        final Response response = client
+                .path("properties/test12355")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .post(jcrProperty);
+        assertTrue(response.getStatus() == Response.Status.NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    public void testAddPropertyFailsWithIncorrectInput() throws RepositoryException {
+        session.getRootNode().addNode("test", "nt:unstructured");
+        session.save();
+
+        final ArrayList<String> values = new ArrayList<String>(1);
+        values.add("test");
+
+        final JcrProperty jcrProperty = new JcrProperty();
+        jcrProperty.setName("");
+        jcrProperty.setType("String");
+        jcrProperty.setMultiple(false);
+        jcrProperty.setValues(values);
+
+        final Response response = client
+                .path("properties/test")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .post(jcrProperty);
+        assertTrue(response.getStatus() == Response.Status.BAD_REQUEST.getStatusCode());
+
+        client.reset();
+
+        jcrProperty.setName("name");
+        jcrProperty.setType("");
+
+        final Response typedResponse = client
+                .path("properties/test")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .post(jcrProperty);
+        assertTrue(typedResponse.getStatus() == Response.Status.BAD_REQUEST.getStatusCode());
+
+        session.getRootNode().getNode("test").remove();
+        session.save();
+    }
+
+    @Test
+    public void testUpdateProperty() throws RepositoryException {
+        session.getRootNode().addNode("test", "nt:unstructured");
+        session.save();
+
+        final ArrayList<String> values = new ArrayList<String>(1);
+        values.add("test");
+
+        final JcrProperty jcrProperty = new JcrProperty();
+        jcrProperty.setName("test");
+        jcrProperty.setType("String");
+        jcrProperty.setMultiple(false);
+        jcrProperty.setValues(values);
+
+        final Response response = client
+                .path("properties/test")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .post(jcrProperty);
+        assertTrue(response.getStatus() == Response.Status.CREATED.getStatusCode());
+
+        client.reset();
+
+        values.remove("test");
+        values.add("test2");
+        final Response updateResponse = client
+                .path("properties/test/test")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .put(jcrProperty);
+        assertTrue(updateResponse.getStatus() == Response.Status.NO_CONTENT.getStatusCode());
+
+        client.reset();
+        final JcrProperty newValuedProperty = client.path("properties/test/test")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(JcrProperty.class);
+
+        assertTrue(newValuedProperty.getValues().get(0).equals("test2"));
+
+        session.getRootNode().getNode("test").remove();
+        session.save();
+
+    }
+
+    @Test
     public void testDeleteProperty() throws RepositoryException {
         final Node test = session.getRootNode().addNode("test", "nt:unstructured");
         test.setProperty("propname", "propvalue");

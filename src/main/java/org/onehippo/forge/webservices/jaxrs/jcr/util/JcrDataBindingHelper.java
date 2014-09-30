@@ -175,7 +175,7 @@ public final class JcrDataBindingHelper {
     }
 
     /**
-     * Add a property to a node
+     * Add a property to a node. In case the property with that specific name already exists, the value(s) will be updated.
      * @param node the {@link javax.jcr.Node} on which to set the property
      * @param property the property
      * @throws RepositoryException
