@@ -132,7 +132,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
 
-        assertTrue(newJcrNode.getProperties().size() == 4);
+        assertTrue("Expected 4 properties, but received: "+ newJcrNode.getProperties().size(),  newJcrNode.getProperties().size() == 4);
 
         // cleanup
         session.getRootNode().getNode("newnode").remove();

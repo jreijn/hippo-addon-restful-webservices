@@ -16,6 +16,8 @@
 
 package org.onehippo.forge.webservices.jaxrs.jcr.util;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,6 +34,7 @@ import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 import javax.jcr.nodetype.NodeType;
 
+import org.apache.jackrabbit.value.ValueFactoryImpl;
 import org.apache.jackrabbit.value.ValueHelper;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrProperty;
@@ -46,12 +49,15 @@ public final class JcrDataBindingHelper {
 
     private static final Logger log = LoggerFactory.getLogger(JcrDataBindingHelper.class);
 
-    private static final Map<Integer, String> HIPPO_PROPERTY_BLACKLIST = createMap();
+    private static final Map<Integer, String> PROPERTY_BLACKLIST = ignoreMap();
 
-    private static Map<Integer, String> createMap() {
+    private static Map<Integer, String> ignoreMap() {
         Map<Integer, String> result = new HashMap<Integer, String>();
         result.put(1, "hippo:paths");
         result.put(2, "hippo:related");
+        result.put(3, "jcr:primaryType");
+        result.put(4, "jcr:mixinTypes");
+        result.put(5, "jcr:uuid");
         return Collections.unmodifiableMap(result);
     }
 
@@ -86,7 +92,7 @@ public final class JcrDataBindingHelper {
             PropertyIterator properties = node.getProperties();
             while (properties.hasNext()) {
                 Property property = properties.nextProperty();
-                if (!property.getName().startsWith("jcr:")) {
+                if(!PROPERTY_BLACKLIST.containsValue(property.getName())) {
                     jcrNode.getProperties().add(getPropertyRepresentation(property));
                 }
             }
@@ -118,13 +124,27 @@ public final class JcrDataBindingHelper {
         List<String> values = new ArrayList<String>();
         if (property.isMultiple()) {
             for (Value propertyValue : property.getValues()) {
-                values.add(propertyValue.getString());
+                values.add(getPropertyValueAsString(propertyValue));
             }
         } else {
-            values.add(property.getValue().getString());
+            values.add(getPropertyValueAsString(property.getValue()));
         }
         data.setValues(values);
         return data;
+    }
+
+    private static String getPropertyValueAsString(final Value value) throws RepositoryException {
+        StringWriter stringWriter = new StringWriter();
+        if(value.getType() == PropertyType.BINARY) {
+            try {
+                ValueHelper.serialize(value, false, true, stringWriter);
+            } catch (IOException e) {
+                log.error("An exception occurred while trying to serialize the value: {}", e);
+            }
+        } else {
+            stringWriter.write(ValueHelper.serialize(value,false));
+        }
+        return stringWriter.toString();
     }
 
     /**
@@ -150,7 +170,7 @@ public final class JcrDataBindingHelper {
      */
     public static void addPropertiesFromRepresentation(final Node node, final List<JcrProperty> jcrProperties) throws RepositoryException {
         for (JcrProperty property : jcrProperties) {
-            if (HIPPO_PROPERTY_BLACKLIST.containsValue(property.getName())) {
+            if (PROPERTY_BLACKLIST.containsValue(property.getName())) {
                 continue;
             }
             addPropertyToNode(node, property);
@@ -165,7 +185,12 @@ public final class JcrDataBindingHelper {
      */
     public static void addChildNodesFromRepresentation(final Node node, List<JcrNode> nodes) throws RepositoryException {
         for (JcrNode jcrNode : nodes) {
-            Node childNode = node.addNode(jcrNode.getName(), jcrNode.getPrimaryType());
+            Node childNode;
+            if(node.hasNode(jcrNode.getName()) && node.getNode(jcrNode.getName()).getDefinition().isAutoCreated()) {
+                childNode = node.getNode(jcrNode.getName());
+            } else {
+                childNode = node.addNode(jcrNode.getName(), jcrNode.getPrimaryType());
+            }
             addMixinsFromRepresentation(childNode, jcrNode.getMixinTypes());
             addPropertiesFromRepresentation(childNode, jcrNode.getProperties());
             if (!jcrNode.getNodes().isEmpty()) {
@@ -189,7 +214,12 @@ public final class JcrDataBindingHelper {
                 int propertyType = PropertyType.valueFromName(property.getType());
                 int i = 0;
                 for (String propertyValue : property.getValues()) {
-                    values[i++] = ValueHelper.convert(propertyValue, propertyType, valueFactory);
+                    Value value;
+                    if(propertyType == PropertyType.BINARY) {
+                        values[i++] = ValueHelper.deserialize(propertyValue, propertyType,false, ValueFactoryImpl.getInstance());
+                    } else {
+                        values[i++] = ValueHelper.convert(propertyValue, propertyType, valueFactory);
+                    }
                 }
             } else {
                 values = new Value[0];
@@ -207,7 +237,13 @@ public final class JcrDataBindingHelper {
             final int propertyType = PropertyType.valueFromName(property.getType());
             final String propertyValue = property.getValues().get(0);
 
-            Value value = ValueHelper.convert(propertyValue, propertyType, valueFactory);
+            Value value;
+            if(propertyType == PropertyType.BINARY) {
+                value = ValueHelper.deserialize(propertyValue, propertyType,false, ValueFactoryImpl.getInstance());
+            } else {
+                value = ValueHelper.convert(propertyValue, propertyType, valueFactory);
+            }
+
             String name = property.getName();
             if (node.hasProperty(name)) {
                 Property existingProperty = node.getProperty(name);

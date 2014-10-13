@@ -61,7 +61,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Resource providing CRUD operations on JCR nodes.
- *
  */
 @GZIP
 @Api(value = "nodes", description = "JCR node API", position = 2)
@@ -177,10 +176,8 @@ public class NodesResource {
         return Response.created(newNodeUri).build();
     }
 
-    //TODO keep stable UUIDs? / Do only update and not delete properties?
-
     /**
-     * Updates a node.
+     * Updates a node. To update a node you need to provide the entire entity.
      */
     @PUT
     @Path("{path:.*}")
@@ -230,9 +227,7 @@ public class NodesResource {
             //remove properties, childnodes and mixins before updating
             while (properties.hasNext()) {
                 final Property property = properties.nextProperty();
-                if (!property.getName().startsWith("jcr:")) {
-                    property.remove();
-                }
+                property.remove();
             }
 
             while (childNodes.hasNext()) {
@@ -296,12 +291,6 @@ public class NodesResource {
         }
         return Response.noContent().build();
 
-    }
-
-
-    private URI getUriForNode(final UriInfo ui, final JcrNode nodeRepresentation) {
-        UriBuilder uriBuilder = ui.getBaseUriBuilder().path(NodesResource.class).path(NodesResource.class, "getNodeByPath");
-        return uriBuilder.build(nodeRepresentation.getPath().substring(1));
     }
 
 }
