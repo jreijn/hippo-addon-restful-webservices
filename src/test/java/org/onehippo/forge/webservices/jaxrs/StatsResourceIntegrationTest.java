@@ -29,7 +29,7 @@ public class StatsResourceIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetInstanceInformation() throws Exception {
         final Response statistics = client
-                .path("_stats")
+                .path("_stats/repository")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Response.class);
@@ -39,7 +39,27 @@ public class StatsResourceIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetInstanceInformationByKey() throws Exception {
         final Response statistics = client
-                .path("_stats/type/SESSION_COUNT")
+                .path("_stats/repository/type/SESSION_COUNT")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(Response.class);
+        assertTrue(statistics.getStatus() == Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    public void testGetSlowQueryLog() throws Exception {
+        final Response statistics = client
+                .path("_stats/queries/slow")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(Response.class);
+        assertTrue(statistics.getStatus() == Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    public void testGetPopularQueryLog() throws Exception {
+        final Response statistics = client
+                .path("_stats/queries/popular")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Response.class);

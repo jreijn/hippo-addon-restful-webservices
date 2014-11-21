@@ -23,12 +23,14 @@ import org.onehippo.forge.webservices.WebservicesIntegrationTest;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrQueryResult;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrSearchQuery;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class QueryIntegrationTest extends WebservicesIntegrationTest {
 
     @Test
     public void testGetQueryResults() {
+        final String rootNodeLink = "http://localhost:8080/cms/rest/api/nodes/";
         final JcrQueryResult response = client
                 .path("_query/")
                 .query("statement", "//element(*,rep:root) order by @jcr:score")
@@ -37,6 +39,7 @@ public class QueryIntegrationTest extends WebservicesIntegrationTest {
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrQueryResult.class);
         assertTrue(response.getHits() == 1);
+        assertEquals(rootNodeLink, response.getNodes().get(0).getLink().toString());
     }
 
     @Test

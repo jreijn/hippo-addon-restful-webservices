@@ -46,7 +46,7 @@ import org.onehippo.repository.testutils.RepositoryTestCase;
  */
 public abstract class WebservicesIntegrationTest extends RepositoryTestCase {
 
-    protected static final String HTTP_ENDPOINT_ADDRESS = "http://localhost:8080/rest";
+    protected static final String HTTP_ENDPOINT_ADDRESS = "http://localhost:8080/cms/rest/api";
     protected static Server cxfServer;
     protected static WebClient client;
 

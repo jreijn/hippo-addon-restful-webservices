@@ -33,7 +33,7 @@ See for a working demo the [sample project](https://github.com/jreijn/hippo-addo
 
 To install this project into a local project you need to add the web services dependency to your projects _cms_ module located in ```cms/pom.xml```
 
-```
+``` xml
 <dependency>
   <groupId>org.onehippo.forge.webservices</groupId>
   <artifactId>hippo-addon-webservices</artifactId>
@@ -97,7 +97,7 @@ Now add the servlet definition to your CMS web.xml located in ```cms/src/main/we
 We will also need to add the servlet mapping, so that the API is exposed at _/rest/api_ :
 
 
-```
+``` xml
 <servlet-mapping>
   <servlet-name>RepositoryWebServicesServlet</servlet-name>
   <url-pattern>/rest/api/*</url-pattern>
@@ -117,7 +117,7 @@ This plugin requires [Maven](http://maven.apache.org) to build the module from s
 
 After you have installed Maven you can build the module with:
 
-```
+``` console
 $ mvn install
 ```
 

@@ -33,10 +33,13 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
+import org.apache.jackrabbit.api.stats.QueryStat;
+import org.apache.jackrabbit.api.stats.QueryStatDto;
 import org.apache.jackrabbit.api.stats.RepositoryStatistics;
 import org.apache.jackrabbit.api.stats.TimeSeries;
 import org.apache.jackrabbit.core.RepositoryContext;
 import org.apache.jackrabbit.core.RepositoryImpl;
+import org.apache.jackrabbit.core.stats.QueryStatCore;
 import org.apache.jackrabbit.core.stats.RepositoryStatisticsImpl;
 import org.hippoecm.repository.impl.RepositoryDecorator;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
@@ -65,13 +68,14 @@ public class StatsResource {
             notes = "",
             position = 1)
     @GET
+    @Path("/repository")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInstanceInformation() {
         Session session = null;
         RepositoryStatistics repositoryStatistics = null;
         try {
             session = RepositoryConnectionUtils.createSession(request);
-            repositoryStatistics = getStatistics(session);
+            repositoryStatistics = getRepositoryStatistics(session);
         } catch (LoginException e) {
             log.warn("An exception occurred while trying to login: {}", e);
         } finally {
@@ -85,14 +89,14 @@ public class StatsResource {
             notes = "",
             position = 2)
     @GET
-    @Path("/type/{key}")
+    @Path("/repository/type/{key}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInstanceInformationByKey(@PathParam("key") String key) {
         Session session = null;
         TimeSeries timeSeries = null;
         try {
             session = RepositoryConnectionUtils.createSession(request);
-            RepositoryStatistics repositoryStatistics = getStatistics(session);
+            RepositoryStatistics repositoryStatistics = getRepositoryStatistics(session);
             timeSeries = repositoryStatistics.getTimeSeries(RepositoryStatistics.Type.getType(key));
         } catch (LoginException e) {
             log.warn("An exception occurred while trying to login: {}", e);
@@ -102,15 +106,68 @@ public class StatsResource {
         return Response.ok(timeSeries).build();
     }
 
+    @ApiOperation(
+            value = "Displays the most popular queries",
+            notes = "Query stats collection needs to be enabled",
+            position = 3)
+    @GET
+    @Path("/queries/popular")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPopularQueries() {
+        Session session = null;
+        QueryStatDto[] popularQueries = null;
+        try {
+            session = RepositoryConnectionUtils.createSession(request);
+            final QueryStat queryStatistics = getQueryStatistics(session);
+            popularQueries = queryStatistics.getPopularQueries();
+        } catch (LoginException e) {
+            log.warn("An exception occurred while trying to login: {}", e);
+        } catch (IllegalAccessException e) {
+            log.warn("An exception occurred while trying to get query information: {}",e);
+        } catch (NoSuchFieldException e) {
+            log.warn("An exception occurred while trying to get query information: {}",e);
+        } finally {
+            RepositoryConnectionUtils.cleanupSession(session);
+        }
+        return Response.ok(popularQueries).build();
+    }
 
-    private RepositoryStatistics getStatistics(Session session) {
+    @ApiOperation(
+            value = "Displays the slowest queries",
+            notes = "Query stats collection needs to be enabled",
+            position = 4)
+    @GET
+    @Path("/queries/slow")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSlowQueries() {
+        Session session = null;
+        QueryStatDto[] slowQueries = null;
+        try {
+            session = RepositoryConnectionUtils.createSession(request);
+            final QueryStat queryStatistics = getQueryStatistics(session);
+            slowQueries = queryStatistics.getSlowQueries();
+        } catch (LoginException e) {
+            log.warn("An exception occurred while trying to login: {}", e);
+        } catch (IllegalAccessException e) {
+            log.warn("An exception occurred while trying to get query information: {}",e);
+        } catch (NoSuchFieldException e) {
+            log.warn("An exception occurred while trying to get query information: {}",e);
+        } finally {
+            RepositoryConnectionUtils.cleanupSession(session);
+        }
+        return Response.ok(slowQueries).build();
+    }
+
+    private QueryStat getQueryStatistics(final Session session) throws NoSuchFieldException, IllegalAccessException {
+        final RepositoryContext repositoryContext = getRepositoryContext(session);
+        final QueryStatCore queryStat = repositoryContext.getStatManager().getQueryStat();
+        return queryStat;
+    }
+
+    private RepositoryStatistics getRepositoryStatistics(Session session) {
         if (statistics == null) {
             try {
-                Field contextField = RepositoryImpl.class.getDeclaredField("context");
-                if (!contextField.isAccessible()) {
-                    contextField.setAccessible(true);
-                }
-                RepositoryContext repositoryContext = (RepositoryContext) contextField.get(RepositoryDecorator.unwrap(session.getRepository()));
+                RepositoryContext repositoryContext = getRepositoryContext(session);
                 this.statistics = repositoryContext.getRepositoryStatistics();
             } catch (SecurityException e) {
                 throw new IllegalArgumentException(e);
@@ -123,6 +180,14 @@ public class StatsResource {
         } else {
             return statistics;
         }
+    }
+
+    private RepositoryContext getRepositoryContext(final Session session) throws NoSuchFieldException, IllegalAccessException {
+        Field contextField = RepositoryImpl.class.getDeclaredField("context");
+        if (!contextField.isAccessible()) {
+            contextField.setAccessible(true);
+        }
+        return (RepositoryContext) contextField.get(RepositoryDecorator.unwrap(session.getRepository()));
     }
 
 }

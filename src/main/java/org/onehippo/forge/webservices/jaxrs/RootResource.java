@@ -33,6 +33,7 @@ import javax.ws.rs.core.Response;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
 import org.slf4j.Logger;
@@ -41,20 +42,16 @@ import org.slf4j.LoggerFactory;
 /**
  * The root resource which will be there for consumers to go to a default api endpoint.
  */
-@Api(value = "/", description = "API Root.", position = 1)
 @Path(value = "/")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class RootResource {
 
     private static final Logger log = LoggerFactory.getLogger(RootResource.class);
+    public static final String UNKNOWN = "unknown";
 
     @Context
     private HttpServletRequest request;
 
-    @ApiOperation(
-            value = "Display basic information about the repository instance",
-            notes = "",
-            position = 1)
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInstanceInformation() {
@@ -76,14 +73,14 @@ public class RootResource {
     }
 
     private String getClusterNodeId(Session session) {
-        String clusterNodeId = "";
+        String emptyClusterNodeId = "";
         if (session.getRepository() != null) {
             final String clusterId = session.getRepository().getDescriptor("jackrabbit.cluster.id");
-            if(clusterId!=null){
-                clusterNodeId = clusterId;
+            if(StringUtils.isNotBlank(clusterId)){
+                return clusterId;
             }
         }
-        return clusterNodeId;
+        return emptyClusterNodeId;
     }
 
     private String getRepositoryVersion(Session session) {
@@ -91,7 +88,7 @@ public class RootResource {
         if (repository != null) {
             return repository.getDescriptor(Repository.REP_VERSION_DESC);
         } else {
-            return "unknown";
+            return UNKNOWN;
         }
     }
 
@@ -100,7 +97,7 @@ public class RootResource {
         if (repository != null) {
             return repository.getDescriptor(Repository.REP_NAME_DESC);
         } else {
-            return "unknown";
+            return UNKNOWN;
         }
     }
 }
