@@ -121,7 +121,6 @@ After you have installed Maven you can build the module with:
 $ mvn install
 ```
 
-
 ## Issues
 
 If you have any problems, please [check the project issues](https://github.com/jreijn/hippo-addon-webservices/issues).
