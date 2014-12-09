@@ -19,12 +19,8 @@ package org.onehippo.forge.webservices.jaxrs.jcr;
 import java.net.URI;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.nodetype.NodeType;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -177,8 +173,9 @@ public class NodesResource {
     }
 
     /**
-     * Updates a node. To update a node you need to provide the entire entity. The entity will be replaced with the provided data.
-     * Be careful in case you want to update entire node structures, because the UUIDs will be regenerated
+     * Updates a node. To update a node you need to provide the entire entity. The entity will be replaced with the
+     * provided data. Be careful in case you want to update entire node structures, because the UUIDs will be
+     * regenerated
      */
     @PUT
     @Path("{path:.*}")
