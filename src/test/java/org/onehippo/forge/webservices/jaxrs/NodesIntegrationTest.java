@@ -35,7 +35,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetJcrRootNode() {
         final JcrNode response = client
-                .path("nodes/")
+                .path("v1/nodes/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
@@ -48,7 +48,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testNotFoundForJcrNode() {
         final Response response = client
-                .path("nodes/nonexistingnode")
+                .path("v1/nodes/nonexistingnode")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Response.class);
@@ -58,7 +58,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetJcrRootNodeWithDepth() {
         final JcrNode response = client
-                .path("nodes/")
+                .path("v1/nodes/")
                 .query("depth", "1")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
@@ -117,7 +117,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         node.setProperties(properties);
 
         final Response response = client
-                .path("nodes/")
+                .path("v1/nodes/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(node);
@@ -125,10 +125,10 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
                 response.getStatus() == Response.Status.CREATED.getStatusCode());
 
         final Object location = response.getMetadata().getFirst("Location");
-        assertTrue((HTTP_ENDPOINT_ADDRESS + "/nodes/newnode").equals(location));
+        assertTrue((HTTP_ENDPOINT_ADDRESS + "/v1/nodes/newnode").equals(location));
         client.reset();
         final JcrNode newJcrNode = client
-                .path("nodes/newnode")
+                .path("v1/nodes/newnode")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
@@ -188,7 +188,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         node.setProperties(properties);
 
         final Response response = client
-                .path("nodes/")
+                .path("v1/nodes/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(node);
@@ -196,20 +196,60 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
                 response.getStatus() == Response.Status.CREATED.getStatusCode());
 
         final Object location = response.getMetadata().getFirst("Location");
-        assertTrue((HTTP_ENDPOINT_ADDRESS + "/nodes/nodename").equals(location));
+        assertTrue((HTTP_ENDPOINT_ADDRESS + "/v1/nodes/nodename").equals(location));
         client.reset();
 
         final JcrNode newJcrNode = client
-                .path("nodes/nodename")
+                .path("v1/nodes/nodename")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
 
-        final List<JcrProperty> properties1 = newJcrNode.getProperties();
-        final JcrProperty jcrProperty = properties1.get(0);
-        System.out.println(jcrProperty.getName());
-
         assertTrue("Expected 4 properties, but received: " + newJcrNode.getProperties().size(), newJcrNode.getProperties().size() == 4);
+
+        properties.clear();
+
+        JcrNode updatedNode = new JcrNode();
+        updatedNode.setName("nodename");
+        updatedNode.setPrimaryType("nt:unstructured");
+
+        final JcrProperty updatedMultipleStringJcrProperty = new JcrProperty();
+        updatedMultipleStringJcrProperty.setName("multiplestringproperty");
+        updatedMultipleStringJcrProperty.setType("String");
+        updatedMultipleStringJcrProperty.setMultiple(true);
+        values = new ArrayList<String>(1);
+        values.add("test1");
+        values.add("test2");
+        updatedMultipleStringJcrProperty.setValues(values);
+        properties.add(updatedMultipleStringJcrProperty);
+
+        final JcrProperty updatedDoubleJcrProperty = new JcrProperty();
+        updatedDoubleJcrProperty.setName("mydoubleproperty");
+        updatedDoubleJcrProperty.setType("Double");
+        updatedDoubleJcrProperty.setMultiple(false);
+        values = new ArrayList<String>(1);
+        values.add("3.14");
+        updatedDoubleJcrProperty.setValues(values);
+        properties.add(updatedDoubleJcrProperty);
+
+        updatedNode.setProperties(properties);
+
+        client.reset();
+        final Response updateResponse = client
+                .path("v1/nodes/nodename")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .put(updatedNode);
+
+        client.reset();
+
+        final JcrNode updatedJcrNode = client
+                .path("v1/nodes/nodename")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(JcrNode.class);
+
+        assertTrue("Expected 2 properties, but received: " + updatedJcrNode.getProperties().size(), updatedJcrNode.getProperties().size() == 2);
 
         // cleanup
         session.getRootNode().getNode("nodename").remove();
@@ -223,7 +263,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         node.setPrimaryType("nt:unstructured");
 
         final Response response = client
-                .path("nodes/mynonexistingnode")
+                .path("v1/nodes/mynonexistingnode")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(node);
@@ -235,7 +275,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         session.getRootNode().addNode("test", "nt:unstructured");
         session.save();
         final Response response = client
-                .path("nodes/test")
+                .path("v1/nodes/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();
@@ -245,7 +285,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testDeleteNonExistingJcrNodeByPath() throws RepositoryException {
         final Response response = client
-                .path("nodes/nonexistingnode")
+                .path("v1/nodes/nonexistingnode")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();
@@ -255,7 +295,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testDeleteWithEmptyPath() throws RepositoryException {
         final Response response = client
-                .path("nodes/")
+                .path("v1/nodes/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();

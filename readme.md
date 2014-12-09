@@ -10,8 +10,8 @@ It provides amongst others a full CRUD API for JCR nodes and properties.
 ## Current Available APIs
 
 + Info ```/```
-+ Nodes API ```/nodes```
-+ Properties API ```/properties```
++ Nodes API ```/v1/nodes```
++ Properties API ```/v1/properties```
 + Query API ```/_query```
 + System API ```/_system```
 + Statistics API ```/_stats```

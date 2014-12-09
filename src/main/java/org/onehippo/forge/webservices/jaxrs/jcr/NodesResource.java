@@ -64,7 +64,7 @@ import org.slf4j.LoggerFactory;
  */
 @GZIP
 @Api(value = "nodes", description = "JCR node API", position = 2)
-@Path("nodes")
+@Path("v1/nodes")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class NodesResource {
 
@@ -201,7 +201,6 @@ public class NodesResource {
         Session session = null;
         try {
             session = RepositoryConnectionUtils.createSession(request);
-            //TODO default?
             String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
             if (!absolutePath.startsWith("/")) {
                 absolutePath = "/" + absolutePath;

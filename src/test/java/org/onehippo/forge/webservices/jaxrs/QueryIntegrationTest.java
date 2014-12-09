@@ -30,7 +30,7 @@ public class QueryIntegrationTest extends WebservicesIntegrationTest {
 
     @Test
     public void testGetQueryResults() {
-        final String rootNodeLink = "http://localhost:8080/cms/rest/api/nodes/";
+        final String rootNodeLink = "http://localhost:8080/cms/rest/api/v1/nodes/";
         final JcrQueryResult response = client
                 .path("_query/")
                 .query("statement", "//element(*,rep:root) order by @jcr:score")

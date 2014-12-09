@@ -62,7 +62,7 @@ import org.slf4j.LoggerFactory;
  */
 @GZIP
 @Api(value = "properties", description = "JCR property API", position = 3)
-@Path("properties")
+@Path("v1/properties")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class PropertiesResource {
 
