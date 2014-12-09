@@ -17,6 +17,7 @@
 package org.onehippo.forge.webservices.jaxrs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.jcr.RepositoryException;
 import javax.ws.rs.core.MediaType;
@@ -136,6 +137,82 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
 
         // cleanup
         session.getRootNode().getNode("newnode").remove();
+        session.save();
+    }
+
+    @Test
+    public void testPutToJcrRootNode() throws RepositoryException {
+        final ArrayList<JcrProperty> properties = new ArrayList<JcrProperty>(1);
+        ArrayList<String> values;
+
+        JcrNode node = new JcrNode();
+        node.setName("nodename");
+        node.setPrimaryType("nt:unstructured");
+
+        final JcrProperty stringJcrProperty = new JcrProperty();
+        stringJcrProperty.setName("myproperty");
+        stringJcrProperty.setType("String");
+        stringJcrProperty.setMultiple(false);
+        values = new ArrayList<String>(1);
+        values.add("test");
+        stringJcrProperty.setValues(values);
+        properties.add(stringJcrProperty);
+
+        final JcrProperty multipleStringJcrProperty = new JcrProperty();
+        multipleStringJcrProperty.setName("multiplestringproperty");
+        multipleStringJcrProperty.setType("String");
+        multipleStringJcrProperty.setMultiple(true);
+        values = new ArrayList<String>(1);
+        values.add("test1");
+        values.add("test2");
+        multipleStringJcrProperty.setValues(values);
+        properties.add(multipleStringJcrProperty);
+
+        final JcrProperty doubleJcrProperty = new JcrProperty();
+        doubleJcrProperty.setName("mydoubleproperty");
+        doubleJcrProperty.setType("Double");
+        doubleJcrProperty.setMultiple(false);
+        values = new ArrayList<String>(1);
+        values.add("3.14");
+        doubleJcrProperty.setValues(values);
+        properties.add(doubleJcrProperty);
+
+        final JcrProperty booleanJcrProperty = new JcrProperty();
+        booleanJcrProperty.setName("myboolproperty");
+        booleanJcrProperty.setType("Boolean");
+        booleanJcrProperty.setMultiple(false);
+        values = new ArrayList<String>(1);
+        values.add("true");
+        booleanJcrProperty.setValues(values);
+        properties.add(booleanJcrProperty);
+        node.setProperties(properties);
+
+        final Response response = client
+                .path("nodes/")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .post(node);
+        assertTrue("Document was not created. Status code: " + response.getStatus() + " " + response,
+                response.getStatus() == Response.Status.CREATED.getStatusCode());
+
+        final Object location = response.getMetadata().getFirst("Location");
+        assertTrue((HTTP_ENDPOINT_ADDRESS + "/nodes/nodename").equals(location));
+        client.reset();
+
+        final JcrNode newJcrNode = client
+                .path("nodes/nodename")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(JcrNode.class);
+
+        final List<JcrProperty> properties1 = newJcrNode.getProperties();
+        final JcrProperty jcrProperty = properties1.get(0);
+        System.out.println(jcrProperty.getName());
+
+        assertTrue("Expected 4 properties, but received: " + newJcrNode.getProperties().size(), newJcrNode.getProperties().size() == 4);
+
+        // cleanup
+        session.getRootNode().getNode("nodename").remove();
         session.save();
     }
 

@@ -177,7 +177,8 @@ public class NodesResource {
     }
 
     /**
-     * Updates a node. To update a node you need to provide the entire entity.
+     * Updates a node. To update a node you need to provide the entire entity. The entity will be replaced with the provided data.
+     * Be careful in case you want to update entire node structures, because the UUIDs will be regenerated
      */
     @PUT
     @Path("{path:.*}")
@@ -218,31 +219,14 @@ public class NodesResource {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
 
-            final Node parentNode = session.getNode(absolutePath).getParent();
-            final Node nodeToUpdate = parentNode.getNode(StringUtils.substringAfterLast(absolutePath, "/"));
-            final PropertyIterator properties = nodeToUpdate.getProperties();
-            final NodeIterator childNodes = nodeToUpdate.getNodes();
-            final NodeType[] mixinNodeTypes = nodeToUpdate.getMixinNodeTypes();
+            final Node nodeToUpdate = session.getNode(absolutePath);
+            final Node parentNode = nodeToUpdate.getParent();
+            nodeToUpdate.remove();
 
-            //remove properties, childnodes and mixins before updating
-            while (properties.hasNext()) {
-                final Property property = properties.nextProperty();
-                property.remove();
-            }
-
-            while (childNodes.hasNext()) {
-                final Node nextNode = childNodes.nextNode();
-                nextNode.remove();
-            }
-            for (NodeType mixinNodeType : mixinNodeTypes) {
-                nodeToUpdate.removeMixin(mixinNodeType.getName());
-            }
-
-            nodeToUpdate.setPrimaryType(jcrNode.getPrimaryType());
-
-            JcrDataBindingHelper.addMixinsFromRepresentation(nodeToUpdate, jcrNode.getMixinTypes());
-            JcrDataBindingHelper.addPropertiesFromRepresentation(nodeToUpdate, jcrNode.getProperties());
-            JcrDataBindingHelper.addChildNodesFromRepresentation(nodeToUpdate, jcrNode.getNodes());
+            final Node node = parentNode.addNode(jcrNode.getName(), jcrNode.getPrimaryType());
+            JcrDataBindingHelper.addMixinsFromRepresentation(node, jcrNode.getMixinTypes());
+            JcrDataBindingHelper.addPropertiesFromRepresentation(node, jcrNode.getProperties());
+            JcrDataBindingHelper.addChildNodesFromRepresentation(node, jcrNode.getNodes());
             session.save();
         } catch (Exception e) {
             throw new WebApplicationException(e);

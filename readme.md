@@ -1,7 +1,7 @@
 # Hippo web services add-on
 
-[![Build Status](https://travis-ci.org/jreijn/hippo-addon-webservices.png?branch=master)](https://travis-ci.org/jreijn/hippo-addon-webservices)
-[![Coverage Status](https://coveralls.io/repos/jreijn/hippo-addon-webservices/badge.png?branch=master)](https://coveralls.io/r/jreijn/hippo-addon-webservices?branch=master)
+[![Build Status](https://travis-ci.org/jreijn/hippo-addon-restful-webservices.png?branch=master)](https://travis-ci.org/jreijn/hippo-addon-restful-webservices)
+[![Coverage Status](https://coveralls.io/repos/jreijn/hippo-addon-restful-webservices/badge.png?branch=master)](https://coveralls.io/r/jreijn/hippo-addon-restful-webservices?branch=master)
 
 This project is a pragmatic approach to provide web services on top of the Hippo CMS repository.
 
@@ -28,7 +28,7 @@ The resources have been defined into two types:
 
 ## Using the web services in your project
 
-See for a working demo the [sample project](https://github.com/jreijn/hippo-addon-webservices-demo).
+See for a working demo the [sample project](https://github.com/jreijn/hippo-addon-restful-webservices-demo).
 
 
 To install this project into a local project you need to add the web services dependency to your projects _cms_ module located in ```cms/pom.xml```
@@ -107,7 +107,7 @@ We will also need to add the servlet mapping, so that the API is exposed at _/re
 That's it. Now the web services should be available. In case you are using the default archetype you should be able to get
 a response by calling the root endpoint [http://localhost:8080/cms/rest/api/](http://localhost:8080/cms/rest/api/)
 
-For a working example see this the [demo project repository](https://github.com/jreijn/hippo-addon-webservices-demo) on GitHub.
+For a working example see this the [demo project repository](https://github.com/jreijn/hippo-addon-restful-webservices-demo) on GitHub.
 
 ## <a name="source"></a>Building from source
 
@@ -123,8 +123,8 @@ $ mvn install
 
 ## Issues
 
-If you have any problems, please [check the project issues](https://github.com/jreijn/hippo-addon-webservices/issues).
+If you have any problems, please [check the project issues](https://github.com/jreijn/hippo-addon-restful-webservices/issues).
 
 ## Contributions
 
-Pull requests are, of course, very welcome! Head over to the [open issues](https://github.com/jreijn/hippo-addon-webservices/issues) to see what we need help with. Make sure you let us know if you intend to work on something. Also, check out the [milestones](https://github.com/jreijn/hippo-addon-webservices/issues/milestones) to see what is planned for future releases.
+Pull requests are, of course, very welcome! Head over to the [open issues](https://github.com/jreijn/hippo-addon-restful-webservices/issues) to see what we need help with. Make sure you let us know if you intend to work on something. Also, check out the [milestones](https://github.com/jreijn/hippo-addon-restful-webservices/issues/milestones) to see what is planned for future releases.
