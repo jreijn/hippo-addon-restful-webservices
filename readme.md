@@ -36,7 +36,7 @@ To install this project into a local project you need to add the web services de
 ``` xml
 <dependency>
   <groupId>org.onehippo.forge.webservices</groupId>
-  <artifactId>hippo-addon-webservices</artifactId>
+  <artifactId>hippo-addon-restful-webservices</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 </dependency>
 ```
@@ -110,8 +110,6 @@ a response by calling the root endpoint [http://localhost:8080/cms/rest/api/](ht
 For a working example see this the [demo project repository](https://github.com/jreijn/hippo-addon-restful-webservices-demo) on GitHub.
 
 ## <a name="source"></a>Building from source
-
-Since this plugin is not yet released you will have to build it from source before you can use it.
 
 This plugin requires [Maven](http://maven.apache.org) to build the module from source.
 
