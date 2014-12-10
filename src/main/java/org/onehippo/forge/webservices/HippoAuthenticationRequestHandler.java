@@ -18,37 +18,39 @@ package org.onehippo.forge.webservices;
 
 import javax.jcr.LoginException;
 import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.cxf.configuration.security.AuthorizationPolicy;
 import org.apache.cxf.jaxrs.ext.RequestHandler;
+import org.apache.cxf.jaxrs.ext.ResponseHandler;
 import org.apache.cxf.jaxrs.model.ClassResourceInfo;
+import org.apache.cxf.jaxrs.model.OperationResourceInfo;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.onehippo.forge.webservices.jaxrs.exception.UnauthorizedException;
-import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrSessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Provider
-public class HippoAuthenticationRequestHandler implements RequestHandler {
+public class HippoAuthenticationRequestHandler implements RequestHandler,ResponseHandler {
 
     private static final Logger log = LoggerFactory.getLogger(HippoAuthenticationRequestHandler.class);
+
+    private Session session = null;
 
     public Response handleRequest(Message m, ClassResourceInfo resourceClass) {
         AuthorizationPolicy policy = m.get(AuthorizationPolicy.class);
         if (policy != null) {
             String username = policy.getUserName();
             String password = policy.getPassword();
-            Session session = null;
             try {
-                session = RepositoryConnectionUtils.createSession(username, password);
+                session = JcrSessionUtil.createSession(username, password);
                 if (isAuthenticated(session)) {
                     HttpServletRequest request = (HttpServletRequest) m.get(AbstractHTTPDestination.HTTP_REQUEST);
-                    request.setAttribute(AuthenticationConstants.HIPPO_CREDENTIALS, new SimpleCredentials(username, password.toCharArray()));
+                    request.setAttribute(AuthenticationConstants.HIPPO_SESSION, session);
                     return null;
                 } else {
                     throw new UnauthorizedException();
@@ -56,11 +58,18 @@ public class HippoAuthenticationRequestHandler implements RequestHandler {
             } catch (LoginException e) {
                 log.debug("Login failed: {}", e);
                 throw new UnauthorizedException(e.getMessage());
-            } finally {
-                RepositoryConnectionUtils.cleanupSession(session);
             }
         }
         throw new UnauthorizedException();
+    }
+
+    @Override
+    public Response handleResponse(final Message m, final OperationResourceInfo ori, final Response response) {
+        if(session!=null && session.isLive()) {
+            session.logout();
+            session = null;
+        }
+        return null;
     }
 
     private boolean isAuthenticated(Session session) {

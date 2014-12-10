@@ -50,7 +50,7 @@ import org.apache.cxf.annotations.GZIP;
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrDataBindingHelper;
-import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrSessionUtil;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.ResponseConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,10 +87,10 @@ public class NodesResource {
                                   @ApiParam(value = "Depth of the retrieval", required = false) @QueryParam("depth") @DefaultValue("0") int depth,
                                   @Context UriInfo ui) throws RepositoryException {
 
-        Session session = null;
+
         JcrNode jcrNode = null;
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             String absolutePath = StringUtils.defaultIfEmpty(path, "/");
             if (!absolutePath.startsWith("/")) {
                 absolutePath = "/" + absolutePath;
@@ -106,8 +106,6 @@ public class NodesResource {
         } catch (RepositoryException e) {
             log.error("Error: {}", e);
             throw new WebApplicationException(e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
         }
         return Response.ok(jcrNode).build();
     }
@@ -134,11 +132,10 @@ public class NodesResource {
                                      @Context UriInfo ui,
                                      JcrNode jcrNode) throws RepositoryException {
 
-        Session session = null;
         URI newNodeUri = null;
 
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
             if (!absolutePath.startsWith("/")) {
                 absolutePath = "/" + absolutePath;
@@ -165,10 +162,7 @@ public class NodesResource {
             session.save();
         } catch (Exception e) {
             throw new WebApplicationException(e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
         }
-
         return Response.created(newNodeUri).build();
     }
 
@@ -195,9 +189,8 @@ public class NodesResource {
                                      @PathParam("path") String parentPath,
                                      @Context UriInfo ui,
                                      JcrNode jcrNode) throws RepositoryException {
-        Session session = null;
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
             if (!absolutePath.startsWith("/")) {
                 absolutePath = "/" + absolutePath;
@@ -226,8 +219,6 @@ public class NodesResource {
             session.save();
         } catch (Exception e) {
             throw new WebApplicationException(e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
         }
 
         return Response.noContent().build();
@@ -244,11 +235,9 @@ public class NodesResource {
     public Response deleteNodeByPath(@ApiParam(required = true, value = "Path of the node to delete e.g. '/content/documents/'")
                                      @PathParam("path") String path) throws RepositoryException {
 
-        Session session = null;
-
         try {
             String absolutePath = path;
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             if (StringUtils.isBlank(path)) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
@@ -266,8 +255,6 @@ public class NodesResource {
             session.save();
         } catch (Exception e) {
             throw new WebApplicationException(e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
         }
         return Response.noContent().build();
 

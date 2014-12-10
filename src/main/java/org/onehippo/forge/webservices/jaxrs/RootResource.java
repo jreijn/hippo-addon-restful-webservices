@@ -19,7 +19,6 @@ package org.onehippo.forge.webservices.jaxrs;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.jcr.LoginException;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
@@ -30,12 +29,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
-import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrSessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,20 +51,13 @@ public class RootResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInstanceInformation() {
-        Session session = null;
         Map<String, Object> info = new LinkedHashMap<String, Object>();
         Map<String, Object> vendor = new LinkedHashMap<String, Object>();
-        try {
-            session = RepositoryConnectionUtils.createSession(request);
-            info.put("clusterid", getClusterNodeId(session));
-            vendor.put("name", getRepositoryVendor(session));
-            vendor.put("version", getRepositoryVersion(session));
-            info.put("vendor",vendor);
-        } catch (LoginException e) {
-            log.warn("An exception occurred while trying to login: {}", e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
-        }
+        Session session = JcrSessionUtil.getSessionFromRequest(request);
+        info.put("clusterid", getClusterNodeId(session));
+        vendor.put("name", getRepositoryVendor(session));
+        vendor.put("version", getRepositoryVersion(session));
+        info.put("vendor", vendor);
         return Response.ok(info).build();
     }
 
@@ -76,7 +65,7 @@ public class RootResource {
         String emptyClusterNodeId = "";
         if (session.getRepository() != null) {
             final String clusterId = session.getRepository().getDescriptor("jackrabbit.cluster.id");
-            if(StringUtils.isNotBlank(clusterId)){
+            if (StringUtils.isNotBlank(clusterId)) {
                 return clusterId;
             }
         }

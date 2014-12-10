@@ -18,7 +18,6 @@ package org.onehippo.forge.webservices.jaxrs;
 
 import java.lang.reflect.Field;
 
-import javax.jcr.LoginException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -42,14 +41,14 @@ import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.stats.QueryStatCore;
 import org.apache.jackrabbit.core.stats.RepositoryStatisticsImpl;
 import org.hippoecm.repository.impl.RepositoryDecorator;
-import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrSessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Resource for showing repository statistics
- * @see "http://wiki.apache.org/jackrabbit/Statistics" for more information
  *
+ * @see "http://wiki.apache.org/jackrabbit/Statistics" for more information
  */
 @Api(value = "_stats", description = "Statistics API.", position = 5)
 @Path(value = "_stats")
@@ -71,16 +70,8 @@ public class StatsResource {
     @Path("/repository")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInstanceInformation() {
-        Session session = null;
-        RepositoryStatistics repositoryStatistics = null;
-        try {
-            session = RepositoryConnectionUtils.createSession(request);
-            repositoryStatistics = getRepositoryStatistics(session);
-        } catch (LoginException e) {
-            log.warn("An exception occurred while trying to login: {}", e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
-        }
+        Session session = JcrSessionUtil.getSessionFromRequest(request);
+        RepositoryStatistics repositoryStatistics = getRepositoryStatistics(session);
         return Response.ok(repositoryStatistics).build();
     }
 
@@ -92,17 +83,10 @@ public class StatsResource {
     @Path("/repository/type/{key}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInstanceInformationByKey(@PathParam("key") String key) {
-        Session session = null;
         TimeSeries timeSeries = null;
-        try {
-            session = RepositoryConnectionUtils.createSession(request);
-            RepositoryStatistics repositoryStatistics = getRepositoryStatistics(session);
-            timeSeries = repositoryStatistics.getTimeSeries(RepositoryStatistics.Type.getType(key));
-        } catch (LoginException e) {
-            log.warn("An exception occurred while trying to login: {}", e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
-        }
+        Session session = JcrSessionUtil.getSessionFromRequest(request);
+        RepositoryStatistics repositoryStatistics = getRepositoryStatistics(session);
+        timeSeries = repositoryStatistics.getTimeSeries(RepositoryStatistics.Type.getType(key));
         return Response.ok(timeSeries).build();
     }
 
@@ -114,20 +98,15 @@ public class StatsResource {
     @Path("/queries/popular")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPopularQueries() {
-        Session session = null;
         QueryStatDto[] popularQueries = null;
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             final QueryStat queryStatistics = getQueryStatistics(session);
             popularQueries = queryStatistics.getPopularQueries();
-        } catch (LoginException e) {
-            log.warn("An exception occurred while trying to login: {}", e);
         } catch (IllegalAccessException e) {
-            log.warn("An exception occurred while trying to get query information: {}",e);
+            log.warn("An exception occurred while trying to get query information: {}", e);
         } catch (NoSuchFieldException e) {
-            log.warn("An exception occurred while trying to get query information: {}",e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
+            log.warn("An exception occurred while trying to get query information: {}", e);
         }
         return Response.ok(popularQueries).build();
     }
@@ -140,20 +119,15 @@ public class StatsResource {
     @Path("/queries/slow")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSlowQueries() {
-        Session session = null;
         QueryStatDto[] slowQueries = null;
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             final QueryStat queryStatistics = getQueryStatistics(session);
             slowQueries = queryStatistics.getSlowQueries();
-        } catch (LoginException e) {
-            log.warn("An exception occurred while trying to login: {}", e);
         } catch (IllegalAccessException e) {
-            log.warn("An exception occurred while trying to get query information: {}",e);
+            log.warn("An exception occurred while trying to get query information: {}", e);
         } catch (NoSuchFieldException e) {
-            log.warn("An exception occurred while trying to get query information: {}",e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
+            log.warn("An exception occurred while trying to get query information: {}", e);
         }
         return Response.ok(slowQueries).build();
     }

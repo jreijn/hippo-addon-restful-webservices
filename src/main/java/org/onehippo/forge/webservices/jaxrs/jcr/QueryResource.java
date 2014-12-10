@@ -53,7 +53,7 @@ import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrQueryResult;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrQueryResultNode;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrSearchQuery;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrDataBindingHelper;
-import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrSessionUtil;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.ResponseConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,9 +90,8 @@ public class QueryResource {
         JcrQueryResult jcrQueryResult = new JcrQueryResult();
         ArrayList<JcrQueryResultNode> resultItems = new ArrayList<JcrQueryResultNode>();
 
-        Session session = null;
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             Query jcrQuery = session.getWorkspace().getQueryManager().createQuery(statement, language);
             if (limit > 0) {
                 jcrQuery.setLimit(limit);
@@ -122,8 +121,6 @@ public class QueryResource {
         } catch (RepositoryException e) {
             log.warn("An exception occurred while trying to perform query: {}", e);
             throw new WebApplicationException(e.getCause());
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
         }
 
         jcrQueryResult.setNodes(resultItems);
@@ -145,9 +142,8 @@ public class QueryResource {
         JcrQueryResult jcrQueryResult = new JcrQueryResult();
         ArrayList<JcrQueryResultNode> resultItems = new ArrayList<JcrQueryResultNode>();
 
-        Session session = null;
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             Query query = session.getWorkspace().getQueryManager().createQuery(searchQuery.getStatement(), searchQuery.getLanguage());
             if (searchQuery.getLimit() > 0) {
                 query.setLimit(searchQuery.getLimit());
@@ -175,8 +171,6 @@ public class QueryResource {
             }
         } catch (RepositoryException e) {
             log.warn("An exception occurred while trying to perform query: {}", e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
         }
 
         jcrQueryResult.setNodes(resultItems);

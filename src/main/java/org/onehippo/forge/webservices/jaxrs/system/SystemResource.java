@@ -27,8 +27,6 @@ import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
-import javax.jcr.LoginException;
-import javax.jcr.Session;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -42,13 +40,11 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
-import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Api for system information
- *
  */
 @Api(value = "_system", description = "System API", position = 6)
 @Path(value = "_system")
@@ -84,18 +80,9 @@ public class SystemResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVersionInfo() {
-        Session session = null;
         Map<String, String> info = new LinkedHashMap<String, String>();
-        try {
-            session = RepositoryConnectionUtils.createSession(request);
-            info.put("Hippo Release Version", getHippoReleaseVersion());
-            info.put("Project Version", getProjectVersion());
-        } catch (LoginException e) {
-            log.warn("An exception occurred while trying to login: {}", e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
-        }
-
+        info.put("Hippo Release Version", getHippoReleaseVersion());
+        info.put("Project Version", getProjectVersion());
         return Response.ok(info).build();
     }
 

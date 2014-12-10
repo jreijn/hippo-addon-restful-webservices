@@ -16,7 +16,6 @@
 
 package org.onehippo.forge.webservices.jaxrs.jcr.util;
 
-import javax.jcr.Credentials;
 import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -28,33 +27,20 @@ import org.onehippo.forge.webservices.AuthenticationConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RepositoryConnectionUtils {
+public class JcrSessionUtil {
 
-    private static final Logger log = LoggerFactory.getLogger(RepositoryConnectionUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(JcrSessionUtil.class);
 
-    private RepositoryConnectionUtils() {
+    private JcrSessionUtil() {
     }
 
     /**
-     * Creates a JCR session based upon the credentials available from the servlet request.
-     * Once the session is not needed anymore make sure you logout the session or call
-     * the {@link org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils#cleanupSession(javax.jcr.Session)}
-     * method.
+     * Gets a JCR session from the servlet request.
      * @param request an HttpServletRequest
      * @return a {@link javax.jcr.Session}
-     * @throws LoginException
      */
-    public static Session createSession(HttpServletRequest request) throws LoginException {
-        Session session = null;
-        try {
-            final HippoRepository repository = HippoRepositoryFactory.getHippoRepository();
-            session = repository.login((Credentials) request.getAttribute(AuthenticationConstants.HIPPO_CREDENTIALS));
-        } catch (LoginException le) {
-            throw new LoginException(le);
-        } catch (RepositoryException e) {
-            log.error("An exception occurred: {}", e);
-        }
-        return session;
+    public static Session getSessionFromRequest(HttpServletRequest request) {
+        return (Session) request.getAttribute(AuthenticationConstants.HIPPO_SESSION);
     }
 
     /**
@@ -75,16 +61,6 @@ public class RepositoryConnectionUtils {
             log.error("An exception occurred: {}", e);
         }
         return session;
-    }
-
-    /**
-     * Cleanup and logout the Session
-     * @param session the JCR session
-     */
-    public static void cleanupSession(final Session session) {
-        if (session != null && session.isLive()) {
-            session.logout();
-        }
     }
 
 }

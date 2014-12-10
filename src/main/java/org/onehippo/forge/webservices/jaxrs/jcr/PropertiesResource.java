@@ -51,7 +51,7 @@ import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrProperty;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrDataBindingHelper;
-import org.onehippo.forge.webservices.jaxrs.jcr.util.RepositoryConnectionUtils;
+import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrSessionUtil;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.ResponseConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,11 +86,10 @@ public class PropertiesResource {
     })
     public Response getPropertyByPath(@ApiParam(value = "Path of the node to retrieve e.g '/content/hippostd:foldertype'.", required = true) @PathParam("path") String path) throws RepositoryException {
 
-        Session session = null;
         JcrProperty jcrProperty = null;
 
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             String absolutePath = StringUtils.defaultIfEmpty(path, "/");
             if (!absolutePath.startsWith("/")) {
                 absolutePath = "/" + absolutePath;
@@ -104,8 +103,6 @@ public class PropertiesResource {
         } catch (RepositoryException e) {
             log.error("Error: {}", e);
             throw new WebApplicationException(e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
         }
         return Response.ok(jcrProperty).build();
     }
@@ -129,10 +126,9 @@ public class PropertiesResource {
                                          @Context UriInfo ui,
                                          JcrProperty jcrProperty) throws RepositoryException {
 
-        Session session = null;
         URI newPropertyUri = null;
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
             if (!absolutePath.startsWith("/")) {
                 absolutePath = "/" + absolutePath;
@@ -156,8 +152,6 @@ public class PropertiesResource {
             newPropertyUri = ub.build(parentNode.getProperty(jcrProperty.getName()).getPath().substring(1));
         } catch (Exception e) {
             throw new WebApplicationException(e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
         }
         return Response.created(newPropertyUri).build();
     }
@@ -180,9 +174,8 @@ public class PropertiesResource {
                                          @PathParam("path") @DefaultValue("/") String parentPath,
                                          @Context UriInfo ui,
                                          JcrProperty jcrProperty) throws RepositoryException {
-        Session session = null;
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session =  JcrSessionUtil.getSessionFromRequest(request);
 
             String absolutePath = StringUtils.defaultIfEmpty(parentPath, "/");
             if (!absolutePath.startsWith("/")) {
@@ -206,8 +199,6 @@ public class PropertiesResource {
             session.save();
         } catch (Exception e) {
             throw new WebApplicationException(e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
         }
         return Response.noContent().build();
     }
@@ -229,9 +220,8 @@ public class PropertiesResource {
     })
     public Response deletePropertyByPath(@ApiParam(required = true, value = "Path of the property to delete e.g. '/content/hippostd:foldertype'.")
                                          @PathParam("path") String path) throws RepositoryException {
-        Session session = null;
         try {
-            session = RepositoryConnectionUtils.createSession(request);
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
             String absolutePath = path;
 
             if (!absolutePath.startsWith("/")) {
@@ -251,8 +241,6 @@ public class PropertiesResource {
             session.save();
         } catch (Exception e) {
             throw new WebApplicationException(e);
-        } finally {
-            RepositoryConnectionUtils.cleanupSession(session);
         }
         return Response.noContent().build();
 
