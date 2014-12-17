@@ -5,7 +5,7 @@ jdk:
   - oraclejdk7
 script: mvn verify
 after_success:
-  - mvn clean verify jacoco:report coveralls:jacoco
+  - mvn jacoco:report coveralls:jacoco
 cache:
   directories:
   - $HOME/.m2
