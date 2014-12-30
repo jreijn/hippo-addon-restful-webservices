@@ -151,6 +151,7 @@ public class PropertiesResource {
             UriBuilder ub = ui.getBaseUriBuilder().path(this.getClass()).path(this.getClass(), "getPropertyByPath");
             newPropertyUri = ub.build(parentNode.getProperty(jcrProperty.getName()).getPath().substring(1));
         } catch (Exception e) {
+            log.error("Error: {}", e);
             throw new WebApplicationException(e);
         }
         return Response.created(newPropertyUri).build();
@@ -198,6 +199,7 @@ public class PropertiesResource {
             JcrDataBindingHelper.addPropertyToNode(node,jcrProperty);
             session.save();
         } catch (Exception e) {
+            log.error("Error: {}", e);
             throw new WebApplicationException(e);
         }
         return Response.noContent().build();
@@ -240,6 +242,7 @@ public class PropertiesResource {
             property.remove();
             session.save();
         } catch (Exception e) {
+            log.error("Error: {}", e);
             throw new WebApplicationException(e);
         }
         return Response.noContent().build();

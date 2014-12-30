@@ -161,6 +161,7 @@ public class NodesResource {
             newNodeUri = ub.build(node.getName());
             session.save();
         } catch (Exception e) {
+            log.error("Error: {}", e);
             throw new WebApplicationException(e);
         }
         return Response.created(newNodeUri).build();
@@ -218,6 +219,7 @@ public class NodesResource {
             JcrDataBindingHelper.addChildNodesFromRepresentation(node, jcrNode.getNodes());
             session.save();
         } catch (Exception e) {
+            log.error("Error: {}", e);
             throw new WebApplicationException(e);
         }
 
@@ -254,6 +256,7 @@ public class NodesResource {
             node.remove();
             session.save();
         } catch (Exception e) {
+            log.error("Error: {}", e);
             throw new WebApplicationException(e);
         }
         return Response.noContent().build();

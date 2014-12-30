@@ -145,9 +145,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         final ArrayList<JcrProperty> properties = new ArrayList<JcrProperty>(1);
         ArrayList<String> values;
 
-        JcrNode node = new JcrNode();
-        node.setName("nodename");
-        node.setPrimaryType("nt:unstructured");
+        JcrNode node = new JcrNode("nodename","nt:unstructured");
 
         final JcrProperty stringJcrProperty = new JcrProperty();
         stringJcrProperty.setName("myproperty");

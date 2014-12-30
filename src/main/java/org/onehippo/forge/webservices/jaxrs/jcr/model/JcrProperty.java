@@ -16,6 +16,7 @@
 
 package org.onehippo.forge.webservices.jaxrs.jcr.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -36,9 +37,9 @@ public class JcrProperty {
     @ApiModelProperty(required = true)
     private String type;
     @ApiModelProperty(required = true)
-    private boolean multiple;
+    private boolean multiple = false;
     @ApiModelProperty(required = true)
-    private List<String> values;
+    private List<String> values = new ArrayList<String>(0);
 
     public String getName() {
         return name;
@@ -72,6 +73,10 @@ public class JcrProperty {
 
     public void setValues(List<String> values) {
         this.values = values;
+    }
+
+    public void setValue(String value) {
+        this.values.add(value);
     }
 
 }

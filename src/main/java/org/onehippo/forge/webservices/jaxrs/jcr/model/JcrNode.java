@@ -44,6 +44,14 @@ public class JcrNode {
     private List<JcrProperty> properties = new ArrayList<JcrProperty>();
     private List<JcrNode> nodes = new ArrayList<JcrNode>();
 
+    public JcrNode() {
+    }
+
+    public JcrNode(final String name, final String primaryType) {
+        this.name = name;
+        this.primaryType = primaryType;
+    }
+
     public String getName() {
         return name;
     }
