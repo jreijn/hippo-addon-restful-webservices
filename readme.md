@@ -37,7 +37,7 @@ To install this project into a local project you need to add the web services de
 <dependency>
   <groupId>org.onehippo.forge.webservices</groupId>
   <artifactId>hippo-addon-restful-webservices</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
