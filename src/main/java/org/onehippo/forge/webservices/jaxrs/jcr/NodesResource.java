@@ -60,7 +60,7 @@ import org.slf4j.LoggerFactory;
  */
 @GZIP
 @Api(value = "nodes", description = "JCR node API", position = 2)
-@Path("v1/nodes")
+@Path("nodes")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class NodesResource {
 

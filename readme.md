@@ -1,4 +1,4 @@
-# Hippo web services add-on
+# Hippo RESTful web services add-on
 
 [![Build Status](https://travis-ci.org/jreijn/hippo-addon-restful-webservices.png?branch=master)](https://travis-ci.org/jreijn/hippo-addon-restful-webservices)
 [![Coverage Status](https://coveralls.io/repos/jreijn/hippo-addon-restful-webservices/badge.png?branch=master)](https://coveralls.io/r/jreijn/hippo-addon-restful-webservices?branch=master)
@@ -10,8 +10,8 @@ It provides amongst others a full CRUD API for JCR nodes and properties.
 ## Current Available APIs
 
 + Info ```/```
-+ Nodes API ```/v1/nodes```
-+ Properties API ```/v1/properties```
++ Nodes API ```/nodes```
++ Properties API ```/properties```
 + Query API ```/_query```
 + System API ```/_system```
 + Statistics API ```/_stats```
@@ -37,24 +37,22 @@ To install this project into a local project you need to add the web services de
 <dependency>
   <groupId>org.onehippo.forge.webservices</groupId>
   <artifactId>hippo-addon-restful-webservices</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
 </dependency>
 ```
-
-Since the project is not yet released, the snapshot artifacts can be found in the Sonatype snapshot repository.
 
 Add the following repository to your repository section in your pom.xml
 
 ``` xml
 <repositories>
   <repository>
-    <id>sonatype-snapshot</id>
-    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    <id>sonatype-oss-public</id>
+    <url>https://oss.sonatype.org/content/groups/public/</url>
     <releases>
-      <enabled>false</enabled>
+      <enabled>true</enabled>
     </releases>
     <snapshots>
-      <enabled>true</enabled>
+      <enabled>false</enabled>
     </snapshots>
   </repository>
 <repositories>
@@ -74,7 +72,7 @@ Now add the servlet definition to your CMS web.xml located in ```cms/src/main/we
       org.onehippo.forge.webservices.jaxrs.jcr.NodesResource,
       org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource,
       org.onehippo.forge.webservices.jaxrs.jcr.QueryResource,
-      org.onehippo.forge.webservices.jaxrs.StatsResource,
+      org.onehippo.forge.webservices.jaxrs.StatsResource
     </param-value>
   </init-param>
   <init-param>

@@ -35,7 +35,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetJcrRootNode() {
         final JcrNode response = client
-                .path("v1/nodes/")
+                .path("nodes/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
@@ -48,7 +48,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testNotFoundForJcrNode() {
         final Response response = client
-                .path("v1/nodes/nonexistingnode")
+                .path("nodes/nonexistingnode")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Response.class);
@@ -58,7 +58,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetJcrRootNodeWithDepth() {
         final JcrNode response = client
-                .path("v1/nodes/")
+                .path("nodes/")
                 .query("depth", "1")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
@@ -117,7 +117,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         node.setProperties(properties);
 
         final Response response = client
-                .path("v1/nodes/")
+                .path("nodes/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(node);
@@ -125,10 +125,10 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
                 response.getStatus() == Response.Status.CREATED.getStatusCode());
 
         final Object location = response.getMetadata().getFirst("Location");
-        assertTrue((HTTP_ENDPOINT_ADDRESS + "/v1/nodes/newnode").equals(location));
+        assertTrue((HTTP_ENDPOINT_ADDRESS + "/nodes/newnode").equals(location));
         client.reset();
         final JcrNode newJcrNode = client
-                .path("v1/nodes/newnode")
+                .path("nodes/newnode")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
@@ -186,7 +186,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         node.setProperties(properties);
 
         final Response response = client
-                .path("v1/nodes/")
+                .path("nodes/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(node);
@@ -194,11 +194,11 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
                 response.getStatus() == Response.Status.CREATED.getStatusCode());
 
         final Object location = response.getMetadata().getFirst("Location");
-        assertTrue((HTTP_ENDPOINT_ADDRESS + "/v1/nodes/nodename").equals(location));
+        assertTrue((HTTP_ENDPOINT_ADDRESS + "/nodes/nodename").equals(location));
         client.reset();
 
         final JcrNode newJcrNode = client
-                .path("v1/nodes/nodename")
+                .path("nodes/nodename")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
@@ -234,7 +234,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
 
         client.reset();
         final Response updateResponse = client
-                .path("v1/nodes/nodename")
+                .path("nodes/nodename")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .put(updatedNode);
@@ -242,7 +242,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         client.reset();
 
         final JcrNode updatedJcrNode = client
-                .path("v1/nodes/nodename")
+                .path("nodes/nodename")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrNode.class);
@@ -261,7 +261,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         node.setPrimaryType("nt:unstructured");
 
         final Response response = client
-                .path("v1/nodes/mynonexistingnode")
+                .path("nodes/mynonexistingnode")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(node);
@@ -273,7 +273,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
         session.getRootNode().addNode("test", "nt:unstructured");
         session.save();
         final Response response = client
-                .path("v1/nodes/test")
+                .path("nodes/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();
@@ -283,7 +283,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testDeleteNonExistingJcrNodeByPath() throws RepositoryException {
         final Response response = client
-                .path("v1/nodes/nonexistingnode")
+                .path("nodes/nonexistingnode")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();
@@ -293,7 +293,7 @@ public class NodesIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testDeleteWithEmptyPath() throws RepositoryException {
         final Response response = client
-                .path("v1/nodes/")
+                .path("nodes/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();
