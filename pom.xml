@@ -22,7 +22,7 @@
   <description>Hippo RESTful Web Services Addon project</description>
   <groupId>org.onehippo.forge.webservices</groupId>
   <artifactId>hippo-addon-restful-webservices</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
   <packaging>jar</packaging>
 
   <url>https://github.com/jreijn/hippo-addon-restful-webservices</url>
@@ -47,7 +47,7 @@
   </developers>
 
   <contributors>
-    <contributor/>
+    <contributor />
   </contributors>
 
   <issueManagement>
@@ -59,6 +59,7 @@
     <url>git@github.com:jreijn/hippo-addon-restful-webservices.git</url>
     <connection>scm:git:git@github.com:jreijn/hippo-addon-restful-webservices.git</connection>
     <developerConnection>scm:git:git@github.com:jreijn/hippo-addon-restful-webservices.git</developerConnection>
+    <tag>hippo-addon-restful-webservices-0.1.0</tag>
   </scm>
   <ciManagement>
     <system>travis-ci</system>
@@ -439,10 +440,7 @@
               <outputTemplate>https://raw.github.com/kongchen/api-doc-template/master/v2.0/markdown.mustache</outputTemplate>
               <outputPath>src/site/markdown/rest-api-docs.md</outputPath>
               <swaggerUIDocBasePath>http://www.example.com/apidocsf</swaggerUIDocBasePath>
-              &lt;!&ndash;swaggerDirectory>generated/apidocs</swaggerDirectory&ndash;&gt;
-              &lt;!&ndash;useOutputFlatStructure>false</useOutputFlatStructure&ndash;&gt;
-              &lt;!&ndash;mustacheFileRoot>${basedir}/src/main/resources/</mustacheFileRoot&ndash;&gt;
-            </apiSource>
+              &lt;!&ndash;swaggerDirectory>generated/apidocs</swaggerDirectory&ndash;&gt; &lt;!&ndash;useOutputFlatStructure>false</useOutputFlatStructure&ndash;&gt; &lt;!&ndash;mustacheFileRoot>${basedir}/src/main/resources/</mustacheFileRoot&ndash;&gt; </apiSource>
           </apiSources>
         </configuration>
         <executions>
