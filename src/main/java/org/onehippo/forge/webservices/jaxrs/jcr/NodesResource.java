@@ -176,7 +176,9 @@ public class NodesResource {
     @Path("{path:.*}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Update a node", notes = "Updates a node and it's properties", position = 3)
+    @ApiOperation(value = "Update a node", notes = "To update a node you need to provide the entire entity. The entity will be replaced with the " +
+            " provided data. Be careful in case you want to update entire node structures, because the UUIDs will be " +
+            " regenerated", position = 3)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK),
             @ApiResponse(code = 204, message = ResponseConstants.STATUS_MESSAGE_UPDATED),

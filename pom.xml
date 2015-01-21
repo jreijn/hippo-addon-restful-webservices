@@ -22,7 +22,7 @@
   <description>Hippo RESTful Web Services Addon project</description>
   <groupId>org.onehippo.forge.webservices</groupId>
   <artifactId>hippo-addon-restful-webservices</artifactId>
-  <version>0.2.1-SNAPSHOT</version>
+  <version>0.3.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <url>https://github.com/jreijn/hippo-addon-restful-webservices</url>
@@ -114,6 +114,7 @@
     <maven-source-plugin.version>2.4</maven-source-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.5</nexus-staging-maven-plugin.version>
     <maven-release-plugin.version>2.5.1</maven-release-plugin.version>
+    <maven.plugin.jrebel.version>1.1.5</maven.plugin.jrebel.version>
   </properties>
 
   <repositories>
@@ -427,7 +428,7 @@
           </includes>
         </configuration>
       </plugin>
-<!--      <plugin>
+      <plugin>
         <groupId>com.github.kongchen</groupId>
         <artifactId>swagger-maven-plugin</artifactId>
         <version>2.2</version>
@@ -437,10 +438,13 @@
               <locations>org.onehippo.forge.webservices.jaxrs</locations>
               <apiVersion>v1</apiVersion>
               <basePath>http://host:port/cms/rest/api</basePath>
-              <outputTemplate>https://raw.github.com/kongchen/api-doc-template/master/v2.0/markdown.mustache</outputTemplate>
+              <outputTemplate>${basedir}/src/main/resources/markdown.mustache</outputTemplate>
               <outputPath>src/site/markdown/rest-api-docs.md</outputPath>
               <swaggerUIDocBasePath>http://www.example.com/apidocsf</swaggerUIDocBasePath>
-              &lt;!&ndash;swaggerDirectory>generated/apidocs</swaggerDirectory&ndash;&gt; &lt;!&ndash;useOutputFlatStructure>false</useOutputFlatStructure&ndash;&gt; &lt;!&ndash;mustacheFileRoot>${basedir}/src/main/resources/</mustacheFileRoot&ndash;&gt; </apiSource>
+              <swaggerDirectory>generated/apidocs</swaggerDirectory>
+              <useOutputFlatStructure>false</useOutputFlatStructure>
+              <mustacheFileRoot>${basedir}/src/main/resources/</mustacheFileRoot>
+            </apiSource>
           </apiSources>
         </configuration>
         <executions>
@@ -470,7 +474,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>-->
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -677,6 +681,35 @@
                 <exclude>**/*.iml</exclude>
               </excludes>
             </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>jrebel</id>
+      <activation>
+        <property>
+          <name>jrebel</name>
+        </property>
+      </activation>
+      <properties>
+        <javaagent>-javaagent:${env.REBEL_HOME}/jrebel.jar</javaagent>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>jrebel-maven-plugin</artifactId>
+            <version>${maven.plugin.jrebel.version}</version>
+            <executions>
+              <execution>
+                <id>generate-rebel-xml</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>

@@ -9,12 +9,16 @@ It provides amongst others a full CRUD API for JCR nodes and properties.
 
 ## Current Available APIs
 
+Version 0.2.X
 + Info ```/```
 + Nodes API ```/nodes```
 + Properties API ```/properties```
 + Query API ```/_query```
 + System API ```/_system```
 + Statistics API ```/_stats```
+
+Coming in version 0.3.0
++ Users API ```/users```
 
 The resources have been defined into two types:
 

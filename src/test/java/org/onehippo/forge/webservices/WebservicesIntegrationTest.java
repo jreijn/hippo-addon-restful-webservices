@@ -32,12 +32,14 @@ import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.hippoecm.repository.HippoRepositoryFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.onehippo.forge.webservices.jaxrs.CustomJacksonConfig;
 import org.onehippo.forge.webservices.jaxrs.RootResource;
 import org.onehippo.forge.webservices.jaxrs.StatsResource;
 import org.onehippo.forge.webservices.jaxrs.exception.CustomWebApplicationExceptionMapper;
 import org.onehippo.forge.webservices.jaxrs.jcr.NodesResource;
 import org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource;
 import org.onehippo.forge.webservices.jaxrs.jcr.QueryResource;
+import org.onehippo.forge.webservices.jaxrs.management.UsersResource;
 import org.onehippo.forge.webservices.jaxrs.system.SystemResource;
 import org.onehippo.repository.testutils.RepositoryTestCase;
 
@@ -65,8 +67,10 @@ public abstract class WebservicesIntegrationTest extends RepositoryTestCase {
         Object hippoAuthenticationRequestHandler = new HippoAuthenticationRequestHandler();
         Object apiDeclarationProvider = new ApiDeclarationProvider();
         Object resourceListingProvider = new ResourceListingProvider();
+        Object customJacksonConfig = new CustomJacksonConfig();
 
         List<Object> providers = new ArrayList<Object>();
+        providers.add(customJacksonConfig);
         providers.add(jacksonJaxbJsonProvider);
         providers.add(crossOriginResourceSharingFilter);
         providers.add(customWebApplicationExceptionMapper);
@@ -82,6 +86,7 @@ public abstract class WebservicesIntegrationTest extends RepositoryTestCase {
         serviceClasses.add(PropertiesResource.class);
         serviceClasses.add(QueryResource.class);
         serviceClasses.add(StatsResource.class);
+        serviceClasses.add(UsersResource.class);
 
         JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
 

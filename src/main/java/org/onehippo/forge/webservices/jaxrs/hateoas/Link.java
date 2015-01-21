@@ -19,7 +19,9 @@ package org.onehippo.forge.webservices.jaxrs.hateoas;
 import java.net.URI;
 
 import javax.ws.rs.HttpMethod;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class Link {
 
     /**
@@ -39,7 +41,9 @@ public class Link {
 
     private String rel;
     private URI href;
-    private HttpMethod method;
+
+    public Link() {
+    }
 
     public Link(final String rel, final URI href) {
         this.rel = rel;
@@ -60,14 +64,6 @@ public class Link {
 
     public void setHref(URI href) {
         this.href = href;
-    }
-
-    public HttpMethod getMethod() {
-        return method;
-    }
-
-    public void setMethod(HttpMethod method) {
-        this.method = method;
     }
 
 }

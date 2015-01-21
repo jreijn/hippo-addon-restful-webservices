@@ -30,6 +30,14 @@ public class ResponseExceptionRepresentation {
     private int statusCode;
     private String message;
 
+    public ResponseExceptionRepresentation() {
+    }
+
+    public ResponseExceptionRepresentation(final int statusCode, final String message) {
+        this.statusCode = statusCode;
+        this.message = message;
+    }
+
     @XmlElement(name = "status-code")
     public int getStatusCode() {
         return statusCode;

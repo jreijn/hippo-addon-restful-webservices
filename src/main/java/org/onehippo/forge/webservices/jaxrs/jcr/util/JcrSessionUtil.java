@@ -35,7 +35,8 @@ public class JcrSessionUtil {
     }
 
     /**
-     * Gets a JCR session from the servlet request.
+     * Gets a JCR session from the servlet request. The session does need to be logged out by the developer,
+     * but is logged out once the request is finished.
      * @param request an HttpServletRequest
      * @return a {@link javax.jcr.Session}
      */
