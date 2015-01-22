@@ -16,11 +16,14 @@
 
 package org.onehippo.forge.webservices.jaxrs;
 
+import java.util.List;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 import org.onehippo.forge.webservices.WebservicesIntegrationTest;
+import org.onehippo.forge.webservices.jaxrs.management.model.Group;
 import org.onehippo.forge.webservices.jaxrs.management.model.User;
 import org.onehippo.forge.webservices.jaxrs.management.model.UserCollection;
 
@@ -48,6 +51,18 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
                 .get(User.class);
         assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
         assertTrue("admin".equals(user.getUsername()));
+    }
+
+    @Test
+    public void testGetAdminUserGroups() {
+        @SuppressWarnings("unchecked")
+        final List<Group> groups = client
+                .path("users/admin/groups")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(List.class);
+        assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
+        assertTrue(groups.size() == 1);
     }
 
     @Test
