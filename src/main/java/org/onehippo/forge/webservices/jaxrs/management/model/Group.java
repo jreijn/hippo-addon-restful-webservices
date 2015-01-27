@@ -16,11 +16,16 @@
 
 package org.onehippo.forge.webservices.jaxrs.management.model;
 
+import java.net.URI;
+import java.util.List;
+
 public class Group {
 
     private String name;
     private String description;
+    private List<String> members;
     private boolean external = false;
+    private URI uri;
 
     public Group() {
 
@@ -52,5 +57,21 @@ public class Group {
 
     public void setExternal(final boolean external) {
         this.external = external;
+    }
+
+    public List<String> getMembers() {
+        return members;
+    }
+
+    public void setMembers(final List<String> members) {
+        this.members = members;
+    }
+
+    public URI getUri() {
+        return uri;
+    }
+
+    public void setUri(final URI uri) {
+        this.uri = uri;
     }
 }

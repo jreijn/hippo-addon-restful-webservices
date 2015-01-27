@@ -39,6 +39,7 @@ import org.onehippo.forge.webservices.jaxrs.exception.CustomWebApplicationExcept
 import org.onehippo.forge.webservices.jaxrs.jcr.NodesResource;
 import org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource;
 import org.onehippo.forge.webservices.jaxrs.jcr.QueryResource;
+import org.onehippo.forge.webservices.jaxrs.management.GroupsResource;
 import org.onehippo.forge.webservices.jaxrs.management.UsersResource;
 import org.onehippo.forge.webservices.jaxrs.system.SystemResource;
 import org.onehippo.repository.testutils.RepositoryTestCase;
@@ -87,6 +88,7 @@ public abstract class WebservicesIntegrationTest extends RepositoryTestCase {
         serviceClasses.add(QueryResource.class);
         serviceClasses.add(StatsResource.class);
         serviceClasses.add(UsersResource.class);
+        serviceClasses.add(GroupsResource.class);
 
         JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
 
