@@ -19,6 +19,7 @@ Version 0.2.X
 
 Coming in version 0.3.0
 + Users API ```/users```
++ Groups API ```/groups```
 
 The resources have been defined into two types:
 
@@ -76,7 +77,9 @@ Now add the servlet definition to your CMS web.xml located in ```cms/src/main/we
       org.onehippo.forge.webservices.jaxrs.jcr.NodesResource,
       org.onehippo.forge.webservices.jaxrs.jcr.PropertiesResource,
       org.onehippo.forge.webservices.jaxrs.jcr.QueryResource,
-      org.onehippo.forge.webservices.jaxrs.StatsResource
+      org.onehippo.forge.webservices.jaxrs.StatsResource,
+      org.onehippo.forge.webservices.jaxrs.management.UsersResource,
+      org.onehippo.forge.webservices.jaxrs.management.GroupsResource
     </param-value>
   </init-param>
   <init-param>
