@@ -61,13 +61,14 @@ import org.apache.jackrabbit.util.Text;
 import org.hippoecm.repository.PasswordHelper;
 import org.hippoecm.repository.api.HippoNodeType;
 import org.hippoecm.repository.api.NodeNameCodec;
-import org.onehippo.forge.webservices.jaxrs.management.model.Group;
-import org.onehippo.forge.webservices.jaxrs.management.model.User;
-import org.onehippo.forge.webservices.jaxrs.management.model.UserCollection;
 import org.onehippo.forge.webservices.jaxrs.exception.ResponseExceptionRepresentation;
 import org.onehippo.forge.webservices.jaxrs.hateoas.Link;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.JcrSessionUtil;
 import org.onehippo.forge.webservices.jaxrs.jcr.util.ResponseConstants;
+import org.onehippo.forge.webservices.jaxrs.management.model.Group;
+import org.onehippo.forge.webservices.jaxrs.management.model.GroupCollection;
+import org.onehippo.forge.webservices.jaxrs.management.model.User;
+import org.onehippo.forge.webservices.jaxrs.management.model.UserCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,18 +134,18 @@ public class UsersResource {
             }
             users = new UserCollection(userList);
 
-            UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(),"getUsers");
+            UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getUsers");
             ub.queryParam("offset", offset + limit);
-            if(limit>0) {
+            if (limit > 0) {
                 ub.queryParam("limit", limit);
             }
             final URI nextUri = ub.build();
 
-            ub.replaceQueryParam("offset",0);
-            ub.replaceQueryParam("limit",20);
+            ub.replaceQueryParam("offset", 0);
+            ub.replaceQueryParam("limit", 20);
             final URI firstUri = ub.build();
             //TODO: Take care of negative offset
-            if(offset>0) {
+            if (offset > 0) {
                 ub.replaceQueryParam("offset", offset - limit);
                 ub.replaceQueryParam("limit", limit);
                 final URI prevUri = ub.build();
@@ -159,6 +160,29 @@ public class UsersResource {
         }
         return Response.ok(users).build();
     }
+
+//    public Response updateAllUsers(@ApiParam(required = true, value="List of users") UserCollection users,
+//                                   @Context UriInfo ui) throws RepositoryException {
+//        try {
+//            Session session = JcrSessionUtil.getSessionFromRequest(request);
+//            final Collection<User> userCollection = users.getUsers();
+//            if (users != null && !userCollection.isEmpty()) {
+//                final Node usersNode = session.getNode("/" + HippoNodeType.CONFIGURATION_PATH + "/" + HippoNodeType.USERS_PATH);
+//                final NodeIterator userIterator = usersNode.getNodes();
+//                while (userIterator.hasNext()) {
+//                    final Node userNode = userIterator.nextNode();
+//                    userNode.remove();
+//                }
+//                for(User user : userCollection) {
+//                    create(user);
+//                }
+//                session.save();
+//            }
+//        } catch (RepositoryException e) {
+//            log.error("Error: {}", e);
+//            throw new WebApplicationException(e);
+//        }
+//    }
 
     /**
      * Adds a new user and populates it with the supplied properties.
@@ -300,10 +324,11 @@ public class UsersResource {
             @PathParam("username") String username,
             @Context UriInfo ui) throws RepositoryException {
         List<Group> groups = new ArrayList<Group>();
-        if(userExists(username)) {
-         groups = getLocalMemberships(username);
+        if (userExists(username)) {
+            groups = getLocalMemberships(username);
         }
-        return Response.ok(groups).build();
+        GroupCollection collection = new GroupCollection(groups);
+        return Response.ok(collection).build();
     }
 
     private Node getUserNodeByName(final String username) throws RepositoryException {
@@ -449,9 +474,9 @@ public class UsersResource {
         final List<Group> localMemberships = new ArrayList<Group>();
         try {
             final Query query = getQueryManager().createQuery(queryString, Query.XPATH);
-            final NodeIterator iter = query.execute().getNodes();
-            while (iter.hasNext()) {
-                final Node node = iter.nextNode();
+            final NodeIterator iterator = query.execute().getNodes();
+            while (iterator.hasNext()) {
+                final Node node = iterator.nextNode();
                 if (node == null) {
                     continue;
                 }
