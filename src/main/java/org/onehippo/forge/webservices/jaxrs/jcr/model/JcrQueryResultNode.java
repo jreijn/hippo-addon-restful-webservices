@@ -27,15 +27,15 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "result")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = {"score","link","values" })
+@XmlType(propOrder = {"score","link","fields" })
 public class JcrQueryResultNode {
 
     private double score;
     private URI link;
-    private Map<String, String> values = new LinkedHashMap<String, String>();
+    private Map<String, String> fields = new LinkedHashMap<String, String>();
 
-    public void addValue(String column, String value) {
-        this.values.put(column,value);
+    public void addField(String column, String value) {
+        this.fields.put(column, value);
     }
 
     public double getScore() {
@@ -54,7 +54,7 @@ public class JcrQueryResultNode {
         this.link = link;
     }
 
-    public Map<String, String> getValues() {
-        return values;
+    public Map<String, String> getFields() {
+        return fields;
     }
 }

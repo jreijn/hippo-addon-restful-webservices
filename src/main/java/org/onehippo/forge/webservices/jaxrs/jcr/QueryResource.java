@@ -98,8 +98,6 @@ public class QueryResource {
             final QueryManager queryManager = session.getWorkspace().getQueryManager();
             Query jcrQuery;
             if (Query.XPATH.equals(language)) {
-                // we encode xpath queries to support queries like /jcr:root/7_8//*
-                // the 7 needs to be encode
                 jcrQuery = queryManager.createQuery(RepoUtils.encodeXpath(statement), language);
             } else {
                 jcrQuery = queryManager.createQuery(statement, language);
@@ -128,7 +126,7 @@ public class QueryResource {
                 for(String column : queryResult.getColumnNames()){
                     final Value value = row.getValue(column);
                     if(value!=null){
-                        queryResultNode.addValue(column, JcrDataBindingHelper.getPropertyValueAsString(value));
+                        queryResultNode.addField(column, JcrDataBindingHelper.getPropertyValueAsString(value));
                     }
                 }
                 queryResultNode.setLink(nodeUri);
@@ -161,7 +159,14 @@ public class QueryResource {
 
         try {
             Session session = JcrSessionUtil.getSessionFromRequest(request);
-            Query query = session.getWorkspace().getQueryManager().createQuery(searchQuery.getStatement(), searchQuery.getLanguage());
+            final QueryManager queryManager = session.getWorkspace().getQueryManager();
+            Query query;
+            if (Query.XPATH.equals(searchQuery.getLanguage())) {
+                query = queryManager.createQuery(RepoUtils.encodeXpath(searchQuery.getStatement()), searchQuery.getLanguage());
+            } else {
+                query = queryManager.createQuery(searchQuery.getStatement(), searchQuery.getLanguage());
+            }
+
             if (searchQuery.getLimit() > 0) {
                 query.setLimit(searchQuery.getLimit());
             }
@@ -184,7 +189,7 @@ public class QueryResource {
                 for(String column : queryResult.getColumnNames()){
                     final Value value = row.getValue(column);
                     if(value!=null){
-                        queryResultNode.addValue(column, JcrDataBindingHelper.getPropertyValueAsString(value));
+                        queryResultNode.addField(column, JcrDataBindingHelper.getPropertyValueAsString(value));
                     }
                 }
                 queryResultNode.setLink(nodeUri);
