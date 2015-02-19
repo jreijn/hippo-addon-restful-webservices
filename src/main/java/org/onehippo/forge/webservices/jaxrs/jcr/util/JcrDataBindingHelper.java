@@ -133,7 +133,7 @@ public final class JcrDataBindingHelper {
         return data;
     }
 
-    private static String getPropertyValueAsString(final Value value) throws RepositoryException {
+    public static String getPropertyValueAsString(final Value value) throws RepositoryException {
         StringWriter stringWriter = new StringWriter();
         if(value.getType() == PropertyType.BINARY) {
             try {

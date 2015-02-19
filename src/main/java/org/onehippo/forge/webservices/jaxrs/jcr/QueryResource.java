@@ -21,7 +21,9 @@ import java.util.ArrayList;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
@@ -48,6 +50,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 
 import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import org.hippoecm.repository.api.HippoNodeIterator;
+import org.hippoecm.repository.util.RepoUtils;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrNode;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrQueryResult;
 import org.onehippo.forge.webservices.jaxrs.jcr.model.JcrQueryResultNode;
@@ -92,7 +95,16 @@ public class QueryResource {
 
         try {
             Session session = JcrSessionUtil.getSessionFromRequest(request);
-            Query jcrQuery = session.getWorkspace().getQueryManager().createQuery(statement, language);
+            final QueryManager queryManager = session.getWorkspace().getQueryManager();
+            Query jcrQuery;
+            if (Query.XPATH.equals(language)) {
+                // we encode xpath queries to support queries like /jcr:root/7_8//*
+                // the 7 needs to be encode
+                jcrQuery = queryManager.createQuery(RepoUtils.encodeXpath(statement), language);
+            } else {
+                jcrQuery = queryManager.createQuery(statement, language);
+            }
+
             if (limit > 0) {
                 jcrQuery.setLimit(limit);
             }
@@ -113,7 +125,12 @@ public class QueryResource {
                 final URI nodeUri = getUriForNode(ui, nodeRepresentation);
 
                 final JcrQueryResultNode queryResultNode = new JcrQueryResultNode();
-                queryResultNode.setNode(nodeRepresentation);
+                for(String column : queryResult.getColumnNames()){
+                    final Value value = row.getValue(column);
+                    if(value!=null){
+                        queryResultNode.addValue(column, JcrDataBindingHelper.getPropertyValueAsString(value));
+                    }
+                }
                 queryResultNode.setLink(nodeUri);
                 queryResultNode.setScore(row.getScore());
                 resultItems.add(queryResultNode);
@@ -164,7 +181,12 @@ public class QueryResource {
                 final URI nodeUri = getUriForNode(ui, nodeRepresentation);
 
                 final JcrQueryResultNode queryResultNode = new JcrQueryResultNode();
-                queryResultNode.setNode(nodeRepresentation);
+                for(String column : queryResult.getColumnNames()){
+                    final Value value = row.getValue(column);
+                    if(value!=null){
+                        queryResultNode.addValue(column, JcrDataBindingHelper.getPropertyValueAsString(value));
+                    }
+                }
                 queryResultNode.setLink(nodeUri);
                 queryResultNode.setScore(row.getScore());
                 resultItems.add(queryResultNode);

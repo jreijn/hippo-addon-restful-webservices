@@ -17,6 +17,8 @@
 package org.onehippo.forge.webservices.jaxrs.jcr.model;
 
 import java.net.URI;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,19 +27,15 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "result")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = {"node", "link", "score"})
+@XmlType(propOrder = {"score","link","values" })
 public class JcrQueryResultNode {
 
-    private JcrNode node;
     private double score;
     private URI link;
+    private Map<String, String> values = new LinkedHashMap<String, String>();
 
-    public JcrNode getNode() {
-        return node;
-    }
-
-    public void setNode(final JcrNode node) {
-        this.node = node;
+    public void addValue(String column, String value) {
+        this.values.put(column,value);
     }
 
     public double getScore() {
@@ -54,5 +52,9 @@ public class JcrQueryResultNode {
 
     public void setLink(final URI link) {
         this.link = link;
+    }
+
+    public Map<String, String> getValues() {
+        return values;
     }
 }
