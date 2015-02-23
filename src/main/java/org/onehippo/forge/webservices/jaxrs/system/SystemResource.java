@@ -46,8 +46,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Api for system information
  */
-@Api(value = "_system", description = "System API", position = 6)
-@Path(value = "_system")
+@Api(value = "v1/_system", description = "System API", position = 6)
+@Path(value = "v1/_system")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class SystemResource {
 

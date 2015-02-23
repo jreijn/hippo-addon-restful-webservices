@@ -63,7 +63,7 @@ import org.onehippo.forge.webservices.jaxrs.management.model.GroupCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Path("/groups")
+@Path("v1/groups")
 public class GroupsResource {
 
     private static final Logger log = LoggerFactory.getLogger(GroupsResource.class);

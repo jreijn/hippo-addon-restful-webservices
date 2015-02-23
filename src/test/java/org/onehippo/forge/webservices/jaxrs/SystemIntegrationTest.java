@@ -37,7 +37,7 @@ public class SystemIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetSystemInfo() {
         final LinkedHashMap response = client
-                .path("_system/jvm")
+                .path("v1/_system/jvm")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(LinkedHashMap.class);
@@ -48,7 +48,7 @@ public class SystemIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetProperties() {
         final LinkedHashMap response = client
-                .path("_system/properties")
+                .path("v1/_system/properties")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(LinkedHashMap.class);
@@ -59,7 +59,7 @@ public class SystemIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetHardwareInfo() {
         final LinkedHashMap response = client
-                .path("_system/hardware")
+                .path("v1/_system/hardware")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(LinkedHashMap.class);
@@ -70,7 +70,7 @@ public class SystemIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetVersionInfo() {
         final String response = client
-                .path("_system/versions")
+                .path("v1/_system/versions")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(String.class);
@@ -84,7 +84,7 @@ public class SystemIntegrationTest extends WebservicesIntegrationTest {
         HttpClient httpclient = new HttpClient();
         httpclient.getParams().setAuthenticationPreemptive(true);
         httpclient.getState().setCredentials(AuthScope.ANY, adminCredentials);
-        GetMethod getMethod = new GetMethod(HTTP_ENDPOINT_ADDRESS + "/_system/versions");
+        GetMethod getMethod = new GetMethod(HTTP_ENDPOINT_ADDRESS + "/v1/_system/versions");
         getMethod.addRequestHeader(CorsHeaderConstants.HEADER_ORIGIN, "http://somehost");
         getMethod.addRequestHeader("Accept", MediaType.APPLICATION_JSON);
 

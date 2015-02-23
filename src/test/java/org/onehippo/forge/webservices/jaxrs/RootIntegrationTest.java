@@ -31,7 +31,7 @@ public class RootIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetSystemInfo() {
         final LinkedHashMap response = client
-                .path("/")
+                .path("/v1/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(LinkedHashMap.class);
