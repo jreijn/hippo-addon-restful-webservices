@@ -11,17 +11,17 @@ It provides amongst others a full CRUD API for JCR nodes and properties.
 
 Version 0.3.X
 
-+ Info ```/v1/```
++ Info ```/```
 
-+ Nodes API ```/v1/nodes```
-+ Properties API ```/v1/properties```
-+ Query API ```/v1/_query```
++ Nodes API ```/nodes```
++ Properties API ```/properties```
 
-+ System API ```/v1/_system```
-+ Statistics API ```/v1/_stats```
++ Query API ```/_query```
++ System API ```/_system```
++ Statistics API ```/_stats```
 
-+ Users API ```/v1/users```
-+ Groups API ```/v1/groups```
++ Users API ```/users```
++ Groups API ```/groups```
 
 The resources have been defined into two types:
 
@@ -38,7 +38,7 @@ To install this project into a local project you need to add the web services de
 <dependency>
   <groupId>org.onehippo.forge.webservices</groupId>
   <artifactId>hippo-addon-restful-webservices</artifactId>
-  <version>0.3.0</version>
+  <version>0.3.1</version>
 </dependency>
 ```
 
@@ -90,7 +90,7 @@ We will also need to add the servlet mapping, so that the API is exposed at _/re
 ```
 
 That's it. Now the web services should be available. In case you are using the default archetype you should be able to get
-a response by calling the root endpoint [http://localhost:8080/cms/rest/api/v1/](http://localhost:8080/cms/rest/api/v1/)
+a response by calling the root endpoint [http://localhost:8080/cms/rest/api/](http://localhost:8080/cms/rest/api/)
 
 For a working example see this the [demo project repository](https://github.com/jreijn/hippo-addon-restful-webservices-demo) on GitHub.
 
