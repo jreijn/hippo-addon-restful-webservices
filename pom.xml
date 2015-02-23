@@ -22,7 +22,7 @@
   <description>Hippo RESTful Web Services Addon project</description>
   <groupId>org.onehippo.forge.webservices</groupId>
   <artifactId>hippo-addon-restful-webservices</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.3.0</version>
   <packaging>jar</packaging>
 
   <url>https://github.com/jreijn/hippo-addon-restful-webservices</url>
@@ -59,7 +59,7 @@
     <url>git@github.com:jreijn/hippo-addon-restful-webservices.git</url>
     <connection>scm:git:git@github.com:jreijn/hippo-addon-restful-webservices.git</connection>
     <developerConnection>scm:git:git@github.com:jreijn/hippo-addon-restful-webservices.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>hippo-addon-restful-webservices-0.3.0</tag>
   </scm>
   <ciManagement>
     <system>travis-ci</system>
