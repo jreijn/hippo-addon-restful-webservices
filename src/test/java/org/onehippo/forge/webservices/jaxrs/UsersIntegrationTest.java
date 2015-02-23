@@ -96,4 +96,50 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
         assertTrue(delete.getStatus() == Response.Status.NO_CONTENT.getStatusCode());
     }
 
+    @Test
+    public void testAddAndUpdateAndRemoveUser() {
+        User user = new User("testupdate");
+        user.setExternal(false);
+        user.setActive(true);
+        user.setSystem(false);
+        user.setPassword("testupdate");
+
+        final Response response = client
+                .path("v1/users/")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .post(user);
+        assertTrue(response.getStatus() == Response.Status.CREATED.getStatusCode());
+
+        client.reset();
+
+        user = new User("testupdate");
+        user.setExternal(false);
+        user.setActive(true);
+        user.setSystem(true);
+        user.setPassword("testupdate");
+
+        client.path("v1/users/testupdate")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .put(user);
+
+        client.reset();
+
+        final User updatedUser = client
+                .path("v1/users/testupdate")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(User.class);
+        assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
+        assertTrue(updatedUser.isSystem());
+        assertTrue(updatedUser.isActive());
+
+        client.reset();
+        final Response delete = client.path("v1/users/testupdate")
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .type(MediaType.APPLICATION_JSON_TYPE).delete();
+        assertTrue(delete.getStatus() == Response.Status.NO_CONTENT.getStatusCode());
+    }
+
 }

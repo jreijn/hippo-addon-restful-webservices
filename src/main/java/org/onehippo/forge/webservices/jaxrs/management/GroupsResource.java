@@ -34,6 +34,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -45,6 +46,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -63,6 +65,7 @@ import org.onehippo.forge.webservices.jaxrs.management.model.GroupCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Api(value = "v1/groups", description = "Groups API", position = 6)
 @Path("v1/groups")
 public class GroupsResource {
 
@@ -102,7 +105,7 @@ public class GroupsResource {
                 final Node node = nodes.nextNode();
                 final Group groupFromNode = getGroupFromNode(node);
                 UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getGroupByName");
-                groupFromNode.setUri(ub.build(groupFromNode.getName()));
+                groupFromNode.setHref(ub.build(groupFromNode.getName()).toString());
                 groupList.add(groupFromNode);
             }
             groups = new GroupCollection(groupList);
@@ -122,10 +125,10 @@ public class GroupsResource {
                 ub.replaceQueryParam("offset", offset - limit);
                 ub.replaceQueryParam("limit", limit);
                 final URI prevUri = ub.build();
-                groups.addLink(new Link("prev", prevUri));
+                groups.addLink(new Link("prev", prevUri.toString()));
             }
-            groups.addLink(new Link("first", firstUri));
-            groups.addLink(new Link("next", nextUri));
+            groups.addLink(new Link("first", firstUri.toString()));
+            groups.addLink(new Link("next", nextUri.toString()));
 
         } catch (RepositoryException e) {
             log.error("Error: {}", e);
@@ -194,6 +197,48 @@ public class GroupsResource {
             throw new WebApplicationException(e);
         }
         return Response.created(newUserUri).build();
+    }
+
+    /**
+     * Updates a group and populates it with the supplied properties.
+     */
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "Updates a new group", notes = "Updates a new group", position = 3)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK),
+            @ApiResponse(code = 204, message = ResponseConstants.STATUS_MESSAGE_UPDATED),
+            @ApiResponse(code = 400, message = ResponseConstants.STATUS_MESSAGE_BAD_REQUEST),
+            @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
+            @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
+            @ApiResponse(code = 403, message = ResponseConstants.STATUS_MESSAGE_ACCESS_DENIED),
+            @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
+    })
+    public Response updateGroup(@ApiParam(required = true, value = "Name of the group") Group group,
+                                @Context UriInfo ui) throws RepositoryException {
+        URI newUserUri;
+        try {
+            Session session = JcrSessionUtil.getSessionFromRequest(request);
+            if (!exists(group.getName())) {
+                final ResponseExceptionRepresentation responseExceptionRepresentation = new ResponseExceptionRepresentation(
+                        Response.Status.CONFLICT.getStatusCode(), "Group with name '" + group.getName() + "' does not exists.");
+                return Response.status(Response.Status.CONFLICT).entity(responseExceptionRepresentation).build();
+            } else if (group.isExternal()) {
+                final ResponseExceptionRepresentation responseExceptionRepresentation = new ResponseExceptionRepresentation(
+                        Response.Status.CONFLICT.getStatusCode(), "External managed group can't be updated through this interface.");
+                return Response.status(Response.Status.CONFLICT).entity(responseExceptionRepresentation).build();
+            }
+
+            final Node node = update(group);
+            UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getGroupByName");
+            newUserUri = ub.build(node.getName());
+            session.save();
+        } catch (RepositoryException e) {
+            log.error("Error: {}", e);
+            throw new WebApplicationException(e);
+        }
+        return Response.noContent().build();
     }
 
     @DELETE
@@ -302,13 +347,33 @@ public class GroupsResource {
     }
 
     /**
-     * Wrapper needed for spi layer which doesn't know if a property exists or not
+     * Create a new group
      *
-     * @param node the node on which to put the property
-     * @param name the name of the property
-     * @param value the value of the property
      * @throws RepositoryException
      */
+    public Node update(Group group) throws RepositoryException {
+        if (!exists(group.getName())) {
+            throw new RepositoryException("Group does not exists");
+        }
+
+        StringBuilder relPath = new StringBuilder();
+        relPath.append(HippoNodeType.CONFIGURATION_PATH);
+        relPath.append("/");
+        relPath.append(HippoNodeType.GROUPS_PATH);
+        relPath.append("/");
+        relPath.append(NodeNameCodec.encode(group.getName(), true));
+
+        final Node node = JcrSessionUtil.getSessionFromRequest(request).getRootNode().getNode(relPath.toString());
+        setOrRemoveStringProperty(node, PROP_DESCRIPTION, group.getDescription());
+        final List<String> members = group.getMembers();
+        if(members!=null){
+            setOrRemoveMultiStringProperty(node, PROP_MEMBERS, members.toArray(new String[0]));
+        }
+        // save parent when adding a node
+        node.getParent().getSession().save();
+        return node;
+    }
+
     private void setOrRemoveStringProperty(Node node, String name, String value) throws RepositoryException {
         if (value == null && !node.hasProperty(name)) {
             return;
@@ -316,14 +381,6 @@ public class GroupsResource {
         node.setProperty(name, value);
     }
 
-    /**
-     * Wrapper needed for spi layer which doesn't know if a property exists or not
-     *
-     * @param node the node on which to put the property
-     * @param name the name of the property
-     * @param values the value of the property
-     * @throws RepositoryException
-     */
     private void setOrRemoveMultiStringProperty(Node node, String name, String[] values) throws RepositoryException {
         if (values == null && !node.hasProperty(name)) {
             return;

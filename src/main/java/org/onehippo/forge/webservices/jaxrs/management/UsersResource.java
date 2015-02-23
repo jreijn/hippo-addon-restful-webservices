@@ -29,6 +29,7 @@ import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -38,6 +39,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -129,7 +131,7 @@ public class UsersResource {
                 final Node node = nodes.nextNode();
                 final User userFromNode = createUserFromNode(node);
                 UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getUserByName");
-                userFromNode.setUri(ub.build(userFromNode.getUsername()));
+                userFromNode.setHref(ub.build(userFromNode.getUsername()).toString());
                 userList.add(userFromNode);
             }
             users = new UserCollection(userList);
@@ -149,10 +151,10 @@ public class UsersResource {
                 ub.replaceQueryParam("offset", offset - limit);
                 ub.replaceQueryParam("limit", limit);
                 final URI prevUri = ub.build();
-                users.addLink(new Link("prev", prevUri));
+                users.addLink(new Link("prev", prevUri.toString()));
             }
-            users.addLink(new Link("first", firstUri));
-            users.addLink(new Link("next", nextUri));
+            users.addLink(new Link("first", firstUri.toString()));
+            users.addLink(new Link("next", nextUri.toString()));
 
         } catch (RepositoryException e) {
             log.error("Error: {}", e);
@@ -247,6 +249,33 @@ public class UsersResource {
             }
             user = createUserFromNode(userNode);
             user.setGroups(getLocalMembershipsAsListOfGroups(user.getUsername()));
+        } catch (RepositoryException e) {
+            log.error("Error: {}", e);
+            throw new WebApplicationException(e);
+        }
+        return Response.ok(user).build();
+    }
+
+    @PUT
+    @Path("/{username}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "Updates a user", notes = "Updates a user by username", position = 2)
+
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = ResponseConstants.STATUS_MESSAGE_UPDATED),
+            @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
+            @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
+            @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)
+    })
+    public Response updateUserByName(@ApiParam(value = "Name of the user to update", required = true) @PathParam("username") String username,
+                                  @Context UriInfo ui, User user) throws RepositoryException {
+        try {
+            Node userNode = getUserNodeByName(username);
+            if (userNode == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            updateUserNodeFromModel(userNode, user);
+            userNode.getSession().save();
         } catch (RepositoryException e) {
             log.error("Error: {}", e);
             throw new WebApplicationException(e);
@@ -352,6 +381,58 @@ public class UsersResource {
         final Session session = JcrSessionUtil.getSessionFromRequest(request);
         return session.getWorkspace().getQueryManager();
     }
+
+    private void updateUserNodeFromModel(final Node userNode, final User user) throws RepositoryException {
+
+        userNode.setProperty(HippoNodeType.HIPPO_ACTIVE,user.isActive());
+        userNode.setProperty(PROP_SYSTEM,user.isSystem());
+
+        if(user.getEmail()!=null) {
+            userNode.setProperty(PROP_EMAIL,user.getEmail());
+        }
+        if(user.getFirstName()!=null) {
+            userNode.setProperty(PROP_FIRSTNAME, user.getFirstName());
+        }
+        if(user.getLastName()!=null) {
+            userNode.setProperty(PROP_LASTNAME,user.getLastName());
+        }
+        if(user.getPassword()!=null) {
+            if(!userNode.getProperty(PROP_PASSWORD).equals(user.getPassword())){
+                savePassword(userNode,user.getPassword());
+            }
+        }
+    }
+
+    /**
+     * Save the current user's password with a hashing function.
+     *
+     * @param password the password
+     * @throws RepositoryException
+     */
+    public void savePassword(final Node node, final String password) throws RepositoryException {
+        // remember old password
+        if (node.hasProperty(HippoNodeType.HIPPO_PASSWORD)) {
+            String oldPassword = node.getProperty(HippoNodeType.HIPPO_PASSWORD).getString();
+            Value[] newValues;
+            if (node.hasProperty(HippoNodeType.HIPPO_PREVIOUSPASSWORDS)) {
+                Value[] oldValues = node.getProperty(HippoNodeType.HIPPO_PREVIOUSPASSWORDS).getValues();
+                newValues = new Value[oldValues.length + 1];
+                System.arraycopy(oldValues, 0, newValues, 1, oldValues.length);
+            } else {
+                newValues = new Value[1];
+            }
+            newValues[0] = node.getSession().getValueFactory().createValue(oldPassword);
+            node.setProperty(HippoNodeType.HIPPO_PREVIOUSPASSWORDS, newValues);
+        }
+
+        // set password last changed date
+        Calendar now = Calendar.getInstance();
+        node.setProperty(HippoNodeType.HIPPO_PASSWORDLASTMODIFIED, now);
+
+        // set new password
+        node.setProperty(HippoNodeType.HIPPO_PASSWORD, createPasswordHash(password));
+    }
+
 
     private User createUserFromNode(final Node userNode) throws RepositoryException {
         User user = new User(NodeNameCodec.decode(userNode.getName()));

@@ -41,7 +41,7 @@ public class ResourceTest {
     @Test
     public void testAddLink() throws Exception {
         final Resource<String> stringResource = new Resource<String>("test");
-        final Link self = new Link("self", new URI("http://localhost/"));
+        final Link self = new Link("self", new URI("http://localhost/").toString());
         stringResource.addLink(self);
         assertTrue(stringResource.getLinks().size()==1);
     }
@@ -49,7 +49,7 @@ public class ResourceTest {
     @Test
     public void testSetLinks() throws Exception {
         final Resource<String> stringResource = new Resource<String>("test");
-        final Link self = new Link("self", new URI("http://localhost/"));
+        final Link self = new Link("self", new URI("http://localhost/").toString());
         final ArrayList<Link> links = new ArrayList<Link>();
         links.add(self);
         stringResource.setLinks(links);

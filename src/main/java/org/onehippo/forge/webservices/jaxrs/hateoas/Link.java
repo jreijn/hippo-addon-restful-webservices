@@ -16,9 +16,6 @@
 
 package org.onehippo.forge.webservices.jaxrs.hateoas;
 
-import java.net.URI;
-
-import javax.ws.rs.HttpMethod;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -40,12 +37,12 @@ public class Link {
     public static final String TYPE = "type";
 
     private String rel;
-    private URI href;
+    private String href;
 
     public Link() {
     }
 
-    public Link(final String rel, final URI href) {
+    public Link(final String rel, final String href) {
         this.rel = rel;
         this.href = href;
     }
@@ -58,11 +55,11 @@ public class Link {
         this.rel = rel;
     }
 
-    public URI getHref() {
+    public String getHref() {
         return href;
     }
 
-    public void setHref(URI href) {
+    public void setHref(String href) {
         this.href = href;
     }
 

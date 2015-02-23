@@ -16,7 +16,6 @@
 
 package org.onehippo.forge.webservices.jaxrs.management.model;
 
-import java.net.URI;
 import java.util.Calendar;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class User {
     private String password;
     private Calendar passwordLastModified;
     private List<Group> groups;
-    private URI uri;
+    private String href;
 
     public User() {
 
@@ -132,12 +131,12 @@ public class User {
         this.groups = groups;
     }
 
-    public URI getUri() {
-        return uri;
+    public String getHref() {
+        return href;
     }
 
-    public void setUri(final URI uri) {
-        this.uri = uri;
+    public void setHref(final String href) {
+        this.href = href;
     }
 
     @Override

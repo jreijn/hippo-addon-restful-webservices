@@ -16,7 +16,6 @@
 
 package org.onehippo.forge.webservices.jaxrs.management.model;
 
-import java.net.URI;
 import java.util.List;
 
 public class Group {
@@ -25,7 +24,7 @@ public class Group {
     private String description;
     private List<String> members;
     private boolean external = false;
-    private URI uri;
+    private String href;
 
     public Group() {
 
@@ -67,11 +66,11 @@ public class Group {
         this.members = members;
     }
 
-    public URI getUri() {
-        return uri;
+    public String getHref() {
+        return href;
     }
 
-    public void setUri(final URI uri) {
-        this.uri = uri;
+    public void setHref(final String href) {
+        this.href = href;
     }
 }
