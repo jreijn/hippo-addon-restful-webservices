@@ -9,15 +9,17 @@ It provides amongst others a full CRUD API for JCR nodes and properties.
 
 ## Current Available APIs
 
-Version 0.2.X
+Version 0.3.X
+
 + Info ```/v1/```
+
 + Nodes API ```/v1/nodes```
 + Properties API ```/v1/properties```
 + Query API ```/v1/_query```
+
 + System API ```/v1/_system```
 + Statistics API ```/v1/_stats```
 
-Coming in version 0.3.0
 + Users API ```/v1/users```
 + Groups API ```/v1/groups```
 
@@ -26,15 +28,9 @@ The resources have been defined into two types:
 + CRUD resources (without underscore)
 + Non-CRUD resources (with underscore)
 
-## Future plans
-
-+ Support [Richardson Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html) and HATEOAS to be fully RESTful.
-+ Add CORS support so the API can be used from a Javascript app __(Done)__
-
 ## Using the web services in your project
 
 See for a working demo the [sample project](https://github.com/jreijn/hippo-addon-restful-webservices-demo).
-
 
 To install this project into a local project you need to add the web services dependency to your projects _cms_ module located in ```cms/pom.xml```
 
@@ -42,25 +38,8 @@ To install this project into a local project you need to add the web services de
 <dependency>
   <groupId>org.onehippo.forge.webservices</groupId>
   <artifactId>hippo-addon-restful-webservices</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
 </dependency>
-```
-
-Add the following repository to your repository section in your pom.xml
-
-``` xml
-<repositories>
-  <repository>
-    <id>sonatype-oss-public</id>
-    <url>https://oss.sonatype.org/content/groups/public/</url>
-    <releases>
-      <enabled>true</enabled>
-    </releases>
-    <snapshots>
-      <enabled>false</enabled>
-    </snapshots>
-  </repository>
-<repositories>
 ```
 
 Now add the servlet definition to your CMS web.xml located in ```cms/src/main/webapp/WEB-INF/web.xml```.
@@ -110,7 +89,7 @@ We will also need to add the servlet mapping, so that the API is exposed at _/re
 ```
 
 That's it. Now the web services should be available. In case you are using the default archetype you should be able to get
-a response by calling the root endpoint [http://localhost:8080/cms/rest/api/](http://localhost:8080/cms/rest/api/)
+a response by calling the root endpoint [http://localhost:8080/cms/rest/api/v1/](http://localhost:8080/cms/rest/api/v1/)
 
 For a working example see this the [demo project repository](https://github.com/jreijn/hippo-addon-restful-webservices-demo) on GitHub.
 
