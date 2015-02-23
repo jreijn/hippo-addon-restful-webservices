@@ -105,7 +105,7 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
         user.setPassword("testupdate");
 
         final Response response = client
-                .path("v1/users/")
+                .path("users/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(user);
@@ -119,7 +119,7 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
         user.setSystem(true);
         user.setPassword("testupdate");
 
-        client.path("v1/users/testupdate")
+        client.path("users/testupdate")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .put(user);
@@ -127,7 +127,7 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
         client.reset();
 
         final User updatedUser = client
-                .path("v1/users/testupdate")
+                .path("users/testupdate")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(User.class);
@@ -136,7 +136,7 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
         assertTrue(updatedUser.isActive());
 
         client.reset();
-        final Response delete = client.path("v1/users/testupdate")
+        final Response delete = client.path("users/testupdate")
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .type(MediaType.APPLICATION_JSON_TYPE).delete();
         assertTrue(delete.getStatus() == Response.Status.NO_CONTENT.getStatusCode());

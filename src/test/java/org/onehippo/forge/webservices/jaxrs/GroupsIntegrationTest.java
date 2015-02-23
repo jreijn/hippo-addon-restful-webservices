@@ -108,7 +108,7 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
         group.setMembers(members);
 
         final Response response = client
-                .path("v1/groups/")
+                .path("groups/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(group);
@@ -122,7 +122,7 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
         group.setMembers(members);
 
         client
-                .path("v1/groups/testupdate")
+                .path("groups/testupdate")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .put(group);
@@ -130,7 +130,7 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
 
         client.reset();
         final Group testGroup = client
-                .path("v1/groups/testupdate")
+                .path("groups/testupdate")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Group.class);
@@ -140,7 +140,7 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
 
         client.reset();
 
-        final Response delete = client.path("v1/groups/testupdate")
+        final Response delete = client.path("groups/testupdate")
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .type(MediaType.APPLICATION_JSON_TYPE).delete();
         assertTrue(delete.getStatus() == Response.Status.NO_CONTENT.getStatusCode());
