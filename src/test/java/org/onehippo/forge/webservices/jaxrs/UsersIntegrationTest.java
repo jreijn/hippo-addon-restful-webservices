@@ -32,7 +32,7 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetUsers() {
         final UserCollection response = client
-                .path("v1/users/")
+                .path("users/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(UserCollection.class);
@@ -43,7 +43,7 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetAdminUser() {
         final User user = client
-                .path("v1/users/admin")
+                .path("users/admin")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(User.class);
@@ -55,7 +55,7 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
     public void testGetAdminUserGroups() {
         @SuppressWarnings("unchecked")
         final GroupCollection groups = client
-                .path("v1/users/admin/groups")
+                .path("users/admin/groups")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(GroupCollection.class);
@@ -66,7 +66,7 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetMe() {
         final User user = client
-                .path("v1/users/me")
+                .path("users/me")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(User.class);
@@ -83,14 +83,14 @@ public class UsersIntegrationTest extends WebservicesIntegrationTest {
         user.setPassword("test");
 
         final Response response = client
-                .path("v1/users/")
+                .path("users/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(user);
         assertTrue(response.getStatus() == Response.Status.CREATED.getStatusCode());
 
         client.reset();
-        final Response delete = client.path("v1/users/test")
+        final Response delete = client.path("users/test")
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .type(MediaType.APPLICATION_JSON_TYPE).delete();
         assertTrue(delete.getStatus() == Response.Status.NO_CONTENT.getStatusCode());

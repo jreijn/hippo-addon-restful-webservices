@@ -59,8 +59,8 @@ import org.slf4j.LoggerFactory;
  * Resource providing CRUD operations on JCR nodes.
  */
 @GZIP
-@Api(value = "v1/nodes", description = "JCR node API", position = 2)
-@Path("v1/nodes")
+@Api(value = "nodes", description = "JCR node API", position = 2)
+@Path("nodes")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class NodesResource {
 

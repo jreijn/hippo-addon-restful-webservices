@@ -431,12 +431,12 @@
       <plugin>
         <groupId>com.github.kongchen</groupId>
         <artifactId>swagger-maven-plugin</artifactId>
-        <version>2.2</version>
+        <version>2.3.2</version>
         <configuration>
           <apiSources>
             <apiSource>
               <locations>org.onehippo.forge.webservices.jaxrs</locations>
-              <apiVersion>v1</apiVersion>
+              <apiVersion>0.3</apiVersion>
               <basePath>http://host:port/cms/rest/api</basePath>
               <outputTemplate>${basedir}/src/main/resources/markdown.mustache</outputTemplate>
               <outputPath>src/site/markdown/rest-api-docs.md</outputPath>
@@ -444,12 +444,18 @@
               <swaggerDirectory>generated/apidocs</swaggerDirectory>
               <useOutputFlatStructure>false</useOutputFlatStructure>
               <mustacheFileRoot>${basedir}/src/main/resources/</mustacheFileRoot>
+              <apiInfo>
+                <title>Hippo CMS RESTful API reference</title>
+                <description>This is the Hippo CMS REST API reference</description>
+                <license>Apache 2.0</license>
+                <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+              </apiInfo>
             </apiSource>
           </apiSources>
         </configuration>
         <executions>
           <execution>
-            <phase>site</phase>
+            <phase>compile</phase>
             <goals>
               <goal>generate</goal>
             </goals>

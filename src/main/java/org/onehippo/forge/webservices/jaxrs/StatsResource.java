@@ -50,8 +50,8 @@ import org.slf4j.LoggerFactory;
  *
  * @see "http://wiki.apache.org/jackrabbit/Statistics" for more information
  */
-@Api(value = "v1/_stats", description = "Statistics API.", position = 5)
-@Path(value = "v1/_stats")
+@Api(value = "_stats", description = "Statistics API.", position = 5)
+@Path(value = "_stats")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class StatsResource {
 

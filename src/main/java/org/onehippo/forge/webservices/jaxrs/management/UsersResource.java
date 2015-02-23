@@ -74,8 +74,8 @@ import org.onehippo.forge.webservices.jaxrs.management.model.UserCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Api(value = "v1/users", description = "Users API", position = 6)
-@Path("v1/users")
+@Api(value = "users", description = "Users API", position = 6)
+@Path("/users")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class UsersResource {
 

@@ -36,7 +36,7 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetGroups() {
         final GroupCollection response = client
-                .path("v1/groups/")
+                .path("groups/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(GroupCollection.class);
@@ -47,7 +47,7 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGetAdminGroup() {
         final Group group = client
-                .path("v1/groups/admin")
+                .path("groups/admin")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Group.class);
@@ -58,7 +58,7 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
     @Test
     public void testGroupNotFound() {
         final int status = client
-                .path("v1/groups/blah")
+                .path("groups/blah")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get().getStatus();
@@ -74,7 +74,7 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
         group.setMembers(members);
 
         final Response response = client
-                .path("v1/groups/")
+                .path("groups/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(group);
@@ -83,7 +83,7 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
         client.reset();
 
         final Group testGroup = client
-                .path("v1/groups/test")
+                .path("groups/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Group.class);
@@ -92,7 +92,7 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
 
         client.reset();
 
-        final Response delete = client.path("v1/groups/test")
+        final Response delete = client.path("groups/test")
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .type(MediaType.APPLICATION_JSON_TYPE).delete();
         assertTrue(delete.getStatus() == Response.Status.NO_CONTENT.getStatusCode());

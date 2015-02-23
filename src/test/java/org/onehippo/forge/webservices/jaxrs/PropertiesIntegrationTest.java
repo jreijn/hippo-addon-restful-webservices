@@ -34,7 +34,7 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
 
     @Test
     public void testGetPropertyFromNode() {
-        final JcrProperty response = client.path("v1/properties/jcr:primaryType")
+        final JcrProperty response = client.path("properties/jcr:primaryType")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrProperty.class);
@@ -45,7 +45,7 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
 
     @Test
     public void testNotFoundOnGetProperty() {
-        final Response response = client.path("v1/properties/jcr:someProperty")
+        final Response response = client.path("properties/jcr:someProperty")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(Response.class);
@@ -67,12 +67,12 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
         jcrProperty.setValues(values);
 
         final Response response = client
-                .path("v1/properties/test")
+                .path("properties/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(jcrProperty);
         assertTrue(response.getStatus() == Response.Status.CREATED.getStatusCode());
-        assertTrue(response.getMetadata().getFirst("Location").equals(HTTP_ENDPOINT_ADDRESS + "/v1/properties/test/myproperty"));
+        assertTrue(response.getMetadata().getFirst("Location").equals(HTTP_ENDPOINT_ADDRESS + "/properties/test/myproperty"));
         session.getRootNode().getNode("test").remove();
         session.save();
     }
@@ -89,7 +89,7 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
         jcrProperty.setValues(values);
 
         final Response response = client
-                .path("v1/properties/test12355")
+                .path("properties/test12355")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(jcrProperty);
@@ -111,7 +111,7 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
         jcrProperty.setValues(values);
 
         final Response response = client
-                .path("v1/properties/test")
+                .path("properties/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(jcrProperty);
@@ -123,7 +123,7 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
         jcrProperty.setType("");
 
         final Response typedResponse = client
-                .path("v1/properties/test")
+                .path("properties/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(jcrProperty);
@@ -148,7 +148,7 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
         jcrProperty.setValues(values);
 
         final Response response = client
-                .path("v1/properties/test")
+                .path("properties/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .post(jcrProperty);
@@ -159,14 +159,14 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
         values.remove("test");
         values.add("test2");
         final Response updateResponse = client
-                .path("v1/properties/test/test")
+                .path("properties/test/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .put(jcrProperty);
         assertTrue(updateResponse.getStatus() == Response.Status.NO_CONTENT.getStatusCode());
 
         client.reset();
-        final JcrProperty newValuedProperty = client.path("v1/properties/test/test")
+        final JcrProperty newValuedProperty = client.path("properties/test/test")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .get(JcrProperty.class);
@@ -185,7 +185,7 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
         session.save();
 
         final Response emptyPathResponse = client
-                .path("v1/properties/")
+                .path("properties/")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();
@@ -195,7 +195,7 @@ public class PropertiesIntegrationTest extends WebservicesIntegrationTest {
         client.reset();
 
         final Response response = client
-                .path("v1/properties/test/propname")
+                .path("properties/test/propname")
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
                 .delete();

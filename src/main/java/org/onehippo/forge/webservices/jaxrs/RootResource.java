@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The root resource which will be there for consumers to go to a default api endpoint.
  */
-@Path(value = "/v1/")
+@Path(value = "/")
 @CrossOriginResourceSharing(allowAllOrigins = true)
 public class RootResource {
 
