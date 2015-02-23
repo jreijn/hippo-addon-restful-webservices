@@ -98,4 +98,52 @@ public class GroupsIntegrationTest extends WebservicesIntegrationTest {
         assertTrue(delete.getStatus() == Response.Status.NO_CONTENT.getStatusCode());
     }
 
+    @Test
+    public void testAddUpdateAndRemoveGroups() {
+        Group group = new Group("testupdate");
+        group.setExternal(false);
+        group.setDescription("Some description");
+        List<String> members = new ArrayList<String>();
+        members.add("admin");
+        group.setMembers(members);
+
+        final Response response = client
+                .path("v1/groups/")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .post(group);
+        assertTrue(response.getStatus() == Response.Status.CREATED.getStatusCode());
+
+        client.reset();
+
+        group = new Group("testupdate");
+        group.setExternal(false);
+        group.setDescription("Updated description");
+        group.setMembers(members);
+
+        client
+                .path("v1/groups/testupdate")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .put(group);
+        assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
+
+        client.reset();
+        final Group testGroup = client
+                .path("v1/groups/testupdate")
+                .accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON)
+                .get(Group.class);
+        assertTrue(client.get().getStatus() == Response.Status.OK.getStatusCode());
+        assertTrue(testGroup.getMembers().size()==1);
+        assertTrue("Updated description".equals(testGroup.getDescription()));
+
+        client.reset();
+
+        final Response delete = client.path("v1/groups/testupdate")
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .type(MediaType.APPLICATION_JSON_TYPE).delete();
+        assertTrue(delete.getStatus() == Response.Status.NO_CONTENT.getStatusCode());
+    }
+
 }

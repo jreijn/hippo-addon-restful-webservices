@@ -203,6 +203,7 @@ public class GroupsResource {
      * Updates a group and populates it with the supplied properties.
      */
     @PUT
+    @Path("/{groupName}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "Updates a new group", notes = "Updates a new group", position = 3)
@@ -217,7 +218,6 @@ public class GroupsResource {
     })
     public Response updateGroup(@ApiParam(required = true, value = "Name of the group") Group group,
                                 @Context UriInfo ui) throws RepositoryException {
-        URI newUserUri;
         try {
             Session session = JcrSessionUtil.getSessionFromRequest(request);
             if (!exists(group.getName())) {
@@ -229,10 +229,7 @@ public class GroupsResource {
                         Response.Status.CONFLICT.getStatusCode(), "External managed group can't be updated through this interface.");
                 return Response.status(Response.Status.CONFLICT).entity(responseExceptionRepresentation).build();
             }
-
-            final Node node = update(group);
-            UriBuilder ub = ui.getAbsolutePathBuilder().path(this.getClass(), "getGroupByName");
-            newUserUri = ub.build(node.getName());
+            update(group);
             session.save();
         } catch (RepositoryException e) {
             log.error("Error: {}", e);
@@ -369,8 +366,6 @@ public class GroupsResource {
         if(members!=null){
             setOrRemoveMultiStringProperty(node, PROP_MEMBERS, members.toArray(new String[0]));
         }
-        // save parent when adding a node
-        node.getParent().getSession().save();
         return node;
     }
 
