@@ -27,13 +27,15 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.wordnik.swagger.annotations.ApiModel;
+
 import org.onehippo.forge.webservices.jaxrs.hateoas.Link;
 
+@ApiModel(value = "GroupCollection", description = "A collection of Groups")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"groups", "links" })
+@XmlType(name = "", propOrder = {"groups", "links"})
 public class GroupCollection {
-
 
     private Collection groups;
     @XmlElementWrapper(name = "links")

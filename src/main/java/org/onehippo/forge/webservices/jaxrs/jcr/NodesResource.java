@@ -75,7 +75,10 @@ public class NodesResource {
     @GET
     @Path("{path:.*}")
     @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Get a node", notes = "Returns a node from the specified path", position = 1)
+    @ApiOperation(value = "Get a node",
+            notes = "Returns a node from the specified path",
+            position = 1,
+            response = JcrNode.class)
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK, response = JcrNode.class),

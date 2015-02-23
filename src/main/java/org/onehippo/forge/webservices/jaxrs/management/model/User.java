@@ -19,18 +19,31 @@ package org.onehippo.forge.webservices.jaxrs.management.model;
 import java.util.Calendar;
 import java.util.List;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
+@ApiModel( value = "User", description = "User resource representation" )
 public class User {
 
+    @ApiModelProperty( value = "Indicates if the user originates from an external system", required = false )
     private boolean external = false;
+    @ApiModelProperty( value = "Indicates if the user account is active", required = true )
     private boolean active = true;
+    @ApiModelProperty( value = "Indicates if the user account is a system user account", required = true )
     private boolean system = false;
     private String path;
+    @ApiModelProperty( value = "The unique username", required = true )
     private String username;
+    @ApiModelProperty( value = "The users first name", required = false )
     private String firstName;
+    @ApiModelProperty( value = "The users last name", required = false )
     private String lastName;
+    @ApiModelProperty( value = "The users e-mail", required = false )
     private String email;
+    @ApiModelProperty( value = "The users password", required = false )
     private String password;
     private Calendar passwordLastModified;
+    @ApiModelProperty( value = "The groups of which the user is a member", required = false )
     private List<Group> groups;
     private String href;
 

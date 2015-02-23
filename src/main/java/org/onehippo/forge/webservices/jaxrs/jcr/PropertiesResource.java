@@ -77,9 +77,13 @@ public class PropertiesResource {
     @GET
     @Path("{path:.*}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @ApiOperation(value = "Get a property", notes = "Returns a property from the specified path")
+    @ApiOperation(
+            value = "Get a property",
+            notes = "Returns a property from the specified path",
+            response = JcrProperty.class
+    )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK, response = JcrNode.class),
+            @ApiResponse(code = 200, message = ResponseConstants.STATUS_MESSAGE_OK, response = JcrProperty.class),
             @ApiResponse(code = 401, message = ResponseConstants.STATUS_MESSAGE_UNAUTHORIZED),
             @ApiResponse(code = 404, message = ResponseConstants.STATUS_MESSAGE_NODE_NOT_FOUND),
             @ApiResponse(code = 500, message = ResponseConstants.STATUS_MESSAGE_ERROR_OCCURRED)

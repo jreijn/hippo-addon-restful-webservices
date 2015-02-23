@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "A representation of a JCR node")
+@ApiModel(value = "JcrNode", description = "Representation of a JCR node")
 @XmlRootElement(name = "node")
 @XmlType(propOrder = {"name", "identifier", "path", "primaryType", "mixinTypes", "properties", "nodes"})
 public class JcrNode {

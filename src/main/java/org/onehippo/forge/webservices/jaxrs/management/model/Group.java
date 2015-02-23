@@ -18,10 +18,17 @@ package org.onehippo.forge.webservices.jaxrs.management.model;
 
 import java.util.List;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
+@ApiModel( value = "Group", description = "Group resource representation" )
 public class Group {
 
+    @ApiModelProperty( value = "Group name", required = true )
     private String name;
+    @ApiModelProperty( value = "Group description", required = false )
     private String description;
+    @ApiModelProperty( value = "Group members", required = false )
     private List<String> members;
     private boolean external = false;
     private String href;
