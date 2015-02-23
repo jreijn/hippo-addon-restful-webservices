@@ -67,6 +67,7 @@ Now add the servlet definition to your CMS web.xml located in ```cms/src/main/we
       org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider,
       org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter,
       org.onehippo.forge.webservices.jaxrs.exception.CustomWebApplicationExceptionMapper,
+      org.onehippo.forge.webservices.jaxrs.CustomJacksonConfig,
       org.onehippo.forge.webservices.HippoAuthenticationRequestHandler
     </param-value>
   </init-param>
