@@ -103,9 +103,9 @@ After you have installed Maven you can build the module with:
 $ mvn install
 ```
 
-## Issues
+## Issues, Questions or improvements
 
-If you have any problems, please [check the project issues](https://github.com/jreijn/hippo-addon-restful-webservices/issues).
+If you find any problems, have a question or see a possibility to improve the add-on please browse the [project issues](https://github.com/jreijn/hippo-addon-restful-webservices/issues).
 
 ## Contributions
 
