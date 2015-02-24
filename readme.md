@@ -12,14 +12,11 @@ It provides amongst others a full CRUD API for JCR nodes and properties.
 Version 0.3.X
 
 + Info ```/```
-
 + Nodes API ```/nodes```
 + Properties API ```/properties```
-
 + Query API ```/_query```
 + System API ```/_system```
 + Statistics API ```/_stats```
-
 + Users API ```/users```
 + Groups API ```/groups```
 
@@ -27,6 +24,8 @@ The resources have been defined into two types:
 
 + CRUD resources (without underscore)
 + Non-CRUD resources (with underscore)
+
+If you would like to know more about how to use the REST endpoints go ahead and read the [API Reference section](https://github.com/jreijn/hippo-addon-restful-webservices/wiki/API-Reference).
 
 ## Using the web services in your project
 
