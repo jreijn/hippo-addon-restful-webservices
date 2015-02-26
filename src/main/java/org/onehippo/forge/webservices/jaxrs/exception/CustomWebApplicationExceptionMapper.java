@@ -59,7 +59,6 @@ public class CustomWebApplicationExceptionMapper implements ExceptionMapper<WebA
         switch (status) {
             case BAD_REQUEST:
             case NOT_FOUND:
-            case INTERNAL_SERVER_ERROR:
             case NOT_ACCEPTABLE:
             case UNAUTHORIZED:
                 return status.getReasonPhrase();
